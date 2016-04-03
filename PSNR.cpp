@@ -50,7 +50,7 @@ int main(){
 	for (int j=1;j<=frame_count;j++){
 		sprintf (buffer, "../data/Pictures%d.png", j);
 		PictureData * frame=read_png_file(buffer);
-		sprintf (buffer, "../data2/Pictures%d.png", j);
+		sprintf (buffer, "../data3/Pictures%d.png", j);
 		PictureData * frame2=read_png_file(buffer);
 		float sum=0;
 		int pixel;
