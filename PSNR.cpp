@@ -41,20 +41,65 @@ int compare (const void * a, const void * b)
 {
   return ( *(float*)a - *(float*)b );
 }
+PictureData *getVideoInfo(string path){
+	PictureData * data=new PictureData;
+
+	string cmd="ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=width,height -of default=noprint_wrappers=1:nokey=1 "+path;
+	FILE *stream = popen(cmd.c_str(), "r");
+	char buffer [50];
+	fgets(buffer, 10, stream);
+	data->width = atoi (buffer);
+	fgets(buffer, 10, stream);
+	data->height = atoi (buffer);
+	return data;
+}
+FILE * startFfmepg(string path){
+	
+    string cmd="ffmpeg -i "+path+" -f image2pipe -pix_fmt rgb24 -vcodec rawvideo - 2>/dev/null";
+    
+    FILE *stream = popen(cmd.c_str(), "rb");
+    if (stream){
+      
+    }
+	return stream;
+}
 int main(){
+	string file1 = "../data/W1.mkv";
+	string file2 = "../data/W6.mp4";
 	/*BMPData frame=getData("frame.bmp");
 	BMPData frame2=getData("frame_2.bmp");*/
-	int frame_count=452;
+	int frame_count=7192;
 	float * results=new float[frame_count];
-	char buffer [50];
+	const int MAX_BUFFER = 2048000;
+	
+	PictureData * frame=getVideoInfo(file1);
+	frame->data = new char[frame->width*frame->height*3];
+	
+	PictureData * frame2=getVideoInfo(file2);
+	frame2->data = new char[frame->width*frame->height*3];
+	
+	FILE * stream=startFfmepg(file1);
+	FILE * stream2=startFfmepg(file2);
 	for (int j=1;j<=frame_count;j++){
-		sprintf (buffer, "../data/Pictures%d.png", j);
+		
+			 // memcpy(&c, buffer, bytesize); //copy the data to a more usable structure for bit manipulation later
+
+            if(fread(frame->data,frame->width*frame->height*3 , 1,stream)== NULL)
+            {
+               cout<<"error"<<endl;
+            }
+			if (fread(frame2->data,frame->width*frame->height*3 ,1, stream2) == NULL)
+            {
+               cout<<"error2"<<endl;
+            }
+       //pclose(stream);
+		/*sprintf (buffer, "../data/Pictures%d.png", j);
 		PictureData * frame=read_png_file(buffer);
-		sprintf (buffer, "../data3/Pictures%d.png", j);
-		PictureData * frame2=read_png_file(buffer);
+		sprintf (buffer, "../data4/Pictures%03d.png", j);
+		PictureData * frame2=read_png_file(buffer);*/
 		float sum=0;
 		int pixel;
-		for(int i=0;i<frame->width*frame->height;i++){
+		for(int i=0;i<frame->width*frame->height*3;i++){
 			if(i%1==0){
 				pixel=pow((unsigned char)frame->data[i]-(unsigned char)frame2->data[i],2);
 				//cout<<int((unsigned char)frame->data[i])<<endl;
@@ -66,17 +111,18 @@ int main(){
 		float mse=sum/frame->width/frame->height/3;
 		float psnr=10*log10(max*max/mse);
 		results[j]=psnr;
-		cout<<psnr<<endl;
-		delete frame->data;
-		delete frame2->data;
-		delete frame;
-		delete frame2;
+		cout<<j<<" "<<psnr<<endl;
+		
 		//unsigned char a=frame->data[198];
 		/*cout<<"SUM: "<<sum<<endl;
 		cout<<"MSE: "<<mse<<endl;
 		cout<<"MAX^2: "<<max*max<<endl;
 		cout<<"PSNR: "<<10*log10(max*max/mse)<<endl;*/
 	}
+	delete frame->data;
+		delete frame2->data;
+		delete frame;
+		delete frame2;
 	float sum=0;
 	int frames=frame_count;
 	for (int i=0;i<frame_count;i++){
