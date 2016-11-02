@@ -1,0 +1,338 @@
+% options:
+% thesis=B bachelor's thesis
+% thesis=M master's thesis
+% czech thesis in Czech language
+% slovak thesis in Slovak language
+% english thesis in English language
+% hidelinks remove colour boxes around hyperlinks
+
+\documentclass[thesis=M,czech]{FITthesis}[2016/06/26]
+
+\usepackage[utf8]{inputenc} % LaTeX source encoded as UTF-8
+\usepackage{float}
+\usepackage{graphicx} %graphics files inclusion
+
+\usepackage{amsmath} %advanced maths
+% \usepackage{amssymb} %additional math symbols
+
+\usepackage{dirtree} %directory tree visualisation
+\usepackage{amsmath}
+% % list of acronyms
+% \usepackage[acronym,nonumberlist,toc,numberedsection=autolabel]{glossaries}
+% \iflanguage{czech}{\renewcommand*{\acronymname}{Seznam pou{\v z}it{\' y}ch zkratek}}{}
+% \makeglossaries
+
+\newcommand{\tg}{\mathop{\mathrm{tg}}} %cesky tangens
+\newcommand{\cotg}{\mathop{\mathrm{cotg}}} %cesky cotangens
+\DeclareMathOperator{\ssim3d}{SSIM-3D}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% ODTUD DAL VSE ZMENTE
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\department{Počítačové systémy a sítě}
+\title{GPU akcelerované vyhodnocení kvality videa}
+\authorGN{Václav} %(křestní) jméno (jména) autora
+\authorFN{Fanfule} %příjmení autora
+\authorWithDegrees{Bc. Václav Fanfule} %jméno autora včetně současných akademických titulů
+\supervisor{Ing. Ivan Šimeček, Ph.D.}
+\acknowledgements{Děkuji vedoucímu práce Ing. Ivanovi Šimečkovi, Ph.D. za vedení, rady a~pomoc při tvorbě této práce. Dále také děkuji rodině za podporu v~průběhu celého studia a~všem dalším, kteří jakkoli přispěli ke vzniku této práce.}
+\abstractCS{V~několika větách shrňte obsah a přínos této práce v~češtině. Po přečtení abstraktu by se čtenář měl mít čtenář dost informací pro rozhodnutí, zda chce Vaši práci číst.}
+\abstractEN{Sem doplňte ekvivalent abstraktu Vaší práce v~angličtině.}
+\placeForDeclarationOfAuthenticity{V~Praze}
+\declarationOfAuthenticityOption{4} %volba Prohlášení (číslo 1-6)
+\keywordsCS{Nahraďte seznamem klíčových slov v~češtině oddělených čárkou.}
+\keywordsEN{Nahraďte seznamem klíčových slov v~angličtině oddělených čárkou.}
+% \website{http://site.example/thesis} %volitelná URL práce, objeví se v tiráži - úplně odstraňte, nemáte-li URL práce
+
+\begin{document}
+
+% \newacronym{CVUT}{{\v C}VUT}{{\v C}esk{\' e} vysok{\' e} u{\v c}en{\' i} technick{\' e} v Praze}
+% \newacronym{FIT}{FIT}{Fakulta informa{\v c}n{\' i}ch technologi{\' i}}
+
+\begin{introduction}
+	%sem napište úvod Vaší práce
+\end{introduction}
+\chapter{Technologie}
+V~této kapitole stručně představím technologie použité v~této práci. Nejprve stručně představím možností porovnávání video snímků poté se zaměřím na metriky které budu v~této práci používat.
+\section{Metriky pro porovnávání videa}
+Pod pojmem metrika se v~této práci rozumí způsob jak ze dvou objektů (v~tomto případě například jednotlivých snímků nebo video záznamů) získat jedno číslo které vyjadřuje vzdálenost těchto objektů. Z~různých algoritmů ale vycházejí různé metriky a proto nejsou mezi sebou porovnatelné. Například u~metriky PSNR platí, že čím jsou objekty shodnější, tím metrika je vyšší a naopak. Ale tato metrika nemá lineární průběh, průběh je spíše exponenciální, pro shodné objekty vychází plus nekonečno, pro zcela neshodné objekty vychází 0.
+
+V~této části se budu zabývat problematikou jak porovávat kvalitu videa. Obecně se metriky dělí na referenční a nereferenční metriky. U~referenčních metrik je vždy k~dispozici jedno vzorové video a k~tomuto videu vztahujeme všechna srovávaná videa. U~nereferenčních metrik není k~dispozici žádné ukázkové video a jsou porovnávána pouze videa mezi sebou bez znalosti toho které je výchozí a které je odvozené.
+U~referenčních metrik je dáno, že čím je porovnávané video blíže k~vzoru, tím je lepší. Naopak u~nereferenčních metrik tento přístup není možný a je možné pouze určit jak moc jsou si videa podobná. Pro odhad kvality u nereferenčních metrik je možné použít některé heuristiky \cite{nonref}. Ovšem tyto heuristiky nejsou spolehlivé u všech typů obrázků, proto není vhodné jejich použití pro video, kde nemůžeme zaručit, že všechny snímky budou vhodné pro danou nereferenční metriku.
+
+Jedna z~klíčových otázek této práce zní jak poznat, které video je kvalitnější. Existuje mnoho přístupů k~této problematice. Jedním z~jednodušších je pouhé porování bitratu. Tato metrika je ale velmi nedostatečná protože nezohladňuje mnoho faktorů, například různé kodeky pro enkódování. Další možností je porovnávání jednotlivých snímků videa a zkoumání jejich shodnosti. Tato metrika je znatelně spolehlivější a přenáší problém na to jak porovávat jednotlivé snímky dvou videí mezi sebou. Na tuto problematiku existuje mnoho algoritmů od jednoduchého součtu odchylek barev jednotlivých pixelů až po komplexní algoritmy které by měly zahrnovat i nedokonalé vnímání lidským okem. V~této práci jsem zvolil z~této oblasti algoritmy PSNR a SSIM. Jedné se pravděpodobně o~nejčastěji používané algoritmy pro porovávání obrázků. Mezi další metriky se řadí například MSE nebo MSSIM, jedná se ale o algoritmy odvozené z PSNR nebo SSIM anebo o algoritmy podobné\cite{otherref}.
+
+Při použití metrik určených pro porovávání obrázků je ale potřeba výsledky z~porovnávání jednotlivých snímků aplikovat na celé video. K~tomuto problému je taktéž možno přistupovat několika způsoby, nejjednodušší je vzít průměr z~metrik pro jednotlivé snímky a ten prohlásit za výsledek. Tento výsledek může být ale velmi nepřesný a nedostatečný, například dostatečně nezohledňuje špičky a výkyvy v~jednotlivých snímcích a dále také není dobře použitelný pro metriky které mají nelineární průběh. O~něco lepší je použít medián výsledných hodnot. Medián sice částečně eliminuje některé problémy které má průměr, ale stále není dostatečný například proto, že nezohledňuje špičky a propady v~grafu. Toto je možné pozorovat na obrázcích níže. V~ideálním případě by závislost shodnosti snímku na čase měla konstantní průběh viz \ref{fig:theory_graph}, ale v~praxi bude graf vypadat spíše jako na obrázku \ref{fig:frames_comparsion}. Z~tohoto důvodu je nutné přijít s~vlastním algoritmem na vyhodnocování těchto dat. Je potřeba zohlednit špičky a propady v~kvalitě snímků a zohlednit i (ne)linearitu dané metriky. Také je žádoucí zohlednit množství informace na daném snímku, například čistě černé snímky budou většinou velmi podobné pokud ne přímo shodné, ale nepřináší nám informace o~kvalitě videosekvence.
+
+\begin{figure}\centering
+\includegraphics[width=\textwidth]{./IMG/graph_const.pdf}
+\caption{Teoretický ideální Graf kvalit jednotlivých snímků ve videu}
+\label{fig:theory_graph}
+\end{figure}
+
+\begin{figure}\centering
+\includegraphics[width=\textwidth]{./IMG/graph_frames_comparsion.pdf}
+\caption{Graf kvalit jednotlivých snímků ve videu}
+\label{fig:frames_comparsion}
+\end{figure}
+
+
+Další možností porovnávání kvality videa je porovávání vidoesekvencí jako celku, nikoliv pouze porovávání jednotlivých snímků. Díky tomu je možné zachytit i přechody mezi snímky, například pomocí pohybového vektoru, a jejich kvalitu. Tyto algoritmy jsou podstatně náročnější ale mají také přesnější výsledky. Příklad takovéhoto algoritmu je stVSSIM, který budu v této práci také implementovat. Tento algoritmus vychází z~algoritmu SSIM ale zohledňuje i předchozí a následující snímky při porovávání. Taktéž zde částečně odpadá nutnost řešit vyhodnocení výsledků z~jednotlivých snímků, protože tento algoritmus je již určen pro porovnávání kvality videa.
+
+V~neposlední řadě je možné kvalitu videa porovnávat na základě subjektivních sledování videosnímků lidmi a následně statistického zpracování těchto výsledků. Tato problematika ale nespadá pod téma této práce a tudíž se v~této práci nebudu zabývat subjektivním porovnáváním.
+\section{PSNR}
+Peak signal-to-noise ratio (PSNR) do češtiny přeloženo jako špičkový poměr signálu k šumu\cite{PSNR}. Jedná se o poměr maximálního možného množství informace obsažené v signálu (v našem případě obrázku) ku množství šumu který ovlivňuje kvalitu tohoto signálu. Díky typicky velkému dynamickému rozsahu množství informace v signálu se PSNR udává v logaritmické škále a má jednodku dB.
+
+Předpoklad pro PSNR je, že máme 2 obrázky které mají stejné rozlišení a jsou uloženy ve 2D matici, indexované od $0,0$,  po jednotlivých pixelech. \newline
+Poté platí matematický zápis:
+\begin{equation}
+\mathit{PSNR} = 10 \cdot \log_{10} \left( \frac{\mathit{MAX}_I^2}{\mathit{MSE}} \right)
+\end{equation}
+Kde platí, že $\mathit{MSE}$ (Mean Squared Error) - průměrná čtvercová odchylka je definována jako:
+\begin{equation}
+\mathit{MSE} = \frac{1}{m\,n}\sum_{i=0}^{m-1}\sum_{j=0}^{n-1} [I(i,j) - K(i,j)]^2
+\end{equation}
+$\mathit{m,n}$ reprezentují šířku a výšku daného obrázku. \newline
+$\mathit{I(j,k)}$ reprezentuje daný pixel v originálním obrázku. \newline
+$\mathit{K(j,k)}$ reprezentuje daný pixel v testovaném obrázku. \newline
+$\mathit{MAX}_I^2$ reprezentuje maximální hodnotu jednoho kanálu jednoho pixelu. \newline
+Pro obrázky s více než jednou barevnou složkou je možné PSNR počítat pouze na jasové části a nebo může být použit stejný vzorec s úpravou výpočtu $\mathit{MSE}$ tak, že se postupně sečtou všechny barevné složky a následně se výsledek vydělí počtem složek\cite{PSNR2}.
+
+Průměrná čtvercová odchylka udává odlišnost originálního a testovaného obrázku. U shodných obrázků vyjde 0 a tudíž PSNR není možné matematicky vyjádřit. Z definice také plyne, že čím nižší je MSE, tím vyšší je PSNR a tudíž je testovaný obrázek blíže k originálu. Minimální hodnota PSNR je $0\mathit{dB}$, velmi dobrá hodnota je $50\mathit{dB}$\cite{50PSNR} ovšem tato hodnota závisí na obrázku a není možné takto porovávat různé obrázky, je možné porovnávat pouze stejný obrázek v různých kvalitách\cite{PSNR3}. Na obrázku \ref{fig:PSNR_image} je vidět ilustrace různých hodnot PSNR pro daný obrázek. 
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{./IMG/img95.png}
+\caption{Srovnání obrázku v různých hodnotách PSNR}
+\label{fig:PSNR_image}
+\end{figure}
+
+Mezi hlavní výhody algoritmu patří jeho implementační jednoduchost při uspokojivém výsledku. Hlavní slabinou tohoto algoritmu je, že je založen pouze na numerické odlišnosti jednotlivých pixelů a zcela ignoruje všechny biologické faktory vnímání obrázku lidským okem.  Z tohoto důvodu jsou pro lepší přesnost doporučovány jiné algoritmy (například SSIM). Pro porovnání barevných obrázků je možné buď daný obrázek převést do jedné barevné složky (černobílý obraz), nebo počítat průměr ze všech barevných složek a nebo převést obrázek do barevného modelu který má jasovou složku a počítat PSNR pouze na jasové složce. Poslední zmíňený přístup se používá z důvodu vyšší citlivosti lidského oka na jasovou složku oproti ostatním složkám.
+\section{SSIM}
+Výpočet SSIM je prováděn nad jasovou složkou obrazu. Základní vzorec pro výpočet SSIM je \ref{eq:0}.
+\begin{equation}  \label{eq:0}
+\mathit{SSIM}(x, y) = [l(x, y)]^{\alpha}\cdot[c(x, y)]^\beta\cdot[s(x, y)]^\gamma
+\end{equation}
+Kdy musí platit, že $\alpha > 0$, $\beta > 0$ a $\lambda > 0$, v referenční verzi se používá $\alpha = \beta = \gamma = 1$\cite{SSIM1}.
+Takto je výpočet SSIM rozdělen do 3 částí, srovnává se postupně jas, kontrast a struktura. Tyto tři veličiny jsou na sobě nezávislé. Nejprve je spočítán jas. Pro průměrnou hodnotu jasu platí vzorec \ref{eq:1}
+\begin{equation} \label{eq:1}
+\mu_x = \frac{1}{N}\sum_{i=1}^{N}x_i
+\end{equation}
+Pro rozdíl mezi jasovými složkami dvou snímků je použit vzorec \ref{eq:2}.
+\begin{equation} \label{eq:2}
+l(x, y) = \frac{2\mu_x \mu_y + C_1}{\mu^2_x+\mu^2_y+C_1}
+\end{equation}
+Následně je odečten průměrný jas složka z obrazu a za pomoci vzorce \ref{eq:3} je vypočítána standardní odchylka jednotlivých snímků.
+\begin{equation} \label{eq:3}
+\sigma_x = \left(\frac{1}{N-1}\sum_{i=1}^{N}(x_i-\mu_x)^2\right)^{1/2}
+\end{equation}
+Vzorec \ref{eq:4} vyjadřuje rozdíl kontrastu dvou snímků.
+\begin{equation}\label{eq:4}
+c(x, y) = \frac{2\sigma_x \sigma_y + C_2}{\sigma^2_x+\sigma^2_y+C_2}
+\end{equation}
+Následně je signál (snímek) znormalizován (vydělen) jeho vlastní standardní odchylkou. Díky tomu mají oba snímky stejnou standardní odchylku. Porovnávání struktury signálů je tedy prováděna na normalizovaném signálu $(x-\mu_x)/\sigma_x$. Korelace těchto signálů je vyjádřena pomocí vzorce \ref{eq:5}
+
+\begin{equation}\label{eq:5}
+s(x, y) = \frac{\sigma_{xy} + C_3}{\sigma_x\sigma_y+C_3}
+\end{equation}
+
+Z toho $\sigma_{xy}$ se vypočítá dle \ref{eq:7}.
+
+\begin{equation}\label{eq:7}
+\sigma_{xy} = \frac{1}{N-1} \sum_{i=1}^{N} (x_i-\mu_x)(y_i-\mu_y)
+\end{equation}
+Kde  $\mu_x$ and $\mu_y$ představují průměr z originálního a testovaného obrázku. $\sigma_x$ a $\sigma_y$ představují standardní odchylku. $\sigma_x^2$ a $\sigma_y^2$ představují varianci. $\sigma_{xy}$ představuje kovariance těchto dvou obrázků.
+Na obrázku \ref{fig:ssim} je možné vidět jednotlivé kroky procesu tvorby SSIM indexu.
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{./IMG/ssim.png}
+\caption{Diagram procesu tvorby SSIM}
+\label{fig:ssim}
+\end{figure}
+
+
+Při použití hodnot $\alpha = \beta = \gamma = 1$ a $C_3=C_2/2$ \cite{SSIM1} vyjde zjednodušený vzorec \ref{eq:6}.
+\begin{equation}\label{eq:6}
+\mathit{SSIM}(x, y) = \frac{(2 \mu_x \mu_y + C1) (2 \sigma_{xy} + C2)}{(\mu_x^2+\mu_y^2+C1)(\sigma_x^2+\sigma_y^2+C2}
+\end{equation}
+$C_1, C_2$ a $C_3$ jsou použity pro eliminaci nestability výsledků když některá z hodnot $\mu_x^2+\mu_y^2$ nebo $\sigma_x^2+\sigma_y$ bude blízká k nule. Pro zjednodušení je možné uvažovat, že $C_1=C_2=C_3=0$. Po tomto zjednodušení by vzorec korespondoval s $\mathit{UQI}$(universal quality index). V SSIM metrice jsou $C_1, C_2$ definovány jako $C_1=(K_1L)^2$ respektive $C_2=(K_2L)^2$ kde $L$ je dynamický rozsah hodnoty pixelu (255 pro jasovou složku 8 bit obrázku) a $K$ je konstanta výrazně menší než 1. Běžně se používají hodnoty $K_1=0.01$ a $K_2=0.03$ \cite{SSIM2}.
+
+Hodnoty $\mu_x$, $\sigma_x$ a $\sigma_{xy}$ se počítají na blocích $8\times8$ pixelů, toto okno se postupně posouvá po celém obrazu, je možné posouvat toto okno po 1 nebo více pixelech pro zvýšení rychlosti výpočtu za cenu snížení přesnosti výpočtu.
+Pro vypočítání SSIM pro celý snímek se poté použije průměr z výsledků SSIM pro $8\times8$ okna. Pro zvýšení přesnosti tohoto algoritmu je možné použít vážený průměr nebo heuristiku zohledňující bloky s horším výsledkem\cite{stvssim}.
+
+SSIM má oproti PSNR výhodu v tom, že zohledňuje vnímání obrazu lidským okem a nepočítá pouze absolutní odchylku od výchozího zdroje, například lidské oko je citilivější na jasovou složku obrázku oproti jiným složkám. V SSIM je také využito maskování postupně průměrného jasu a kontrastu pro získání nezávislých výsledků při počítání kontrastu a struktury. SSIM se opírá o myšlenku, že pixely, zejména ty které jsou blízko sebe, mají silnou závislost. Tato závislost obsahuje důležité množství informace ohledně struktury objektů v obrázku.
+Je ovšem výpočetně náročnější oproti PSNR. Stejně jako PSNR je určena pro porovávání snímků a nikoliv videí, tudíž pro mé využití je potřeba tento algoritmus rozšířit aby byl použitelný i na video.
+
+\section{stVSSIM}
+!!když bude málo textu, dá se psát nějaká teorie o MOVIE!! FIXME
+Algoritmus spatio-temporal video SSIM\cite{stvssim} je další z algoritmů na porovnávání kvality videí. Narozdíl od algoritmů SSIM i PSNR, které porovnávají pouze jednotlivé snímky mezi sebou, stVSSIM algoritmus zohledňuje i okolní snímky videa. Jedná se o full reference metriku, stejně jako PSNR a SSIM. Inspirací pro stVSSIM byl Motion-based Video Integrity Evaluation(MOVIE) index\cite{MOVIE}. MOVIE index se ale ukázal být sice poměrně přesný, ale výpočetně velmi náročný. Proto byl navržen spatio-temporal video SSIM algoritmus. 
+
+Spatio-temporal video SSIM využívá pohybové informace získané z blokově založeného algoritmu na odhad pohybu při použití sady časoprostorových filtrů. stVSSIM se snaží o zachování kvality algoritmu MOVIE při snížení potřebného výpočetního výkonu.
+
+stVSSIM využívá metriku SSIM popsanou v předchozí kapitole na měření kvality jednotlivých snímků, tato metrika velmi dobře koreluje se subjektivním pozorováním při porovnávání kvality snímků\cite{SSIM3}. Vyhodnocování kvality v časové rovině je dosaženo rozšířením SSIM o časoprostorovou doménu, kterou autoři této metriky nazývají SSIM-3D. 
+
+\subsection{SSIM-3D}
+SSIM je počítáno z jednoho snímku po blocích dané velikosti(typicky $8\times8$ pixelů), při SSIM-3D je přidána ještě časová osa. Vezměme si pixel na souřadnicích $(i,j,k)$ kde (i,j) jsou prostorové souřadnice daného pixelu v rámsci daného obrazu a $k$ značí číslo snímku. V tomto případě nás při každém výpočtu zajímá blok pixelů v okolí pixelu $(i,j,k)$. Definujme $\alpha, \beta$ jako rozměry v prostoru a $\gamma$ jako počet snímků. V případě real-time implementace tohoto algoritmu, by bylo využito $\gamma -1$ předchozích snímků a současný, v této práci ale nepotřebujeme vyhodnocovat kvalitu v real-time a proto budou brány i následující snímky. při každém vyhodnocovaném snímku tedy budou brány snímky $k-\gamma/2$ až $k+\gamma/2$. Pro pixel $(i,j,k)$ je tedy možné určit blok jako všechny pixely mezi:
+$$(i-\left \lfloor{\frac{\alpha}{2}}\right \rfloor,j-\left \lfloor{\frac{\beta}{2}}\right \rfloor,k-\left \lfloor{\frac{\gamma}{2}}\right \rfloor)$$
+$$(i-\left \lfloor{\frac{\alpha}{2}}\right \rfloor,j+\left \lfloor{\frac{\beta}{2}}\right \rfloor,k-\left \lfloor{\frac{\gamma}{2}}\right \rfloor)$$
+$$(i+\left \lfloor{\frac{\alpha}{2}}\right \rfloor,j-\left \lfloor{\frac{\beta}{2}}\right \rfloor,k-\left \lfloor{\frac{\gamma}{2}}\right \rfloor)$$
+$$(i+\left \lfloor{\frac{\alpha}{2}}\right \rfloor,j+\left \lfloor{\frac{\beta}{2}}\right \rfloor,k-\left \lfloor{\frac{\gamma}{2}}\right \rfloor)$$
+a
+$$(i-\left \lfloor{\frac{\alpha}{2}}\right \rfloor,j-\left \lfloor{\frac{\beta}{2}}\right \rfloor,k+\left \lfloor{\frac{\gamma}{2}}\right \rfloor)$$
+$$(i-\left \lfloor{\frac{\alpha}{2}}\right \rfloor,j+\left \lfloor{\frac{\beta}{2}}\right \rfloor,k+\left \lfloor{\frac{\gamma}{2}}\right \rfloor)$$
+$$(i+\left \lfloor{\frac{\alpha}{2}}\right \rfloor,j-\left \lfloor{\frac{\beta}{2}}\right \rfloor,k+\left \lfloor{\frac{\gamma}{2}}\right \rfloor)$$
+$$(i+\left \lfloor{\frac{\alpha}{2}}\right \rfloor,j+\left \lfloor{\frac{\beta}{2}}\right \rfloor,k+\left \lfloor{\frac{\gamma}{2}}\right \rfloor)$$
+Referenční hodnoty jsou $\alpha=\beta=11$ a $\gamma=33$. Tyto hodnoty vychází z algoritmů SSIM a MOVIE, kterýmy je metrika stVSSIM inspirována. Obdobně jako u metriky SSIM jsou použity následující vzorce.
+\begin{equation} 
+\mu_{x(i,j,k)} = \sum_{m=1}^{\alpha}\sum_{n=1}^{\beta}\sum_{o=1}^{\gamma}w(m,n,o)x(m,n,o)
+\end{equation}
+\begin{equation} 
+\mu_{y(i,j,k)} = \sum_{m=1}^{\alpha}\sum_{n=1}^{\beta}\sum_{o=1}^{\gamma}w(m,n,o)y(m,n,o)
+\end{equation}
+\begin{equation} 
+\sigma_{x(i,j,k)}^2 = \sum_{m=1}^{\alpha}\sum_{n=1}^{\beta}\sum_{o=1}^{\gamma}w(m,n,o)(x(m,n,o)-\mu_{x(i,j,k)})^2
+\end{equation}
+\begin{equation} 
+\sigma_{y(i,j,k)}^2 = \sum_{m=1}^{\alpha}\sum_{n=1}^{\beta}\sum_{o=1}^{\gamma}w(m,n,o)(y(m,n,o)-\mu_{y(i,j,k)})^2
+\end{equation}
+
+\begin{equation} 
+\sigma_{x(i,j,k)y(i,j,k)} = \sum_{m=1}^{\alpha}\sum_{n=1}^{\beta}\sum_{o=1}^{\gamma}w(m,n,o)(x(m,n,o)-\mu_{x(i,j,k)})(y(m,n,o)-\mu_{y(i,j,k)})
+\end{equation}
+Výpočet celého SSIM-3D pro pixel $(i,j,k)$ je zobrazen v rovnici \ref{eq:ssim3d}.
+\begin{equation}\label{eq:ssim3d}
+\mathit{\ssim3d} = \frac{(2 \mu_{x(i,j,k)} \mu_{y(i,j,k)} + C1) (2 \sigma_{x(i,j,k)y(i,j,k)} + C2)}{(\mu_{x(i,j,k)}^2+\mu_{y(i,j,k)}^2+C1)(\sigma_{x(i,j,k)}^2+\sigma_{y(i,j,k)}^2+C2}
+\end{equation}
+Konstanty $C1$ a $C2$ jsou stejné jako v případě SSIM. Váhová funkce $w$ záleží na typu filtru který je použit. V případě SSIM-3D jsou použity 4 různé filtry, viz obrázky \ref{fig:filter_vertical}, \ref{fig:filter_horizontal}, \ref{fig:filter_left}, \ref{fig:filter_right}. $w(m,n,o)$ nabývá hodnoty 1 pokud bod $(m,n,o)$ leží v rovině daného filtru, v opačném případě nabývá hodnoty 0. $m$ a $n$ značí horizontální a vertikální pozici od výchozího pixelu z bloku pixelů. Záporné hodnoty značí pixely vlevo od tohoto pixelu a naopak. $o$ značí číslo snímku od výchozího snímku. Záporné hodnoty $o$ značí předchozí snímky a naopak. V referenčním publikaci jsou spočítány SSIM-3D hotnoty pro všechny 4 filtry pro každý (i,j,k) pixel a následně je jich pří výpočtu vybrána pouze část. Který filtr bude použit se rozhoduje podle odhadu pohybového vektoru. Tento odhad pohybového vektoru je vypočítán z aktuálního a předchozího snímku  při použití bloku $8 \times 8$. Použití bloku $8 \times 8$ je zapříčiněno velmi četným použitím právě tohoto bloku při kompresích videa, moderní kompresní algoritmy ale používají proměnnou velikost bloku a z toho důvodu je vhodné zkusit změnit velikost bloku. Pro výpočet pohybového vektoru je použit algoritumus Adaptive Rood Pattern Search (ARPS)\cite{ARPS}.
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{./IMG/filter-vertical.pdf}
+\caption{Vertikální filtr}
+\label{fig:filter_vertical}
+\end{figure}
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{./IMG/filter-horizontal.pdf}
+\caption{Horizontální filtr}
+\label{fig:filter_horizontal}
+\end{figure}
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{./IMG/filter-right.pdf}
+\caption{Pravý filtr}
+\label{fig:filter_right}
+\end{figure}
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{./IMG/filter-left.pdf}
+\caption{Vertikální filtr}
+\label{fig:filter_left}
+\end{figure}
+\subsection {ARPS}
+\subsubsection{Popis algoritmu}
+Adaptive Rood Pattern Search (ARPS)\cite{ARPS} je algoritmus, který se zabývá hledáním pohybových vektorů ve videu. Pohybový vektor (motion vector) je způsob reprezentace bloku v daném snímku na základě stejného (nebo podobného) bloku v předchozím snímku. Pro nalezení pohybového vektoru je potřeba nalézt v předchozím snímku co blok co nejpodobnější aktuálnímu bloku. Při videokompresi se často používají pohybové vektory, protože následující snímek je často alespoň částečně tvořen pouze posunutím předchozího snímku, nebo jeho části.  Tohoto algoritmu je využíváno zejména při kompresi videí. Hledání pohybových vektorů je časově nejnáročnější akce při kompresi videa a proto může tvořit velké omezení při kompresi/enkódování videa. Algoritmus ARPS se snaží přinést dostatečně efektivní způsob, který bude ale také mnohem méně výpočetně náročný než například celé prohledávání hrubou silou. 
+
+Jednou z důležitých vlastností tohoto algoritmu je předpoklad, že okolní bloky mají podobný pohybový vektor, pohybový vektor získaný z okolních bloků budeme nazývat předpovídaný pohybový vektor. Okolní bloky mohou být buď časové, nebo prostorové, intuitivně by blok na stejné prostorové pozici v předchozím snímku mohl mít podobný pohybový vektor, ale z důvodu vysoké paměťové náročnosti tohoto řešení bylo v referenčním řešení zvoleno využití sousedních prostorových bloků. Protože každý snímek je zpracováván postupně po blocích v jednotlivých řadách, jsou k dispozici pohybové vektory okolních bloků viz obrázek \ref{fig:nearby}. Na zmíněném obrázku je červeně znázorněn právě ověřovaný blok a šedě bloky které jsou použity pro odhad okolních bloků. Typ B je často používán při video kompresi, například i u populárního kodeku H263\cite{H263}. Předpovídaný pohybový vektor se spočítá jako medián z okolních pohybových vektorů. V případě bloku na okraji snímků jsou použity bloky jako na obrázku \ref{fig:border}. Místo mediánu je možné použít průměr nebo jiné složitejší metody, ty ale vzhledem k zanedbatelnému přínosu v přesnosnosti a rychlosti nemá smysl používat. Dle \cite{ARPS} je velmi malý rozdíl v přesnosti a výkonu při používání různých  podporujících sousedních bloků, z toho důvodu byl použit typ D.
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{./IMG/ROS.pdf}
+\caption{Typy podporujících sousedních bloků}
+\label{fig:nearby}
+\end{figure}
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{./IMG/border_ROS.pdf}
+\caption{Podporující sousední bloky u okrajů}
+\label{fig:border}
+\end{figure}
+
+Algoritmus ARPS se snaží najít vzor aktuálního bloku dle kříže, jak je znázorněno na obrázku \ref{fig:rood}. Na tomto obrázku je vidět jak využití pohybového vektoru z předchozího snímku, který byl $(2,-1)$, tak využití 4  okolních bodů a středu. Vzdálenost okolních bodů od středu ($\Gamma$) může být dána například rovnicí \ref{eq:dist}. Alternativně je možné použít rovnici \ref{eq:dist2}. Protože druhá zmíněná rovnice nevyžaduje ani zaokrouhlování, ani umocňování a odmocňování, je mnohem méně výpočetně náročná. Protože v praxi nepřináší první rovnice lepší přesnost, bude použita rovnice \ref{eq:dist2}. Pokud není dostupný předchozí blok, tak bude použita vzdálenost 2 pixely, tedy $\Gamma=2$.
+\begin{figure}[h]\centering
+\includegraphics[width=\textwidth]{./IMG/rood.pdf}
+\caption{Graf potenciálních kandidátů na vzor aktuálního bloku}
+\label{fig:rood}
+\end{figure}
+\begin{multline}\label{eq:dist}
+\Gamma = \mathit{Round}\left|\overrightarrow{MV}_{predicted}\right| =\mathit{Round}\left|\sqrt{MV_{predicted}(x)^2+MV_{predicted}(y)^2}\right|
+\end{multline}
+\begin{equation}\label{eq:dist2}
+\Gamma = \mathit{Max}(\left|MV_{predicted}(x)\right|,\left|MV_{predicted}(x)\right|)
+\end{equation}
+
+Pro zjištění shodnosti daného bloku se vzorem je použita suma absolutních rozdílů pixelů mezi vzorem a daným blokem. 
+
+Další vlastností algoritmu ARPS je takzvaný předsudek nulového pohybu (zero-motion prejudgment). Tento předsudek očekává, že ve většině bloků nedochází k žádnému pohybu, jako klasický příklad může být uvedena telekonference, kde po většinu doby nedochází k žádnému pohybu nebo jen ve velmi omezené části obrazu. Algoritmus tedy v prvním kroku spočítá sumu absolutních rozdílů oproti stejně umístěnému bloku v předchozích snímků a pokud je tato suma nižší, než stanovená hranice, tak již výpočet nepokračuje a je bráno, že zde nedošlo k žádnému pohybu. Tato hranice je v referenční verzi algoritmu stanovena na odchylku 2 na každém pixelu, čili při velikosti $8 \times 8$ je možné stanovit hranici na $T=128$. Tuto hranici je možné posunout, čim výše je tato hranice nasazena, tím lepší dosáhneme zrychlení tohoto algoritmu, ale ztrácíme přesnost výpočtu.
+\subsubsection{Výpočet ARPS}
+Jak bylo již zmíněno dříve, budeme používat D typ podporujícího sousedního bloku dle obrázku \ref{fig:nearby}. Pro všechny nejlevější bloky použijeme $\Gamma=2$. Hranice pro nulový pohyb bude v našem případě $T=128$.
+\begin{enumerate}
+\item Spočítáme sumu absolutních rozdílů oproti stejně umístěnému bloku v předchozím snímku. Pokud je tato suma menší nebo rovna 128, pak ukončíme algoritmus a vrátíme pohybový vektor o hodnotě $(0,0)$ předpokládáme tedy nulový posuv.
+\item Pokud je aktuální blok nelevější v daném snímku, nastavíme $\Gamma=2$, v opačném případě nastavíme $\Gamma= \mathit{Max}(\left|MV_{predicted}(x)\right|,\left|MV_{predicted}(x)\right|)$
+\item Nastavíme střed kříže, který je znázorněn na obrázku \ref{fig:rood}, na stejné souřadnice jako je aktuální blok.
+\item Spočítáme sumy absolutních rozdílů pro bloky se středy danými těmito body. Pokud nám vyjde střed jako bod s nejnižší sumou rozdílů, tak vracíme rozdíl souřadnic, který reprezentuje pohybový vektor.
+\item V opačném případě nastavíme střed kříže na bod s nejnižším absolutním rozdílem a opakujeme bod 3.
+\end{enumerate}
+Pro snížení výpočetní náročností je vhodné implementovat nějakým způsobem identifikování, zda-li už byla spočítána odchylka daného bodu, například pomocí bit mapy. 
+Takto se postupně dostaneme do bodu, který budeme používat jako vzor pro náš aktuální blok. 
+
+\subsection {Využití ARPS}
+Poté, co je spočítán pohybový vektor daného bloku, je potřeba rozhodnout, který filtr bude použit. Je možné použít vážené průměry těchto filtrů dle směrového vektoru, pro snížení výpočetní náročnosti je ale také možné použít hladový algoritmus a zvolit filtr který je nejbližší vzniklému pohybovému vektoru. Tím se vyhneme například výpočtům s desetinými čísly. Pokud je vzniklý pohybový vektor přesně mezi dvěmi filtry, je použit průměr z těchto dvou filtrů. Pokud je pohybový vektor roven $(0,0)$, pak použijeme průměr ze všech čtyř filtrů. V nejhorším případě bude výpočetně nejnáročnější operací dělení čtyřmi, což lze ale implementovat pomocí bitového posunu, proto lze označit tuto část výpočtu za výpočetně nenáročnou.
+
+\subsection{Výpočet stVSSIM}
+Na každý pixel z daného snímku aplikujeme SSIM-3D. V referenční verzi je použit nejhorších 6\% z výsledků SSIM-3D pro daný snímek, je ale také možné použít průměr všech výsledků SSIM-3D. Výsledek pro časovou doménu celého video snímku($T_{video}$) je spočítán jako průměr výsledků jednotlivých snímků, stejně jako je výsledek pro prostorovou rovinu($S_{video}$) spočítán jako průměr výsledků SSIM pro jednotlivé snímky. V referenční implementaci se počítá SSIM i SSIM-3D pouze z každého šestnáctého nsímku. Výsledný index stVSSIM je následně spočítán jako \ref{eq:stvssim}.
+\begin{equation} \label{eq:stvssim}
+\mathit{stVSSIM} = T_{video}\times S_{video}
+\end{equation}
+
+\chapter{Analýza}
+
+\section{Využití pro video}
+\section{Srování s~konkurencí}
+
+\chapter{Implementace}
+\section{PSNR}
+\section{SSIM}
+\section{stVSSIM}
+
+
+\chapter{Měření}
+http://4ksamples.com/category/4k/movies/
+http://www.hd-trailers.net/movie/elysium/
+$ffmpeg -i h264_fHD_orig.mp4 -c:v h264 -c:a copy -b:v 5000000 -vf scale=1920:-1 h264_fHD_5000Kb.mkv
+ffmpeg -i h264_fHD_orig.mp4 -c:v vp9 -c:a copy -b:v 5000000 -vf scale=1920:-1 vp9_fHD_5000Kb.mkv
+ffmpeg -i h264_fHD_orig.mp4 -c:v hevc -c:a copy -b:v 5000000 -vf scale=1920:-1 h265_fHD_5000Kb.mkv
+ffmpeg -i h264_fHD_orig.mp4 -c:v mpeg2video -c:a copy -b:v 5000000 -vf scale=1920:-1 mpeg2_fHD_5000Kb.mkv
+ffmpeg -i h264_fHD_orig.mp4 -c:v mpeg4 -c:a copy -b:v 5000000 -vf scale=1920:-1 mpeg4_fHD_5000Kb.mkv$
+\section{Srovnání rychlosti metrik}
+\section{Výkonnost CPU}
+\section{Výkonnost GPU}
+
+
+\chapter{Porovnávání kodeků}
+
+\begin{conclusion}
+	%sem napište závěr Vaší práce
+\end{conclusion}
+
+\bibliographystyle{csn690}
+\bibliography{mybibliographyfile}
+
+\appendix
+
+\chapter{Seznam použitých zkratek}
+% \printglossaries
+\begin{description}
+	\item[GUI] Graphical user interface
+	\item[XML] Extensible markup language
+\end{description}
+
+
+\chapter{Obsah přiloženého CD}
+
+%upravte podle skutecnosti
+
+\begin{figure}
+	\dirtree{%
+		.1 readme.txt\DTcomment{stručný popis obsahu CD}.
+		.1 exe\DTcomment{adresář se spustitelnou formou implementace}.
+		.1 src.
+		.2 impl\DTcomment{zdrojové kódy implementace}.
+		.2 thesis\DTcomment{zdrojová forma práce ve formátu \LaTeX{}}.
+		.1 text\DTcomment{text práce}.
+		.2 thesis.pdf\DTcomment{text práce ve formátu PDF}.
+		.2 thesis.ps\DTcomment{text práce ve formátu PS}.
+	}
+\end{figure}
+
+\end{document}
