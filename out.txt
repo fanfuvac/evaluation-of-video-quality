@@ -1,0 +1,7 @@
+./comparsion-r D:\Dokumenty -in1 D:\Dokumenty\DP\data5\V2.mkv -in2 D:\Dokumenty\DP\data5\V7.mkv -type STVSSIM 
+-nan
+-nan
+D:\Dokumenty\DP\data5\V7.mkv
+-nan
+-nan
+-2147483648

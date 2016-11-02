@@ -1,3 +1,3 @@
 all:
-	g++ PSNR.cpp png_decode.cpp -lpng -g -o PSNR1
+	g++ PSNR.cpp  SSIM.cpp stvssim.cpp main.cpp -fopenmp -g -o comparsion
 	
