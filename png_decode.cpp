@@ -1,13 +1,11 @@
 //http://zarb.org/~gc/html/libpng.html
-#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
 #include <iostream>
-#define PNG_DEBUG 3
-#include <png.h>
-#include "png_decode.h"
+#include "png_decode.h"   
+
 using namespace std;
 
 void abort_(const char * s, ...)
@@ -22,13 +20,8 @@ void abort_(const char * s, ...)
 
 int x, y;
 
-png_byte color_type;
-png_byte bit_depth;
 
-png_structp png_ptr;
-png_infop info_ptr;
 int number_of_passes;
-png_bytep * row_pointers;
 
 
 
