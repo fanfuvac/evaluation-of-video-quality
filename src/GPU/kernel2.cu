@@ -8,13 +8,12 @@
 #include <cmath>
 
 #include "main.h"   
-//#include "..\..\Video_comparsion\Video_comparsion\PSNR.h"   
+#include "..\..\Video_comparsion\Video_comparsion\PSNR.h"   
 #include <omp.h>
 
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
-#include <errno.h>
 #include <stdio.h>
 using namespace std;
 //cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size);
@@ -25,86 +24,57 @@ __device__ double countVariance(unsigned char * data, double avg);
 __device__ double countCovariance(unsigned char * data1, unsigned char * data2, double avg1, double avg2);
 __device__ void getRect(unsigned char* data, int start, int width, unsigned char * out);
 __device__ double countRectangle(unsigned char * data1, unsigned char * data2);
-float countRes(float * tmpRes, int count);
-void getLuma(unsigned char *in, unsigned char *out, int size);
+__device__ double countRes(double * tmpRes, int count);
+__device__ void getLuma(unsigned char *in, unsigned char *out, int size);
 
-double countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char * dataC1, unsigned char * dataC2, unsigned char ** rects1,unsigned char ** rects2,int size, int width) {
+__device__ double countSSIM(unsigned char * datain1, unsigned char * datain2, int size, int width) {
 	//unsigned char * data1 = (unsigned char*)datain1;
 	//unsigned char * data2 = (unsigned char*)datain2;
-	cudaError_t cudaStatus;
-	//double * tmpRes = new double[size];
 	
-	unsigned char * data1 = new unsigned char[size];
-	unsigned char * data2 = new unsigned char[size];
-/*
-	if (data1==0 or data2==0){
-		//return -1;
-		//cout<<"error in allocation"<<endl;
-	}*/
-	getLuma(datain1, data1, size);
-	getLuma(datain2, data2, size);
-	/*unsigned char * rect1 = new unsigned char[RECT_SIZE];
+	float * tmpRes = new float[size/SKIP_SIZE/SKIP_SIZE];
+	
+	/*unsigned char * data1 = new unsigned char[10];
+	unsigned char * data2 = new unsigned char[10];*/
+	//getLuma(datain1, data1, size);
+	//getLuma(datain2, data2, size);
+	unsigned char * rect1 = new unsigned char[RECT_SIZE];
 	unsigned char * rect2 = new unsigned char[RECT_SIZE];
-	int k = 0;*/
-
-	float * results;
-	cudaStatus=cudaMalloc((void**)&results, size/SKIP_SIZE/SKIP_SIZE);
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMalloc failed!");
-
-		return -1;
-
-	}
+	int k = 0;
+	
+	
 	//#pragma omp parallel
 	//nthreads = omp_get_num_threads();
-
-	
-	cudaStatus = cudaMemcpy(dataC1,data1,size, cudaMemcpyHostToDevice);
-	if (cudaStatus != cudaSuccess ) {
-		printf("%s\n", cudaGetErrorString(cudaStatus));
-		return -1;
-	}
-	cudaStatus = cudaMemcpy(dataC2,data2,size, cudaMemcpyHostToDevice);
-	if (cudaStatus != cudaSuccess) {
-		printf("%s\n", cudaGetErrorString(cudaStatus));
-		return -1;
-	}
-
-
+	//datain1[10] = 10;
 	//	#pragma omp parallel for schedule(static, 20)
-	countRectangleKernel<<<1,size/SKIP_SIZE/SKIP_SIZE>>>(dataC1,dataC2,rects1,rects2,results,size,width);
-	/*for (int i = 0; i < size / width - RECT_SQRT; i += SKIP_SIZE) {
-
+	for (int i = 0; i < size / width - RECT_SQRT; i += SKIP_SIZE) {
 		for (int j = 0; j < width - RECT_SQRT; j += SKIP_SIZE, k++) {
 			//for (int i = 0; i < size-(RECT_SQRT-1)*width; i+=SKIP_SIZE) {
-
+			//data1[0] = 10;
+			getRect(datain1, i*width + j, width, rect1);
+			getRect(datain2, i*width + j, width, rect2);
+			//return -3;
+			//tmpRes[k] = 
+			//tmpRes[10] = 10;
+			/*tmpRes[k] = */countRectangle(rect1, rect2);
 			//if (tmpRes[k] < 0) cout << "low result: " << i<< ": " << j<< " :" << tmpRes[k] << endl;
-
+			//delete[] rect1;
+			//delete[] rect1;
 		}
 	}
-
-
-	double res = countRes(tmpRes, k);
-	delete[] tmpRes;
-	delete[] data1;
-	delete[] data2;
-	delete[] rect1;
-	delete[] rect2;*/
-
-	float * resultsOut=new float[size/SKIP_SIZE/SKIP_SIZE];
-	cudaStatus = cudaMemcpy(resultsOut,results,size/SKIP_SIZE/SKIP_SIZE, cudaMemcpyDeviceToHost);
-	if (cudaStatus != cudaSuccess) {
-		printf("%s\n", cudaGetErrorString(cudaStatus));
-		return -1;
-	}
-	double output=countRes(resultsOut, size/SKIP_SIZE/SKIP_SIZE);
-	return output;
+	
+	//double res = countRes(tmpRes, k);
+	delete tmpRes;
+	/*delete data1;
+	delete data2;*/
+	delete rect1;
+	delete rect2;
+	//return res;
 }
 
 
 
 using namespace std;
-void getLuma(unsigned char *in, unsigned char *out, int size) {
+__device__ void getLuma(unsigned char *in, unsigned char *out, int size) {
 	//#pragma omp parallel for schedule(static, 100)
 	for (int i = 0; i < size; i++) {
 		//out[i] = round(0.216*in[3 * i] + 0.7152*in[3 * i + 1] + 0.0722*in[3 * i + 2]); //get Luma from RGB picture
@@ -131,17 +101,18 @@ __device__ void getRect(unsigned char* data, int start, int width, unsigned char
 //count ssim of one rectangle with RECT_SIZE pixels
 __device__ double countRectangle(unsigned char * data1, unsigned char * data2) {
 
-	double avg1 = countAvg(data1);
-	double avg2 = countAvg(data2);
-
+	/*double avg1 = countAvg(data1);
+	double avg2 = countAvg(data2);*/
+	double avg1 = 1;
+	double avg2 = 1;
 	double var1 = countVariance(data1, avg1);
 	double var2 = countVariance(data2, avg2);
-
-	double cov = countCovariance(data1, data2, avg1, avg2);
-
-
-	double ssim = ((2 * avg1*avg2 + C1)*(2 * cov + C2)) / ((avg1*avg1 + avg2*avg2 + C1)*(var1 + var2 + C2));
-	return ssim;
+	/*
+	double cov = countCovariance(data1, data2, avg1, avg2);*/
+	
+	
+	//double ssim = ((2 * avg1*avg2 + C1)*(2 * cov + C2)) / ((avg1*avg1 + avg2*avg2 + C1)*(var1 + var2 + C2));
+	return 0;
 }
 //count avg value of given rectangle 
 __device__ double countAvg(unsigned char * data) {
@@ -178,30 +149,24 @@ __device__ double countCovariance(unsigned char * data1, unsigned char * data2, 
 
 
 //count average SSIM value from SSIM values per rectangle
-float countRes(float * tmpRes, int count) {
-	float sum = 0;
+__device__ double countRes(double * tmpRes, int count) {
+	double sum = 0;
 	for (int i = 0; i < count; i += 1) {
 		sum += tmpRes[i];
 
 	}
-	return sum / (float)count;
+	return sum / (double)count;
 
 }
-__global__ void countRectangleKernel(unsigned char * data1, unsigned char * data2,unsigned char **rects1,unsigned char ** rects2,float * out,int size, int width){
-			int i = threadIdx.x;
-			getRect(data1, (i*SKIP_SIZE)/width + (i*SKIP_SIZE)%width, width, rects1[i]);
-			getRect(data2, (i*SKIP_SIZE)/width + (i*SKIP_SIZE)%width, width, rects2[i]);
-			//return -3;
 
-			out[i] = countRectangle(rects1[i], rects2[i]);
-}
-/*
+
 __global__ void SSIMKernel(unsigned char * data1, unsigned char * data2, float * out, int size, int width){
 	//
 	int i = threadIdx.x;
-	//out[i] =  countSSIM(data1 + size*threadIdx.x, data2 + size*threadIdx.x, size, width);
+	out[i] =  countSSIM(data1 + size*threadIdx.x, data2 + size*threadIdx.x, size, width);
+	//out[10] = 156;
 	//countRes(0,0);
-}*/
+}
 
 
 int compare(const void * a, const void * b)
@@ -215,7 +180,7 @@ PictureData *getVideoInfo(string path) {
 	//string cmd="ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=width,height,nb_frames -of default=noprint_wrappers=1:nokey=1 "+path;
 	string cmd2 = "ffprobe - select_streams v - show_streams" + path + " 2> NUL";
 
-#ifdef __linux__
+#ifdef LINUX
 	FILE *stream = popen(cmd.c_str(), "r");
 #else 
 	FILE *stream = _popen(cmd.c_str(), "r");
@@ -240,25 +205,24 @@ PictureData *getVideoInfo(string path) {
 
 	cout << len*fps << endl;
 	data->frame_count = len*fps;
+	data->size = data->width*data->height;
 	//else data->frame_count = 3121;//181250; // 7100;//3121;//1359;//7192;
 	return data;
 }
-void startFFmpeg(string path, FILE *& stream) {
-#ifdef __linux__
+FILE * startFFmpeg(string path) {
+#ifdef LINUX
 	string cmd = "ffmpeg -i " + path + " -f image2pipe -pix_fmt rgb24 -vcodec rawvideo - 2>/dev/null";
 	cout << cmd << endl;
-	stream = popen(cmd.c_str(), "r");
+	FILE *stream = popen(cmd.c_str(), "rb");
 #else 
 	string cmd = "ffmpeg -i " + path + " -f image2pipe -threads 3  -pix_fmt rgb24 -vcodec rawvideo - 2>NUL";
 	//-c:v h264_qsv
-	stream = _popen(cmd.c_str(), "rb");
+	FILE *stream = _popen(cmd.c_str(), "rb");
 #endif
 	cout << cmd.c_str() << endl;
 
-	if (stream == NULL)
-    		printf ("Error opening file: %s\n",strerror(errno));
 
-	//return stream;
+	return stream;
 }
 
 
@@ -268,7 +232,7 @@ int main(int argc, char ** argv){
 	string file1, file2;
 	string type;
 	cudaError_t cudaStatus;
-	if (argc < 6) { // Check the value of argc. If not enough parameters have been passed, inform user and exit.
+	/*if (argc < 6) { // Check the value of argc. If not enough parameters have been passed, inform user and exit.
 		cout << argc << endl;
 		cout << "Usage is -r <reference file> -in1 <first video to compare> -in2 <second video to compare> [-type]\n"; // Inform the user of how to use the program
 																													   //std::cin.get();
@@ -277,9 +241,7 @@ int main(int argc, char ** argv){
 	else { // if we got enough parameters...
 
 		std::cout << argv[0];
-		for (int i = 1; i < argc; i++) { /* We will iterate over argv[] to get the parameters stored inside.
-										 * Note that we're starting on 1 because we don't need to know the
-										 * path of the program, which is stored in argv[0] */
+		for (int i = 1; i < argc; i++) { 
 			if (i + 1 != argc) // Check that we haven't finished parsing already
 				if (string(argv[i]) == string("-r")) {
 					// We know the next argument *should* be the filename:
@@ -304,8 +266,10 @@ int main(int argc, char ** argv){
 				}
 				std::cout << argv[i] << " ";
 		}
-	}
-
+	}*/
+	file2 = "d:\\Dokumenty\\DP\\dataA\\h265_fHD_5000Kb.mkv";
+	file1 = "d:\\Dokumenty\\DP\\dataA\\h264_fHD_5000Kb.mkv";
+	type = "SSIM";
 	const int MAX_BUFFER = 2048000;
 
 	PictureData * frame = getVideoInfo(file1);
@@ -315,55 +279,49 @@ int main(int argc, char ** argv){
 	frame2->data = new char[frame->width*frame->height * 3];
 	cout << frame->frame_count << endl;
 	float * results; 
-
-	FILE * stream=0;
-	startFFmpeg(file1, stream) ;
-
-	FILE * stream2=0;
-	startFFmpeg(file2, stream2) ;
-	if (stream == NULL)
-    		printf ("Error opening file: %s\n",strerror(errno));
-	if (stream2 == NULL)
-    		printf ("Error opening file2: %s\n",strerror(errno));
-
-	results=new float[frame2->frame_count];	
-//cudaMalloc((void**)&results, frame2->frame_count*sizeof(float));
+	cudaMalloc((void**)&results, frame2->frame_count*sizeof(float));
 	cudaStatus = cudaSetDevice(0);
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
 		return -1;
 		//goto Error;
 	}
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "cudaMalloc failed!");
+		fprintf(stderr, (char *)cudaStatus);
+		return -1;
+	}
+	FILE * stream = startFFmpeg(file1);
+	FILE * stream2 = startFFmpeg(file2);
 
 	unsigned char * data1;
 	unsigned char * data2;
-	unsigned char ** rects1;
-	unsigned char ** rects2;
+	unsigned char * data3;
+	unsigned char * data4;
+
 	size_t pitch;
 	//allocated the device memory for source array  
-	cudaStatus=cudaMalloc((void **)&data2, frame->width*frame->height);
+	cudaStatus=cudaMallocPitch((void **)&data2, &pitch, frame->width*frame->height * 3, CHUNK_SIZE);
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed!");
 		return -1;
 	}
-	cudaStatus=cudaMalloc((void **)&data1, frame->width*frame->height);
+	cudaStatus=cudaMallocPitch((void **)&data1, &pitch, frame->width*frame->height * 3, CHUNK_SIZE);
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed!");
 		return -1;
 	}
-	cudaStatus=cudaMallocPitch((void **)&rects1,&pitch, RECT_SIZE,frame->width*frame->height/SKIP_SIZE/SKIP_SIZE);
+	/*cudaMalloc((void**)&data1, CHUNK_SIZE*sizeof(unsigned char *));
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed!");
 		return -1;
 	}
-	cudaStatus=cudaMallocPitch((void **)&rects2,&pitch, RECT_SIZE,frame->width*frame->height/SKIP_SIZE/SKIP_SIZE);
+	cudaMalloc((void**)&data2, CHUNK_SIZE * sizeof(unsigned char *));
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed!");
 		return -1;
 	}
-
-
-	/*for (int j = 0; j < CHUNK_SIZE; j++) {
+	for (int j = 0; j < CHUNK_SIZE; j++) {
 		cudaMalloc((void**)&data1[j], frame->width*frame->height * 3);
 		if (cudaStatus != cudaSuccess) {
 			fprintf(stderr, "cudaMalloc failed!");
@@ -375,31 +333,57 @@ int main(int argc, char ** argv){
 			return -1;
 		}
 		
-*/
+
 
 		/*data1[j] = new unsigned char[frame->width*frame->height * 3];
 		data2[j] = new unsigned char[frame->width*frame->height * 3];
 	}*/
-	unsigned char * datatmp1 = new unsigned char[frame->width*frame->height * 3];
-	unsigned char * datatmp2 = new unsigned char[frame->width*frame->height * 3];
-	for (int i = 0; i < frame2->frame_count ; i++) {
+	unsigned char * datatmp;
+	datatmp = new unsigned char[frame->width*frame->height * 3];
+	for (int i = 0; i < frame2->frame_count / CHUNK_SIZE; i++) {
+		for (int j = 0; j < CHUNK_SIZE; j++) {
+			int rec1 = fread(datatmp, 1, frame->width*frame->height * 3, stream);
+			cudaStatus = cudaMemcpy(data1,datatmp,frame->width*frame->height * 3, cudaMemcpyHostToDevice);
+			if (cudaStatus != cudaSuccess) {
+				printf("%s\n", cudaGetErrorString(cudaStatus));
+				return -1;
+			}
 
-		int rec1 = fread(datatmp1, 1, frame->width*frame->height * 3, stream);
-		if (rec1 != frame->width*frame->height*3) {
-			printf("error in reading from file 1\n");
-			return -1;
-		}		
 
+			if (rec1 != frame->width*frame->height * 3) {
+				printf("error while reading file 1\n");
+				return -1;
+			}
 
-		int rec2 = fread(datatmp2, 1, frame->width*frame->height * 3, stream2);
-		if (rec2 != frame->width*frame->height*3) {
-			printf("error in reading from file 2\n");
+			int rec2 = fread(datatmp, 1, frame->width*frame->height * 3, stream2);
+			cudaStatus = cudaMemcpy(data2, datatmp, frame->width*frame->height * 3, cudaMemcpyHostToDevice);
+			if (cudaStatus != cudaSuccess) {
+				if (cudaStatus != cudaSuccess) printf("%s\n", cudaGetErrorString(cudaStatus));
+				return -1;
+			}
+
+			if (rec2 != frame->width*frame->height * 3) {
+				cout << "error2" << endl;
+				return -1;
+			}
+		}
+		//SSIMKernel(unsigned char ** data1, unsigned char ** data2, float * data3, float * data4, int size, int width)
+		SSIMKernel<<<1, 1 >>>(data1, data2, results, frame->size, frame->width);
+		cudaStatus = cudaDeviceSynchronize();
+		if (cudaStatus != cudaSuccess) {
+			if (cudaStatus != cudaSuccess) printf("%s\n", cudaGetErrorString(cudaStatus));
 			return -1;
 		}
 
-
-		//double countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char * dataC1, unsigned char * dataC2, unsigned char ** rects1,unsigned char ** rects2,int size, int width
-		results[i]=countSSIM(datatmp1,datatmp2,data1, data2, rects1,rects2, frame->width*frame->height, frame->width);
+		float * resultsHost = new float[frame2->frame_count];
+		cudaStatus = cudaMemcpy(resultsHost, results, frame->frame_count * sizeof(float), cudaMemcpyDeviceToHost);
+		if (cudaStatus != cudaSuccess) {
+			if (cudaStatus != cudaSuccess) printf("%s\n", cudaGetErrorString(cudaStatus));
+			return -1;
+		}
+		
+		
+		cout << resultsHost[10] << endl;
 		/*
 		omp_set_num_threads(CHUNK_SIZE);
 #pragma omp parallel for 
@@ -421,20 +405,24 @@ int main(int argc, char ** argv){
 
 
 	//}
-	//float * results2=new float[frame2->frame_count];
-	/*cudaStatus = cudaMemcpy(results2, results, frame2->frame_count, cudaMemcpyDeviceToHost);*/
+	float * results2=new float[frame2->frame_count];
+	cudaStatus = cudaMemcpy(results2, results, frame2->frame_count, cudaMemcpyDeviceToHost);
 	double sum = 0;
 	int frames = frame2->frame_count;
 	for (int i = 0; i<frame2->frame_count; i++) {
-		cout << i << " " << results[i] << endl;
-		if (isfinite(results[i]))
-			sum += results[i];
+		cout << i << " " << results2[i] << endl;
+		if (isfinite(results2[i]))
+			sum += results2[i];
 		else frames--;
 	}
 
+	delete frame->data;
+	delete frame2->data;
+	delete frame;
+	delete frame2;
 	cout << "AVG: " << sum / frames << endl;
-	qsort(results, frames, sizeof(double), compare);
-	cout << "Median: " << results[frames / 2] << endl;
+	qsort(results2, frames, sizeof(double), compare);
+	cout << "Median: " << results2[frames / 2] << endl;
 }
 
 // Helper function for using CUDA to add vectors in parallel.
