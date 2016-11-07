@@ -28,7 +28,7 @@ __device__ double countRectangle(unsigned char * data1, unsigned char * data2);
 float countRes(float * tmpRes, int count);
 void getLuma(unsigned char *in, unsigned char *out, int size);
 
-double countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char * dataC1, unsigned char * dataC2, unsigned char ** rects1,unsigned char ** rects2,int size, int width) {
+double countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char * dataC1, unsigned char * dataC2, unsigned char * rects1,unsigned char * rects2,int size, int width,float * results) {
 	//unsigned char * data1 = (unsigned char*)datain1;
 	//unsigned char * data2 = (unsigned char*)datain2;
 	cudaError_t cudaStatus;
@@ -47,14 +47,8 @@ double countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char 
 	unsigned char * rect2 = new unsigned char[RECT_SIZE];
 	int k = 0;*/
 
-	float * results;
-	cudaStatus=cudaMalloc((void**)&results, size/SKIP_SIZE/SKIP_SIZE);
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "cudaMalloc failed!");
-
-		return -1;
-
-	}
+	
+	
 	//#pragma omp parallel
 	//nthreads = omp_get_num_threads();
 
@@ -187,14 +181,15 @@ float countRes(float * tmpRes, int count) {
 	return sum / (float)count;
 
 }
-__global__ void countRectangleKernel(unsigned char * data1, unsigned char * data2,unsigned char **rects1,unsigned char ** rects2,float * out,int size, int width){
+__global__ void countRectangleKernel(unsigned char * data1, unsigned char * data2,unsigned char * rects1,unsigned char * rects2,float * out,int size, int width){
 			int i = threadIdx.x;
 			int j= blockIdx.x;
-			getRect(data1, (j*THREADS+i)* SKIP_SIZE * SKIP_SIZE, width, rects1[i]);
-			getRect(data2, (j*THREADS+i)* SKIP_SIZE* SKIP_SIZE, width, rects2[i]);
+			int pos=j*THREADS+i;
+			getRect(data1, (pos)* SKIP_SIZE * SKIP_SIZE, width, rects1+(pos)*RECT_SIZE);
+			getRect(data2, (pos)* SKIP_SIZE* SKIP_SIZE, width, rects2+(pos)*RECT_SIZE);
 			//return -3;
 
-			out[i] = countRectangle(rects1[i], rects2[i]);
+			out[pos] = countRectangle(rects1+pos*RECT_SIZE, rects2+pos*RECT_SIZE);
 }
 /*
 __global__ void SSIMKernel(unsigned char * data1, unsigned char * data2, float * out, int size, int width){
@@ -338,8 +333,8 @@ int main(int argc, char ** argv){
 
 	unsigned char * data1;
 	unsigned char * data2;
-	unsigned char ** rects1;
-	unsigned char ** rects2;
+	unsigned char * rects1;
+	unsigned char * rects2;
 	size_t pitch;
 	//allocated the device memory for source array  
 	cudaStatus=cudaMalloc((void **)&data2, frame->width*frame->height);
@@ -352,17 +347,25 @@ int main(int argc, char ** argv){
 		fprintf(stderr, "cudaMalloc failed!");
 		return -1;
 	}
-	cudaStatus=cudaMallocPitch((void **)&rects1,&pitch, RECT_SIZE,frame->width*frame->height/SKIP_SIZE/SKIP_SIZE);
+	cudaStatus=cudaMallocPitch((void **)&rects1,&pitch, RECT_SIZE,frame->width*frame->height/SKIP_SIZE/SKIP_SIZE*RECT_SIZE);
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed!");
 		return -1;
 	}
-	cudaStatus=cudaMallocPitch((void **)&rects2,&pitch, RECT_SIZE,frame->width*frame->height/SKIP_SIZE/SKIP_SIZE);
+	cudaStatus=cudaMallocPitch((void **)&rects2,&pitch, RECT_SIZE,frame->width*frame->height/SKIP_SIZE/SKIP_SIZE*RECT_SIZE);
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed!");
 		return -1;
 	}
+	
+	float * resultsFrame;
+	cudaStatus=cudaMalloc((void**)&resultsFrame, frame->width*frame->height/SKIP_SIZE/SKIP_SIZE);
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "cudaMalloc failed!");
 
+		return -1;
+
+	}
 
 	/*for (int j = 0; j < CHUNK_SIZE; j++) {
 		cudaMalloc((void**)&data1[j], frame->width*frame->height * 3);
@@ -400,7 +403,7 @@ int main(int argc, char ** argv){
 
 
 		//double countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char * dataC1, unsigned char * dataC2, unsigned char ** rects1,unsigned char ** rects2,int size, int width
-		results[i]=countSSIM(datatmp1,datatmp2,data1, data2, rects1,rects2, frame->width*frame->height, frame->width);
+		results[i]=countSSIM(datatmp1,datatmp2,data1, data2, rects1,rects2, frame->width*frame->height, frame->width,resultsFrame);
 		/*
 		omp_set_num_threads(CHUNK_SIZE);
 #pragma omp parallel for 
@@ -438,82 +441,4 @@ int main(int argc, char ** argv){
 	cout << "Median: " << results[frames / 2] << endl;
 }
 
-// Helper function for using CUDA to add vectors in parallel.
-cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size)
-{
-    int *dev_a = 0;
-    int *dev_b = 0;
-    int *dev_c = 0;
-    cudaError_t cudaStatus;
 
-    // Choose which GPU to run on, change this on a multi-GPU system.
-    cudaStatus = cudaSetDevice(0);
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaSetDevice failed!  Do you have a CUDA-capable GPU installed?");
-        goto Error;
-    }
-
-    // Allocate GPU buffers for three vectors (two input, one output)    .
-    cudaStatus = cudaMalloc((void**)&dev_c, size * sizeof(int));
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMalloc failed!");
-        goto Error;
-    }
-
-    cudaStatus = cudaMalloc((void**)&dev_a, size * sizeof(int));
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMalloc failed!");
-        goto Error;
-    }
-
-    cudaStatus = cudaMalloc((void**)&dev_b, size * sizeof(int));
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMalloc failed!");
-        goto Error;
-    }
-
-    // Copy input vectors from host memory to GPU buffers.
-    cudaStatus = cudaMemcpy(dev_a, a, size * sizeof(int), cudaMemcpyHostToDevice);
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMemcpy failed!");
-        goto Error;
-    }
-
-    cudaStatus = cudaMemcpy(dev_b, b, size * sizeof(int), cudaMemcpyHostToDevice);
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMemcpy failed!");
-        goto Error;
-    }
-
-    // Launch a kernel on the GPU with one thread for each element.
-    //addKernel<<<1, size>>>(dev_c, dev_a, dev_b);
-
-    // Check for any errors launching the kernel
-    cudaStatus = cudaGetLastError();
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "addKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
-        goto Error;
-    }
-    
-    // cudaDeviceSynchronize waits for the kernel to finish, and returns
-    // any errors encountered during the launch.
-    cudaStatus = cudaDeviceSynchronize();
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
-        goto Error;
-    }
-
-    // Copy output vector from GPU buffer to host memory.
-    cudaStatus = cudaMemcpy(c, dev_c, size * sizeof(int), cudaMemcpyDeviceToHost);
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMemcpy failed!");
-        goto Error;
-    }
-
-Error:
-    cudaFree(dev_c);
-    cudaFree(dev_a);
-    cudaFree(dev_b);
-    
-    return cudaStatus;
-}
