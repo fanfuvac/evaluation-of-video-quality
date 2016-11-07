@@ -8,7 +8,7 @@
 #include <cmath>
 
 #include "main.h"   
-#include "..\..\Video_comparsion\Video_comparsion\PSNR.h"   
+//#include "..\..\Video_comparsion\Video_comparsion\PSNR.h"   
 #include <omp.h>
 
 #include "cuda_runtime.h"
@@ -172,7 +172,7 @@ PictureData *getVideoInfo(string path) {
 	//string cmd="ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=width,height,nb_frames -of default=noprint_wrappers=1:nokey=1 "+path;
 	string cmd2 = "ffprobe - select_streams v - show_streams" + path + " 2> NUL";
 
-#ifdef LINUX
+#ifdef __linux__
 	FILE *stream = popen(cmd.c_str(), "r");
 #else 
 	FILE *stream = _popen(cmd.c_str(), "r");
@@ -200,20 +200,20 @@ PictureData *getVideoInfo(string path) {
 	//else data->frame_count = 3121;//181250; // 7100;//3121;//1359;//7192;
 	return data;
 }
-FILE * startFFmpeg(string path) {
-#ifdef LINUX
+void startFFmpeg(string path, FILE * stream) {
+#ifdef __linux__
 	string cmd = "ffmpeg -i " + path + " -f image2pipe -pix_fmt rgb24 -vcodec rawvideo - 2>/dev/null";
 	cout << cmd << endl;
-	FILE *stream = popen(cmd.c_str(), "rb");
+	stream = popen(cmd.c_str(), "rb");
 #else 
 	string cmd = "ffmpeg -i " + path + " -f image2pipe -threads 3  -pix_fmt rgb24 -vcodec rawvideo - 2>NUL";
 	//-c:v h264_qsv
-	FILE *stream = _popen(cmd.c_str(), "rb");
+	stream = _popen(cmd.c_str(), "rb");
 #endif
 	cout << cmd.c_str() << endl;
 
 
-	return stream;
+	//return stream;
 }
 
 
@@ -282,8 +282,10 @@ int main(int argc, char ** argv){
 		fprintf(stderr, (char *)cudaStatus);
 		return -1;
 	}
-	FILE * stream = startFFmpeg(file1);
-	FILE * stream2 = startFFmpeg(file2);
+	FILE * stream;
+	startFFmpeg(file1,stream);
+	FILE * stream2;
+	startFFmpeg(file2,stream2);
 
 	unsigned char * data1;
 	unsigned char * data2;
