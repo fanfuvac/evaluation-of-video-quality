@@ -72,7 +72,7 @@ double countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char 
 
 
 	//	#pragma omp parallel for schedule(static, 20)
-	countRectangleKernel<<<1,size/SKIP_SIZE/SKIP_SIZE>>>(dataC1,dataC2,rects1,rects2,results,size,width);
+	countRectangleKernel<<<size/SKIP_SIZE/SKIP_SIZE/THREADS,THREADS>>>(dataC1,dataC2,rects1,rects2,results,size,width); //FIXME - need to adjust size to count up to THREADS last rectangles!!
 	/*for (int i = 0; i < size / width - RECT_SQRT; i += SKIP_SIZE) {
 
 		for (int j = 0; j < width - RECT_SQRT; j += SKIP_SIZE, k++) {
@@ -189,8 +189,9 @@ float countRes(float * tmpRes, int count) {
 }
 __global__ void countRectangleKernel(unsigned char * data1, unsigned char * data2,unsigned char **rects1,unsigned char ** rects2,float * out,int size, int width){
 			int i = threadIdx.x;
-			getRect(data1, (i*SKIP_SIZE)/width + (i*SKIP_SIZE)%width, width, rects1[i]);
-			getRect(data2, (i*SKIP_SIZE)/width + (i*SKIP_SIZE)%width, width, rects2[i]);
+			int j= blockIdx.x;
+			getRect(data1, (j*THREADS+i)* SKIP_SIZE * SKIP_SIZE, width, rects1[i]);
+			getRect(data2, (j*THREADS+i)* SKIP_SIZE* SKIP_SIZE, width, rects2[i]);
 			//return -3;
 
 			out[i] = countRectangle(rects1[i], rects2[i]);
