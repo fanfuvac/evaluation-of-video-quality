@@ -20,19 +20,19 @@ using namespace std;
 //cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size);
 
 
-__device__ double countAvg(unsigned char * data);
-__device__ double countVariance(unsigned char * data, double avg);
-__device__ double countCovariance(unsigned char * data1, unsigned char * data2, double avg1, double avg2);
+__device__ float countAvg(unsigned char * data);
+__device__ float countVariance(unsigned char * data, float avg);
+__device__ float countCovariance(unsigned char * data1, unsigned char * data2, float avg1, float avg2);
 __device__ void getRect(unsigned char* data, int start, int width, unsigned char * out);
-__device__ double countRectangle(unsigned char * data1, unsigned char * data2);
+__device__ float countRectangle(unsigned char * data1, unsigned char * data2);
 float countRes(float * tmpRes, int count);
 void getLuma(unsigned char *in, unsigned char *out, int size);
 
-double countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char * dataC1, unsigned char * dataC2, unsigned char * rects1,unsigned char * rects2,int size, int width,float * results) {
+float countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char * dataC1, unsigned char * dataC2, unsigned char * rects1,unsigned char * rects2,int size, int width,float*& results) {
 	//unsigned char * data1 = (unsigned char*)datain1;
 	//unsigned char * data2 = (unsigned char*)datain2;
 	cudaError_t cudaStatus;
-	//double * tmpRes = new double[size];
+	//float * tmpRes = new float[size];
 	
 	unsigned char * data1 = new unsigned char[size];
 	unsigned char * data2 = new unsigned char[size];
@@ -66,7 +66,13 @@ double countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char 
 
 
 	//	#pragma omp parallel for schedule(static, 20)
-	countRectangleKernel<<<size/SKIP_SIZE/SKIP_SIZE/THREADS,THREADS>>>(dataC1,dataC2,rects1,rects2,results,size,width); //FIXME - need to adjust size to count up to THREADS last rectangles!!
+	int rectCount=size/SKIP_SIZE/SKIP_SIZE/THREADS*THREADS;
+	int blocks=rectCount/THREADS;
+	if (rectCount<size/SKIP_SIZE/SKIP_SIZE){
+		blocks=rectCount/THREADS+1;
+	}
+	countRectangleKernel<<<blocks,THREADS>>>(dataC1,dataC2,rects1,rects2,results,size,width); //FIXME - need to adjust size to count up to THREADS last rectangles!!
+	cudaDeviceSynchronize();
 	/*for (int i = 0; i < size / width - RECT_SQRT; i += SKIP_SIZE) {
 
 		for (int j = 0; j < width - RECT_SQRT; j += SKIP_SIZE, k++) {
@@ -78,20 +84,21 @@ double countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char 
 	}
 
 
-	double res = countRes(tmpRes, k);
+	float res = countRes(tmpRes, k);
 	delete[] tmpRes;
 	delete[] data1;
 	delete[] data2;
 	delete[] rect1;
 	delete[] rect2;*/
-
-	float * resultsOut=new float[size/SKIP_SIZE/SKIP_SIZE];
-	cudaStatus = cudaMemcpy(resultsOut,results,size/SKIP_SIZE/SKIP_SIZE, cudaMemcpyDeviceToHost);
+	
+	float * resultsOut=new float[rectCount];
+	cudaStatus = cudaMemcpy(resultsOut,results,rectCount*sizeof(float), cudaMemcpyDeviceToHost);
 	if (cudaStatus != cudaSuccess) {
 		printf("%s\n", cudaGetErrorString(cudaStatus));
 		return -1;
 	}
-	double output=countRes(resultsOut, size/SKIP_SIZE/SKIP_SIZE);
+	float output=countRes(resultsOut,rectCount);
+	cout<<output<<endl;
 	return output;
 }
 
@@ -102,7 +109,7 @@ void getLuma(unsigned char *in, unsigned char *out, int size) {
 	//#pragma omp parallel for schedule(static, 100)
 	for (int i = 0; i < size; i++) {
 		//out[i] = round(0.216*in[3 * i] + 0.7152*in[3 * i + 1] + 0.0722*in[3 * i + 2]); //get Luma from RGB picture
-		//out[i] = round((double)1/3*in[3 * i] + (double)1/3*in[3 * i + 1] + (double)1/3*in[3 * i + 2]); //get Luma from RGB picture
+		//out[i] = round((float)1/3*in[3 * i] + (float)1/3*in[3 * i + 1] + (float)1/3*in[3 * i + 2]); //get Luma from RGB picture
 		out[i] = round(0.299*in[3 * i] + 0.587*in[3 * i + 1] + 0.114*in[3 * i + 2]); //get Luma from RGB picture
 	}
 }
@@ -123,47 +130,47 @@ __device__ void getRect(unsigned char* data, int start, int width, unsigned char
 }
 
 //count ssim of one rectangle with RECT_SIZE pixels
-__device__ double countRectangle(unsigned char * data1, unsigned char * data2) {
+__device__ float countRectangle(unsigned char * data1, unsigned char * data2) {
 
-	double avg1 = countAvg(data1);
-	double avg2 = countAvg(data2);
+	float avg1 = countAvg(data1);
+	float avg2 = countAvg(data2);
 
-	double var1 = countVariance(data1, avg1);
-	double var2 = countVariance(data2, avg2);
+	float var1 = countVariance(data1, avg1);
+	float var2 = countVariance(data2, avg2);
 
-	double cov = countCovariance(data1, data2, avg1, avg2);
+	float cov = countCovariance(data1, data2, avg1, avg2);
 
 
-	double ssim = ((2 * avg1*avg2 + C1)*(2 * cov + C2)) / ((avg1*avg1 + avg2*avg2 + C1)*(var1 + var2 + C2));
+	float ssim = ((2 * avg1*avg2 + C1)*(2 * cov + C2)) / ((avg1*avg1 + avg2*avg2 + C1)*(var1 + var2 + C2));
 	return ssim;
 }
 //count avg value of given rectangle 
-__device__ double countAvg(unsigned char * data) {
-	double avg = 0;
+__device__ float countAvg(unsigned char * data) {
+	float avg = 0;
 	for (int i = 0; i < RECT_SIZE; i++) {
 		avg += data[i];
 	}
-	avg = avg / (double)RECT_SIZE;
+	avg = avg / (float)RECT_SIZE;
 	return avg;
 }
 
 //count variance of given rectangle
-__device__ double countVariance(unsigned char * data, double avg) {
-	double var = 0;
+__device__ float countVariance(unsigned char * data, float avg) {
+	float var = 0;
 	for (int i = 0; i < RECT_SIZE; i++) {
 		var += (data[i] - avg)*(data[i] - avg);
 	}
-	var = var / (double)RECT_SIZE;
+	var = var / (float)RECT_SIZE;
 	return var;
 }
 
 //count covariance of given rectangle
-__device__ double countCovariance(unsigned char * data1, unsigned char * data2, double avg1, double avg2) {
-	double cov = 0;
+__device__ float countCovariance(unsigned char * data1, unsigned char * data2, float avg1, float avg2) {
+	float cov = 0;
 	for (int i = 0; i < RECT_SIZE; i++) {
 		cov += (data1[i] - avg1)*(data2[i] - avg2);
 	}
-	cov = cov / (double)RECT_SIZE;
+	cov = cov / (float)RECT_SIZE;
 	//if (cov < 0) cout << "neg "<<cov << endl;
 	return cov;
 }
@@ -184,12 +191,19 @@ float countRes(float * tmpRes, int count) {
 __global__ void countRectangleKernel(unsigned char * data1, unsigned char * data2,unsigned char * rects1,unsigned char * rects2,float * out,int size, int width){
 			int i = threadIdx.x;
 			int j= blockIdx.x;
+int a;
 			int pos=j*THREADS+i;
-			getRect(data1, (pos)* SKIP_SIZE * SKIP_SIZE, width, rects1+(pos)*RECT_SIZE);
-			getRect(data2, (pos)* SKIP_SIZE* SKIP_SIZE, width, rects2+(pos)*RECT_SIZE);
-			//return -3;
+			if (pos<size/SKIP_SIZE/SKIP_SIZE){
+				getRect(data1, ((pos)* SKIP_SIZE)%width + (pos*SKIP_SIZE)/width*SKIP_SIZE*width, width, rects1+(pos)*RECT_SIZE);
+				getRect(data2, ((pos)* SKIP_SIZE)%width + (pos*SKIP_SIZE)/width*SKIP_SIZE*width, width, rects2+(pos)*RECT_SIZE);
+				//return -3;
 
-			out[pos] = countRectangle(rects1+pos*RECT_SIZE, rects2+pos*RECT_SIZE);
+				out[pos] = countRectangle(rects1+pos*RECT_SIZE, rects2+pos*RECT_SIZE);
+			}
+	else{
+	rects1[0]=1;
+}
+a=a+1;
 }
 /*
 __global__ void SSIMKernel(unsigned char * data1, unsigned char * data2, float * out, int size, int width){
@@ -202,7 +216,7 @@ __global__ void SSIMKernel(unsigned char * data1, unsigned char * data2, float *
 
 int compare(const void * a, const void * b)
 {
-	return (*(double*)a - *(double*)b);
+	return (*(float*)a - *(float*)b);
 }
 PictureData *getVideoInfo(string path) {
 	PictureData * data = new PictureData;
@@ -225,14 +239,14 @@ PictureData *getVideoInfo(string path) {
 	string tmp = buffer;
 	int pos = tmp.find('/');
 	int fps1 = atoi(buffer);
-	double fps2 = atoi(tmp.substr(pos + 1).c_str());
-	double fps = fps1 / fps2;
+	float fps2 = atoi(tmp.substr(pos + 1).c_str());
+	float fps = fps1 / fps2;
 	cout << fps << endl;
 	fgets(buffer, 20, stream);
 	//cout << buffer << endl;
 
 
-	double len = atof(buffer);
+	float len = atof(buffer);
 
 	cout << len*fps << endl;
 	data->frame_count = len*fps;
@@ -359,7 +373,7 @@ int main(int argc, char ** argv){
 	}
 	
 	float * resultsFrame;
-	cudaStatus=cudaMalloc((void**)&resultsFrame, frame->width*frame->height/SKIP_SIZE/SKIP_SIZE);
+	cudaStatus=cudaMalloc((void**)&resultsFrame, frame->width*frame->height/SKIP_SIZE/SKIP_SIZE*sizeof(float));
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed!");
 
@@ -402,7 +416,7 @@ int main(int argc, char ** argv){
 		}
 
 
-		//double countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char * dataC1, unsigned char * dataC2, unsigned char ** rects1,unsigned char ** rects2,int size, int width
+		//float countSSIM(unsigned char * datain1, unsigned char * datain2,unsigned char * dataC1, unsigned char * dataC2, unsigned char ** rects1,unsigned char ** rects2,int size, int width
 		results[i]=countSSIM(datatmp1,datatmp2,data1, data2, rects1,rects2, frame->width*frame->height, frame->width,resultsFrame);
 		/*
 		omp_set_num_threads(CHUNK_SIZE);
@@ -427,7 +441,7 @@ int main(int argc, char ** argv){
 	//}
 	//float * results2=new float[frame2->frame_count];
 	/*cudaStatus = cudaMemcpy(results2, results, frame2->frame_count, cudaMemcpyDeviceToHost);*/
-	double sum = 0;
+	float sum = 0;
 	int frames = frame2->frame_count;
 	for (int i = 0; i<frame2->frame_count; i++) {
 		cout << i << " " << results[i] << endl;
@@ -437,7 +451,7 @@ int main(int argc, char ** argv){
 	}
 
 	cout << "AVG: " << sum / frames << endl;
-	qsort(results, frames, sizeof(double), compare);
+	qsort(results, frames, sizeof(float), compare);
 	cout << "Median: " << results[frames / 2] << endl;
 }
 
