@@ -10,14 +10,7 @@
 
 
 using namespace std;
-void getLuma(unsigned char *in, unsigned char *out,int size) {
-	//#pragma omp parallel for schedule(static, 100)
-	for (int i = 0; i < size; i++) {
-		//out[i] = round(0.216*in[3 * i] + 0.7152*in[3 * i + 1] + 0.0722*in[3 * i + 2]); //get Luma from RGB picture
-		//out[i] = round((double)1/3*in[3 * i] + (double)1/3*in[3 * i + 1] + (double)1/3*in[3 * i + 2]); //get Luma from RGB picture
-		out[i] = round(0.299*in[3 * i] + 0.587*in[3 * i + 1] + 0.114*in[3 * i + 2]); //get Luma from RGB picture
-	}
-}
+
 
 
 //count SSIM
@@ -25,10 +18,10 @@ double countSSIM(unsigned char * datain1, unsigned char * datain2, int size,int 
 	//unsigned char * data1 = (unsigned char*)datain1;
 	//unsigned char * data2 = (unsigned char*)datain2;
 	double * tmpRes=new double[size];
-	unsigned char * data1 = new unsigned char[size];
-	unsigned char * data2 = new unsigned char[size];
-	getLuma(datain1, data1, size);
-	getLuma(datain2, data2,size);
+	//unsigned char * data1 = new unsigned char[size];
+	//unsigned char * data2 = new unsigned char[size];
+	//getLuma(datain1, data1, size);
+	//getLuma(datain2, data2,size);
 	unsigned char * rect1 = new unsigned char[RECT_SIZE];
 	unsigned char * rect2 = new unsigned char[RECT_SIZE];
 	int k = 0;
@@ -42,9 +35,9 @@ double countSSIM(unsigned char * datain1, unsigned char * datain2, int size,int 
 		
 		for (int j = 0; j < width - RECT_SQRT; j += SKIP_SIZE,k++) {
 			//for (int i = 0; i < size-(RECT_SQRT-1)*width; i+=SKIP_SIZE) {
-			getRect(data1, i*width+j, width, rect1);
-			getRect(data2, i*width + j, width, rect2);
-			tmpRes[k] = countRectangle(rect1, rect2);
+			getRect(datain1, i*width+j, width, rect1);
+			getRect(datain2, i*width + j, width, rect2);
+			tmpRes[k] =  countRectangle(rect1, rect2);
 			//if (tmpRes[k] < 0) cout << "low result: " << i<< ": " << j<< " :" << tmpRes[k] << endl;
 			/*delete[] rect1;
 			delete[] rect1;*/
@@ -52,20 +45,21 @@ double countSSIM(unsigned char * datain1, unsigned char * datain2, int size,int 
 	}
 	double res= countRes(tmpRes, k);
 	delete[] tmpRes;
-	delete[] data1;
-	delete[] data2;
+	//delete[] data1;
+	//delete[] data2;
 	delete[] rect1;
 	delete[] rect2;
 	return res;
 }
 
 //count average SSIM value from SSIM values per rectangle
-double countRes(double * tmpRes,int count){
+/*double countRes(double * tmpRes,int count){
 	double sum=0;
 	for (int i = 0; i < count; i += 1) {
 		sum+=tmpRes[i];
-		
+		//cout << tmpRes[i] << endl;
 	}
+	//cout << "frame" << endl;
 	return sum/(double)count;
 	
 }
@@ -123,4 +117,4 @@ double countCovariance(unsigned char * data1, unsigned char * data2, double avg1
 	cov = cov/ (double)RECT_SIZE;
 	//if (cov < 0) cout << "neg "<<cov << endl;
 	return cov;
-}
+}*/

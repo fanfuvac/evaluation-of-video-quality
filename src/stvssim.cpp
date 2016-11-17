@@ -12,6 +12,72 @@
 #include <map>
 
 using namespace std;
+
+double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, PictureData * frame, string type, double ** results, int *& frames) {
+	//results= new double *[files_count];
+	int rec;
+	unsigned char ** ref_data = new unsigned char *[FRAME_CNT];
+	unsigned char *** data = new unsigned char **[FRAME_CNT];
+	for (int k = 0; k < files_count; k++) {
+		//results[k] = new double[frame->frame_count];
+		data[k] = new unsigned char *[FRAME_CNT];
+		for (int j = 0; j < FRAME_CNT; j++) {
+			data[k][j] = new unsigned char[frame->size];
+		}
+	}
+	for (int j = 0; j < FRAME_CNT; j++) {
+		ref_data[j] = new unsigned char[frame->size];
+	}
+	unsigned char * tmp = new  unsigned char[frame->size * 3];
+
+	for (int i = FRAME_CNT / 2; i < FRAME_CNT; i++) {
+		for (int j = 0; j < files_count; j++) {
+			rec = fread(tmp, 1, frame->width*frame->height * 3, streams[j]);
+			if (rec != frame->width*frame->height * 3) {
+				cout << "error" << endl;
+				return NULL;
+			}
+			//getLuma(tmp, data[j][i], frame->size);
+		}
+
+		rec = fread(tmp, 1, frame->width*frame->height * 3, ref);
+		if (rec != frame->width*frame->height * 3) {
+			cout << "error2" << endl;
+			return NULL;
+		}
+		//getLuma(tmp, ref_data[i], frame->size);
+	}
+
+	int i = FRAME_SKIP;
+	int j = 0;
+
+	for (; i < frame->frame_count - FRAME_SKIP; i += FRAME_SKIP, j++) {
+		shiftData(ref_data, frame->size);
+		for (int k = 0; k < files_count; k++) {
+			shiftData(data[k], frame->size);
+		}
+		for (int k = 0; k < FRAME_SKIP; k++) {
+			for (int l = 0; l < files_count; l++) {
+				rec = fread(tmp, 1, frame->width*frame->height * 3, streams[l]);
+				if (rec != frame->width*frame->height * 3) {
+					cout << "error" << endl;
+					return NULL;
+				}
+				//getLuma(tmp, data[l][k], frame->size);
+			}
+		}
+		for (int l = 0; l < files_count; l++) {
+			results[l][j] = countSTVSSIM(ref_data, data[l], frame->width*frame->height, frame->width);
+			cout << j << ": " << results[l][j] << endl;
+		}
+		//cout << results[j] << endl;
+
+	}
+	for (int i = 0; i < files_count; i++) {
+		frames[i] = j;
+	}
+}
+
 double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size, int width) {
 	unsigned char * out = new unsigned char[RECT_SIZE];
 	
@@ -165,6 +231,7 @@ double countDeltaSqr(unsigned char*** filter, unsigned char*** cube,double mu) {
 	return res/ (RECT_SQRT_3D*FRAME_CNT);
 }
 
+
 double countDelta(unsigned char*** filter, unsigned char*** cube1, unsigned char*** cube2, double muX, double muY) {
 	double res = 0;
 	for (int alpha = 0; alpha < RECT_SQRT_3D; alpha++) {
@@ -198,6 +265,8 @@ void fillCube(unsigned char ** datain, int pos, unsigned char *** out, int width
 		}
 	}
 }
+
+//generate cube filters, vertical, horizontal and 2 inclined are being created
 unsigned char **** generateFilters() {
 	unsigned char **** out = new unsigned char***[4];
 	for (int i = 0; i < 4; i++) {
@@ -309,6 +378,13 @@ vector countARPS(unsigned char * block, unsigned char * framePrev, int x,int y,i
 			break;
 		}	
 	}
+}
+
+void shiftData(unsigned char ** data, int size) {
+	for (int i = 0; i < FRAME_CNT / 2 + 1; i++) {
+		memcpy(data[i], data[i + FRAME_CNT / 2], size);
+	}
+
 }
 
 int countSAD(unsigned char * rect1, unsigned  char * rect2) {

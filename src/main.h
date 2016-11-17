@@ -6,5 +6,7 @@ struct PictureData{
 	int frame_count;
 };
 
-PictureData *process_file(PictureData* data);
-PictureData *read_png_file(char* file_name);
+
+#define MAX_FILES 10 //max amount of comapred files
+
+#define THREADS 256 //how many parallel threads will be started for CUDA kernel
