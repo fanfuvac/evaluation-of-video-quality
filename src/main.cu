@@ -10,6 +10,7 @@
 #include "main.h"   
 #include "psnr.h"   
 #include "stvssim.h"
+#include "stvssim.cuh"
 #include "ssim.cuh"
 #include <omp.h>
 
@@ -72,12 +73,7 @@ FILE * startFFmpeg(string path) {
 	return stream;
 }
 
-void shiftData(unsigned char ** data, int size) {
-	for (int i = 0; i < FRAME_CNT / 2 + 1; i++) {
-		memcpy(data[i], data[i + FRAME_CNT / 2], size);
-	}
 
-}
 
 double ** countMetric(FILE ** streams, FILE * ref, int files_count, PictureData * frame, string type, double ** results) {
 
@@ -128,7 +124,7 @@ double ** countMetric(FILE ** streams, FILE * ref, int files_count, PictureData 
 		}
 		omp_set_num_threads(CHUNK_SIZE);
 		for (int k = 0; k < files_count; k++) {
-#pragma omp parallel for 
+			#pragma omp parallel for 
 			for (int j = 0; j < CHUNK_SIZE; j++) {
 
 				if (string(type) == string("SSIM")) results[k][j + i*CHUNK_SIZE] = countSSIM(dataRef[j], data[k][j], frame->width*frame->height, frame->width);
@@ -166,8 +162,17 @@ double ** countMetric(FILE ** streams, FILE * ref, int files_count, PictureData 
 	}
 
 	//delete frame->data;
-	delete frame;
+	//delete frame;
 	return results;
+}
+
+int readFromFile(unsigned char *& data, int count, FILE * file) {
+	int	rec = fread(data, 1, count, file);
+	if (rec != count) {
+		cout << "Error while reading from file" << endl;
+		exit(-1);
+	}
+	return rec;
 }
 
 
@@ -248,73 +253,16 @@ int main(int argc, char ** argv) {
 		sum[i] = 0;
 	}
 	if (gpu == 1) {
+		if (string(type) == string("STVSSIM")) {
+			countMetricSTVSSIM_CUDA(streams, ref, files_count, frame, results, frames);
+		}
 		countCUDA(streams, ref, files_count, frame, type, results);
 	}
 
 	else if (string(type) == string("STVSSIM")) {
 
-		countMetricSTVSSIM(streams, ref, files_count, frame, type, results);
-		//results= new double *[files_count];
-		unsigned char ** ref_data = new unsigned char *[FRAME_CNT];
-		unsigned char *** data = new unsigned char **[FRAME_CNT];
-		for (int k = 0; k < files_count; k++) {
-			//results[k] = new double[frame->frame_count];
-			data[k] = new unsigned char *[FRAME_CNT];
-			for (int j = 0; j < FRAME_CNT; j++) {
-				data[k][j] = new unsigned char[frame->size];
-			}
-		}
-		for (int j = 0; j < FRAME_CNT; j++) {
-			ref_data[j] = new unsigned char[frame->size];
-		}
-		unsigned char * tmp = new  unsigned char[frame->size * 3];
-
-		for (int i = FRAME_CNT / 2; i < FRAME_CNT; i++) {
-			for (int j = 0; j < files_count; j++) {
-				rec = fread(tmp, 1, frame->width*frame->height * 3, streams[j]);
-				if (rec != frame->width*frame->height * 3) {
-					cout << "error" << endl;
-					return -1;
-				}
-				//getLuma(tmp, data[j][i], frame->size);
-			}
-
-			rec = fread(tmp, 1, frame->width*frame->height * 3, ref);
-			if (rec != frame->width*frame->height * 3) {
-				cout << "error2" << endl;
-				return -1;
-			}
-			//getLuma(tmp, ref_data[i], frame->size);
-		}
-
-		int i = FRAME_SKIP;
-		int j = 0;
-
-		for (; i < frame->frame_count - FRAME_SKIP; i += FRAME_SKIP, j++) {
-			shiftData(ref_data, frame->size);
-			for (int k = 0; k < files_count; k++) {
-				shiftData(data[k], frame->size);
-			}
-			for (int k = 0; k < FRAME_SKIP; k++) {
-				for (int l = 0; l < files_count; l++) {
-					rec = fread(tmp, 1, frame->width*frame->height * 3, streams[l]);
-					if (rec != frame->width*frame->height * 3) {
-						cout << "error" << endl;
-						return -1;
-					}
-					//getLuma(tmp, data[l][k], frame->size);
-				}
-			}
-			for (int l = 0; l < files_count; l++) {
-				results[l][j] = countSTVSSIM(ref_data, data[l], frame->width*frame->height, frame->width);
-				cout << j << ": " << results[l][j] << endl;
-			}
-			//cout << results[j] << endl;
-
-		}
-		for (int i = 0; i < files_count; i++) {
-			frames[i] = j;
-		}
+		countMetricSTVSSIM(streams, ref, files_count, frame, results, frames);
+		delete streams; //?
 		
 	}
 	else {
@@ -324,7 +272,7 @@ int main(int argc, char ** argv) {
 
 	for (int j = 0; j < files_count; j++) {
 		cout << "input file number: " << j << endl;
-		for (int i = 0; i < frame->frame_count; i++) {
+		for (int i = 0; i < frames[j]; i++) {
 			cout << i << " " << results[j][i] << endl;
 			if (isfinite(results[j][i]))
 				sum[j] += results[j][i];
@@ -337,4 +285,6 @@ int main(int argc, char ** argv) {
 		qsort(results[i], frames[i], sizeof(double), compare);
 		cout << "Median: " << results[i][frames[i] / 2] << endl;
 	}
+	//_CrtDumpMemoryLeaks();
+
 }

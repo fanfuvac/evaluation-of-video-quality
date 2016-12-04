@@ -71,21 +71,7 @@ double countSSIM(unsigned char * datain1, unsigned char * datain2, unsigned char
 		blocks = rectCount / THREADS + 1;
 		rectCount = (size / width - RECT_SQRT)*(width - RECT_SQRT) / SKIP_SIZE / SKIP_SIZE;
 	}
-	countRectangleKernel << <blocks, THREADS >> >(dataC1, dataC2, rects1, rects2, results, size, width); //FIXME - need to adjust size to count up to THREADS last rectangles!!
-																										 //cudaDeviceSynchronize();
-																										 /*for (int i = 0; i < size / width - RECT_SQRT; i += SKIP_SIZE) {
-
-																										 for (int j = 0; j < width - RECT_SQRT; j += SKIP_SIZE, k++) {
-																										 //for (int i = 0; i < size-(RECT_SQRT-1)*width; i+=SKIP_SIZE) {
-
-																										 //if (tmpRes[k] < 0) cout << "low result: " << i<< ": " << j<< " :" << tmpRes[k] << endl;
-
-																										 }
-																										 }
-
-
-																										 double res = countRes(tmpRes, k);
-																										 */
+	countRectangleKernel << <blocks, THREADS >> >(dataC1, dataC2, rects1, rects2, results, size, width); 
 
 
 

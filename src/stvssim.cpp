@@ -10,14 +10,18 @@
 #include "SSIM.h"
 #include <stdlib.h>     /* abs */
 #include <map>
+#include <omp.h>
+
 
 using namespace std;
 
-double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, PictureData * frame, string type, double ** results, int *& frames) {
+//count STVSSIM metric for all files 
+double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, PictureData * frame, double ** results, int *& frames) {
 	//results= new double *[files_count];
 	int rec;
 	unsigned char ** ref_data = new unsigned char *[FRAME_CNT];
 	unsigned char *** data = new unsigned char **[FRAME_CNT];
+	unsigned char * dataTrash = new unsigned char[frame->width*frame->height / 2];
 	for (int k = 0; k < files_count; k++) {
 		//results[k] = new double[frame->frame_count];
 		data[k] = new unsigned char *[FRAME_CNT];
@@ -32,20 +36,12 @@ double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, Pictu
 
 	for (int i = FRAME_CNT / 2; i < FRAME_CNT; i++) {
 		for (int j = 0; j < files_count; j++) {
-			rec = fread(tmp, 1, frame->width*frame->height * 3, streams[j]);
-			if (rec != frame->width*frame->height * 3) {
-				cout << "error" << endl;
-				return NULL;
-			}
-			//getLuma(tmp, data[j][i], frame->size);
+			readFromFile(data[j][i], frame->size, streams[j]);
+			readFromFile(dataTrash, frame->size/2, streams[j]);//when using yuv, first 2/3 of the picture are Lumma, others are UV which we do not evaluate
+			
 		}
-
-		rec = fread(tmp, 1, frame->width*frame->height * 3, ref);
-		if (rec != frame->width*frame->height * 3) {
-			cout << "error2" << endl;
-			return NULL;
-		}
-		//getLuma(tmp, ref_data[i], frame->size);
+		readFromFile(ref_data[i], frame->size, ref);
+		readFromFile(dataTrash, frame->size/2, ref);
 	}
 
 	int i = FRAME_SKIP;
@@ -56,19 +52,23 @@ double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, Pictu
 		for (int k = 0; k < files_count; k++) {
 			shiftData(data[k], frame->size);
 		}
-		for (int k = 0; k < FRAME_SKIP; k++) {
+		for (int k = FRAME_CNT / 2+1; k < FRAME_CNT; k++) {
 			for (int l = 0; l < files_count; l++) {
-				rec = fread(tmp, 1, frame->width*frame->height * 3, streams[l]);
-				if (rec != frame->width*frame->height * 3) {
-					cout << "error" << endl;
-					return NULL;
-				}
-				//getLuma(tmp, data[l][k], frame->size);
+				readFromFile(data[l][k], frame->size, streams[l]);
+				readFromFile(dataTrash, frame->size / 2, streams[l]);//when using yuv, first 2/3 of the picture are Lumma, others are UV which we do not evaluate
 			}
+			readFromFile(ref_data[k], frame->size, ref);
+			readFromFile(dataTrash, frame->size / 2, ref);//when using yuv, first 2/3 of the picture are Lumma, others are UV which we do not evaluate
+
 		}
+		double resSSIM, res3D;
 		for (int l = 0; l < files_count; l++) {
-			results[l][j] = countSTVSSIM(ref_data, data[l], frame->width*frame->height, frame->width);
-			cout << j << ": " << results[l][j] << endl;
+			res3D = countSTVSSIM(ref_data, data[l], frame->width*frame->height, frame->width);
+			resSSIM = countSSIM(ref_data[FRAME_CNT / 2], data[l][FRAME_CNT / 2], frame->size, frame->width);
+			results[l][j] = res3D*resSSIM;
+			cout << "3D: " << res3D << " SSIM: " << resSSIM << " Total: " << results[l][j] << endl;
+			
+			//cout << j << ": " << results[l][j] << endl;
 		}
 		//cout << results[j] << endl;
 
@@ -76,27 +76,39 @@ double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, Pictu
 	for (int i = 0; i < files_count; i++) {
 		frames[i] = j;
 	}
+	return results;
 }
 
 double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size, int width) {
-	unsigned char * out = new unsigned char[RECT_SIZE];
-	
+
+	unsigned char ** out = new unsigned char*[CHUNK_SIZE];
 	int T = ROOD_SIZE;
 	vector vct;
 	vct.x = 0;
 	vct.y = 0;
 	int filter;
-	unsigned char **** filters = generateFilters();
+	unsigned char ***** filters = new unsigned char ****[CHUNK_SIZE]; //generateFilters();
 	double * tmpRes = new double[size];
-	unsigned char *** cube1 = generateCube();
-	unsigned char *** cube2 = generateCube();
+	unsigned char **** cube1 = new unsigned char ***[CHUNK_SIZE]; //generateCube();
+	unsigned char **** cube2 = new unsigned char ***[CHUNK_SIZE]; //generateCube();
 	int k = 0;
+	for (int i = 0; i < CHUNK_SIZE; i++) {
+		filters[i] = generateFilters();
+		cube1[i]= generateCube();
+		cube2[i] = generateCube();
+		out[i] = new unsigned char[RECT_SIZE];
+	}
+	omp_set_num_threads(CHUNK_SIZE);
+#pragma omp parallel for private(vct, filter,k)
 	for (int i = 0; i < size / width - RECT_SQRT; i += SKIP_SIZE) {
-		for (int j = 0; j < width - RECT_SQRT; j += SKIP_SIZE, k++) {
-			getRect(datain1[FRAME_CNT / 2], i, width, out);
+		int thr = omp_get_thread_num();
+
+		for (int j = 0; j < width - RECT_SQRT; j += SKIP_SIZE) {
+			k = (i/SKIP_SIZE)*((width - RECT_SQRT)/SKIP_SIZE) + j/SKIP_SIZE;
+			getRect(datain1[FRAME_CNT / 2], i, width, out[thr]); //FIXME - is i should be i*width+j ??
 			//if (abs(vct.x) > abs(vct.y)) T = abs(vct.x); FIXME
 			//if (abs(vct.x) < abs(vct.y)) T = abs(vct.y);
-			vct = countARPS(out, datain1[FRAME_CNT / 2 - 1], j, i, width, size / width, T);
+			vct = countARPS(out[thr], datain1[FRAME_CNT / 2 - 1], j, i, width, size / width, T);
 
 			if ((vct.x > vct.y * 2 && vct.x*-1 < 2 * vct.y) || (vct.x < vct.y * 2 && vct.x*-1 > 2 * vct.y)) { //y=0
 				filter = 0;
@@ -132,30 +144,30 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 
 
 			//3D-SSIM part
-			fillCube(datain1, i*width + j, cube1,width);
-			fillCube(datain2, i*width + j, cube2, width);
+			fillCube(datain1, i*width + j, cube1[thr],width);
+			fillCube(datain2, i*width + j, cube2[thr], width);
 			if (filter < 4) {
-				tmpRes[k] = countSSIM3D(filters[filter], cube1, cube2);
+				tmpRes[k] = countSSIM3D(filters[thr][filter], cube1[thr], cube2[thr]);
 				//cout << tmpRes[k] << endl;
 			}
 			else if (filter < 8) {
 				double a, b;
 				switch (filter) {
 				case 4:
-					a = countSSIM3D(filters[0], cube1, cube2);
-					b = countSSIM3D(filters[3], cube1, cube2);
+					a = countSSIM3D(filters[thr][0], cube1[thr], cube2[thr]);
+					b = countSSIM3D(filters[thr][3], cube1[thr], cube2[thr]);
 					break;
 				case 5:
-					a = countSSIM3D(filters[0], cube1, cube2);
-					b = countSSIM3D(filters[1], cube1, cube2);
+					a = countSSIM3D(filters[thr][0], cube1[thr], cube2[thr]);
+					b = countSSIM3D(filters[thr][1], cube1[thr], cube2[thr]);
 					break;
 				case 6:
-					a = countSSIM3D(filters[1], cube1, cube2);
-					b = countSSIM3D(filters[2], cube1, cube2);
+					a = countSSIM3D(filters[thr][1], cube1[thr], cube2[thr]);
+					b = countSSIM3D(filters[thr][2], cube1[thr], cube2[thr]);
 					break;
 				case 7:
-					a = countSSIM3D(filters[2], cube1, cube2);
-					b = countSSIM3D(filters[3], cube1, cube2);
+					a = countSSIM3D(filters[thr][2], cube1[thr], cube2[thr]);
+					b = countSSIM3D(filters[thr][3], cube1[thr], cube2[thr]);
 					break;
 				}
 				tmpRes[k] = (a + b) / 2;
@@ -163,114 +175,67 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 			}
 			else {
 				double a, b, c, d;
-				a = countSSIM3D(filters[0], cube1, cube2);
-				b = countSSIM3D(filters[1], cube1, cube2);
-				c = countSSIM3D(filters[2], cube1, cube2);
-				d = countSSIM3D(filters[3], cube1, cube2);
+				a = countSSIM3D(filters[thr][0], cube1[thr], cube2[thr]);
+				b = countSSIM3D(filters[thr][1], cube1[thr], cube2[thr]);
+				c = countSSIM3D(filters[thr][2], cube1[thr], cube2[thr]);
+				d = countSSIM3D(filters[thr][3], cube1[thr], cube2[thr]);
 				tmpRes[k] = (a + b+c+d) / 4;
 				//cout << tmpRes[k] << endl;
 			}
-			if (tmpRes[k] > 1) {
-				cout<< tmpRes[k] <<endl;
+			if (tmpRes[k] >  1) {
+				//cout<< tmpRes[k] <<endl;
 			}
 		}
 	}
+	k = (size / width - RECT_SQRT) / SKIP_SIZE*(width - RECT_SQRT) / SKIP_SIZE;
 	double res = countRes(tmpRes, k);
 	delete[] tmpRes;
-	delete[] out;
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < RECT_SQRT_3D; j++) {
-			for (int k = 0; k < RECT_SQRT_3D; k++) {
-				delete filters[i][j][k];
-				
-			}
-			delete[] cube1[i][j];
-			delete[] cube2[i][j];
-			delete[] filters[i][j];
-		}
-	}
+	
+	for (int l = 0; l < CHUNK_SIZE; l++) {
+		for (int i = 0; i < FRAME_CNT; i++) {
+			for (int j = 0; j < RECT_SQRT_3D; j++) {
 
+				delete[] cube1[l][i][j];
+				delete[] cube2[l][i][j];
+				//delete[] filters[l][0][j];
+			}
+			delete[] cube1[l][i];
+			delete[] cube2[l][i];
+			//delete[] filters[l][i];
+		}
+		delete[] cube1[l];
+		delete[] cube2[l];
+		//delete[] filters[l];
+		delete[] out[l];
+	}
+	delete[] cube1;
+	delete[] cube2;
+	//delete[] filters;
+	delete[] out;
+	
+	for (int l = 0; l < CHUNK_SIZE; l++) {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < FRAME_CNT; j++) {
+				for (int k = 0; k < RECT_SQRT_3D; k++) {
+					delete[] filters[l][i][j][k];
+				}
+				delete[] filters[l][i][j];
+			}
+			delete[] filters[l][i];
+		}
+		delete[] filters[l];
+	}
+	delete[] filters;
+	
 	return res;
 
-}
-double countSSIM3D(unsigned char *** filter, unsigned char ***  cube1, unsigned char ***  cube2) {
-	double muX = countMu(filter,cube1);
-	double muY = countMu(filter, cube2);
-
-	double deltaSqrX = countDeltaSqr(filter, cube1, muX);
-	double deltaSqrY = countDeltaSqr(filter, cube2, muY); 
-
-	double delta = countDelta(filter, cube1,cube2, muX, muY);
-	
-	double ssim3D = ((2 * muX*muY + C1)*(2 * delta + C2)) / ((muX*muX + muY*muY + C1)*(deltaSqrX + deltaSqrY + C2));
-	return ssim3D;
-}
-double countMu(unsigned char*** filter,unsigned char*** cube){
-	double res = 0;
-	int res2=0;
-	for (int alpha = 0; alpha < RECT_SQRT_3D; alpha++) {
-		for (int beta = 0; beta < RECT_SQRT_3D; beta++) {
-			for (int gamma = 0; gamma < FRAME_CNT; gamma++) {
-				res2 += filter[gamma][alpha][beta];
-				res += filter[gamma][alpha][beta] * cube[gamma][alpha][beta];
-			}
-		}
-	}
-	return res/(RECT_SQRT_3D*FRAME_CNT);
-}
-
-double countDeltaSqr(unsigned char*** filter, unsigned char*** cube,double mu) {
-	double res = 0;
-	for (int alpha = 0; alpha < RECT_SQRT_3D; alpha++) {
-		for (int beta = 0; beta < RECT_SQRT_3D; beta++) {
-			for (int gamma = 0; gamma < FRAME_CNT; gamma++) {
-				res += filter[gamma][alpha][beta] * (cube[gamma][alpha][beta]-mu)*(cube[gamma][alpha][beta] - mu);
-			}
-		}
-	}
-	return res/ (RECT_SQRT_3D*FRAME_CNT);
-}
-
-
-double countDelta(unsigned char*** filter, unsigned char*** cube1, unsigned char*** cube2, double muX, double muY) {
-	double res = 0;
-	for (int alpha = 0; alpha < RECT_SQRT_3D; alpha++) {
-		for (int beta = 0; beta < RECT_SQRT_3D; beta++) {
-			for (int gamma = 0; gamma < FRAME_CNT; gamma++) {
-				res += filter[gamma][alpha][beta] * (cube1[gamma][alpha][beta] - muX)*(cube2[gamma][alpha][beta] - muX);
-			}
-		}
-	}
-	return res/(RECT_SQRT_3D*FRAME_CNT);
-}
-
-//Generates 3D array used for SSIM 3D
-unsigned char *** generateCube(){
-	unsigned char *** out = new unsigned char**[FRAME_CNT];
-	for (int i = 0; i < FRAME_CNT; i++) {
-		out[i] = new unsigned char*[RECT_SQRT_3D];
-		for (int j = 0; j < RECT_SQRT_3D; j++) {
-			out[i][j] = new unsigned char[RECT_SQRT_3D];
-		}
-	}
-
-	return out;
-}
-
-//Fill 3D array with data of surroundings pixels
-void fillCube(unsigned char ** datain, int pos, unsigned char *** out, int width) {
-	for (int i = 0; i < FRAME_CNT; i++) {
-		for (int j = 0; j < RECT_SQRT_3D; j++) {
-			memcpy(out[i][j], datain[i] + pos + width*j, RECT_SQRT_3D);
-		}
-	}
 }
 
 //generate cube filters, vertical, horizontal and 2 inclined are being created
 unsigned char **** generateFilters() {
 	unsigned char **** out = new unsigned char***[4];
 	for (int i = 0; i < 4; i++) {
-		out[i]=new unsigned char**[FRAME_CNT];
+		out[i] = new unsigned char**[FRAME_CNT];
 		for (int j = 0; j < FRAME_CNT; j++) {
 			out[i][j] = new unsigned char*[RECT_SQRT_3D];
 			for (int k = 0; k < RECT_SQRT_3D; k++) {
@@ -281,7 +246,7 @@ unsigned char **** generateFilters() {
 	for (int i = 0; i < FRAME_CNT; i++) { //FIXME modify to create 2D array and memcpy
 		for (int j = 0; j < RECT_SQRT_3D; j++) {
 			for (int k = 0; k < RECT_SQRT_3D; k++) {
-				if (j  == RECT_SQRT_3D / 2) { //horizontal filter
+				if (j == RECT_SQRT_3D / 2) { //horizontal filter
 					out[0][i][j][k] = 1;
 				}
 				else {
@@ -301,7 +266,7 @@ unsigned char **** generateFilters() {
 				else {
 					out[2][i][j][k] = 0;
 				}
-				if (k+j == RECT_SQRT_3D ) { //x=-y filter
+				if (k + j == RECT_SQRT_3D) { //x=-y filter
 					out[3][i][j][k] = 1;
 				}
 				else {
@@ -312,6 +277,89 @@ unsigned char **** generateFilters() {
 	}
 	return out;
 }
+
+double countDeltaSqr(unsigned char*** filter, unsigned char*** cube, double mu) {
+	double res = 0;
+	for (int alpha = 0; alpha < RECT_SQRT_3D; alpha++) {
+		for (int beta = 0; beta < RECT_SQRT_3D; beta++) {
+			for (int gamma = 0; gamma < FRAME_CNT; gamma++) {
+				res += filter[gamma][alpha][beta] * (cube[gamma][alpha][beta] - mu)*(cube[gamma][alpha][beta] - mu);
+			}
+		}
+	}
+	return res / (RECT_SQRT_3D*FRAME_CNT);
+}
+
+double countDelta(unsigned char*** filter, unsigned char*** cube1, unsigned char*** cube2, double muX, double muY) {
+	double res = 0;
+	for (int alpha = 0; alpha < RECT_SQRT_3D; alpha++) {
+		for (int beta = 0; beta < RECT_SQRT_3D; beta++) {
+			for (int gamma = 0; gamma < FRAME_CNT; gamma++) {
+				res += filter[gamma][alpha][beta] * (cube1[gamma][alpha][beta] - muX)*(cube2[gamma][alpha][beta] - muX);
+			}
+		}
+	}
+	return res / (RECT_SQRT_3D*FRAME_CNT);
+}
+
+//Generates 3D array used for SSIM 3D
+unsigned char *** generateCube() {
+	unsigned char *** out = new unsigned char**[FRAME_CNT];
+	for (int i = 0; i < FRAME_CNT; i++) {
+		out[i] = new unsigned char*[RECT_SQRT_3D];
+		for (int j = 0; j < RECT_SQRT_3D; j++) {
+			out[i][j] = new unsigned char[RECT_SQRT_3D];
+		}
+	}
+
+	return out;
+}
+
+//move (FRAME_CNT / 2 + 1) frames from end to begining of the buffer
+void shiftData(unsigned char ** data, int size) {
+	for (int i = 0; i < FRAME_CNT / 2 + 1; i++) {
+		memcpy(data[i], data[i + FRAME_CNT / 2], size);
+	}
+
+}
+
+double countSSIM3D(unsigned char *** filter, unsigned char ***  cube1, unsigned char ***  cube2) {
+	double muX = countMu(filter, cube1);
+	double muY = countMu(filter, cube2);
+
+	double deltaSqrX = countDeltaSqr(filter, cube1, muX);
+	double deltaSqrY = countDeltaSqr(filter, cube2, muY);
+
+	double delta = countDelta(filter, cube1, cube2, muX, muY);
+
+	double ssim3D = ((2 * muX*muY + C1)*(2 * delta + C2)) / ((muX*muX + muY*muY + C1)*(deltaSqrX + deltaSqrY + C2));
+	return ssim3D;
+}
+
+double countMu(unsigned char*** filter, unsigned char*** cube) {
+	double res = 0;
+	int res2 = 0;
+	for (int alpha = 0; alpha < RECT_SQRT_3D; alpha++) {
+		for (int beta = 0; beta < RECT_SQRT_3D; beta++) {
+			for (int gamma = 0; gamma < FRAME_CNT; gamma++) {
+				res2 += filter[gamma][alpha][beta];
+				res += filter[gamma][alpha][beta] * cube[gamma][alpha][beta];
+			}
+		}
+	}
+	return res / (RECT_SQRT_3D*FRAME_CNT);
+}
+
+//Fill 3D array with data of surroundings pixels
+void fillCube(unsigned char ** datain, int pos, unsigned char *** out, int width) {
+	for (int i = 0; i < FRAME_CNT; i++) {
+		for (int j = 0; j < RECT_SQRT_3D; j++) {
+			memcpy(out[i][j], datain[i] + pos + width*j, RECT_SQRT_3D);
+		}
+	}
+}
+
+//other functions are defined in CUDA version, stvssim.cu
 
 vector countARPS(unsigned char * block, unsigned char * framePrev, int x,int y,int width, int height, int T) {
 	unsigned char * out = new unsigned char[RECT_SIZE];
@@ -361,6 +409,7 @@ vector countARPS(unsigned char * block, unsigned char * framePrev, int x,int y,i
 		if (minPos==0) {
 			vOut.x = x - xOrig;
 			vOut.y = y - yOrig;
+			delete[] out;
 			return vOut;
 		}
 		switch (minPos) {
@@ -380,17 +429,3 @@ vector countARPS(unsigned char * block, unsigned char * framePrev, int x,int y,i
 	}
 }
 
-void shiftData(unsigned char ** data, int size) {
-	for (int i = 0; i < FRAME_CNT / 2 + 1; i++) {
-		memcpy(data[i], data[i + FRAME_CNT / 2], size);
-	}
-
-}
-
-int countSAD(unsigned char * rect1, unsigned  char * rect2) {
-	int sad = 0;
-	for (int i = 0; i < RECT_SIZE; i++) {
-		sad += abs(rect1[i] - rect2[i]);
-	}
-	return sad;
-}
