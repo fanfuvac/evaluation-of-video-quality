@@ -197,13 +197,14 @@ double countSTVSSIM_CUDA(unsigned char * datain1, unsigned char * datain2, int s
 	cudaStatus = cudaMallocPitch((void **)&tmpRes, &pitch, sizeof(double), rectCount);
 	cudaTest(cudaStatus, "malloc filters");
 	generateFilters(filters);
-	cudaMemcpy((void*)filters_CUDA, (const void*)filters, FRAME_CNT*RECT_SIZE_3D, cudaMemcpyHostToDevice);
-
-	cudaMemcpy((void*)datain1_CUDA, (void*)datain1, size, cudaMemcpyHostToDevice);
-	cudaMemcpy((void*)datain2_CUDA, (void*)datain2, size, cudaMemcpyHostToDevice);
-
-	cudaMemcpy((void*)filter_CUDA, (void*)filter, rectCount * sizeof(int), cudaMemcpyHostToDevice);
-
+	cudaStatus = cudaMemcpy((void*)&filters_CUDA, (const void*)filters, FRAME_CNT*RECT_SIZE_3D, cudaMemcpyHostToDevice);
+cudaTest(cudaStatus, "memcpy filters");
+	cudaStatus = cudaMemcpy((void*)&datain1_CUDA, (void*)datain1, size, cudaMemcpyHostToDevice);
+	cudaTest(cudaStatus, "memcpy data1");
+	cudaStatus = cudaMemcpy((void*)&datain2_CUDA, (void*)datain2, size, cudaMemcpyHostToDevice);
+	cudaTest(cudaStatus, "memcpy data2");
+	cudaStatus = cudaMemcpy((void*)&filter_CUDA, (void*)filter, rectCount * sizeof(int), cudaMemcpyHostToDevice);
+	cudaTest(cudaStatus, "memcpy filter");
 
 	SSIM3DKernel << <blocks, THREADS >> > (filters_CUDA, datain1_CUDA, datain2_CUDA, filter_CUDA, tmpRes, width, size / width);
 
