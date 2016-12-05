@@ -1,11 +1,11 @@
-LIBRARIES       =+ $(_SPACE_) "-L$(TOP)/$(_TARGET_DIR_)/lib$(_TARGET_SIZE_)/stubs" "-L$(TOP)/$(_TARGET_DIR_)/lib$(_TARGET_SIZE_)"
-
 all: program
 
 program: cudacode.o
-	g++ -o program -L/usr/local/cuda/lib64 -lcuda -lcudart ./src/*.cpp  cudacode.o 
+	nvcc -o program -g -G -L/usr/local/cuda/lib64 -lcuda -lpthread  -Xcompiler -fopenmp *.cpp  stvssim.cu.o main.cu.o SSIM.cu.o
 
 cudacode.o:
-	nvcc -c -arch=sm_20 ./src/*.cu 
+	nvcc -g -c -arch=sm_20 stvssim.cu -o stvssim.cu.o
+	nvcc -g -c -arch=sm_20 main.cu -o main.cu.o
+	nvcc -g -c -arch=sm_20 SSIM.cu -o SSIM.cu.o
 
 clean: rm -rf *o program

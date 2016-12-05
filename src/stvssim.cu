@@ -208,8 +208,12 @@ double countSTVSSIM_CUDA(unsigned char * datain1, unsigned char * datain2, int s
 	SSIM3DKernel << <blocks, THREADS >> > (filters_CUDA, datain1_CUDA, datain2_CUDA, filter_CUDA, tmpRes, width, size / width);
 
 	k = (size / width - RECT_SQRT) / SKIP_SIZE*(width - RECT_SQRT) / SKIP_SIZE;
-	double res = countRes(tmpRes, k);
-	delete[] tmpRes;
+	double * tmpRes2 = new double[k];
+	cudaMemcpy((void*)tmpRes2, (void*)tmpRes2, k*sizeof(double), cudaMemcpyDeviceToHost);
+	
+	
+	double res = countRes(tmpRes2, k);
+	delete[] tmpRes2;
 
 	/*
 	for (int l = 0; l < CHUNK_SIZE; l++) {

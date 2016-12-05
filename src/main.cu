@@ -61,7 +61,7 @@ FILE * startFFmpeg(string path) {
 #ifdef __linux__
 	string cmd = "ffmpeg -i " + path + " -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null";
 	cout << cmd << endl;
-	stream = popen(cmd.c_str(), "rb");
+	stream = popen(cmd.c_str(), "r");
 #else 
 	string cmd = "ffmpeg -i " + path + " -f image2pipe -threads 3  -pix_fmt yuv420p -vcodec rawvideo - 2>NUL";
 	//-c:v h264_qsv

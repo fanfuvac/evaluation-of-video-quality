@@ -23,13 +23,13 @@ double countPSNR(unsigned char * data1, unsigned  char * data2, int size){
 	double sum = 0;
 	int pixel;
 	int nthreads;
-	omp_set_num_threads(1);
+	//omp_set_num_threads(1);
 	double subSum[8] = { 0 };
 	//#pragma omp parallel
 	{
 		
 		//#pragma omp master
-		nthreads =omp_get_num_threads();
+		nthreads =1;//omp_get_num_threads();
 		
 		//#pragma omp  for 
 		for (int n = 0; n < 8; ++n) {
