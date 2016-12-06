@@ -162,7 +162,7 @@ __host__ __device__ double countCovariance(unsigned char * data1, unsigned char 
 double countRes(double * tmpRes, int count) {
 	double sum = 0;
 	for (int i = 0; i < count; i += 1) {
-		//cout << tmpRes[i]<<endl;
+		cout << tmpRes[i]<<endl;
 		sum += tmpRes[i];
 
 	}

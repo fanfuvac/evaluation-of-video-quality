@@ -73,6 +73,25 @@ double ** countMetricSTVSSIM_CUDA(FILE ** streams, FILE * ref, int files_count, 
 
 	int i = FRAME_SKIP;
 	int j = 0;
+	data_CUDA * dataCuda=new data_CUDA;
+	
+	cudaStatus = cudaMallocPitch((void **)&dataCuda->filters, &pitch, RECT_SIZE_3D, FRAME_CNT*4);//4 different filters with size of one cube
+	cudaTest(cudaStatus, "malloc filters");
+	cudaStatus = cudaMallocPitch((void **)&dataCuda->datain1, &pitch, FRAME_CNT, frame->size);
+	cudaTest(cudaStatus, "malloc datain1");
+	cudaStatus = cudaMallocPitch((void **)&dataCuda->datain2, &pitch, FRAME_CNT, frame->size );
+	int k = (frame->size / frame->width - RECT_SQRT) / SKIP_SIZE*(frame->width - RECT_SQRT) / SKIP_SIZE;
+	cudaStatus = cudaMallocPitch((void **)&dataCuda->tmpRes, &pitch, sizeof(double), k);
+	cudaTest(cudaStatus, "malloc datain2");
+	cudaStatus = cudaMallocPitch((void **)&dataCuda->filter, &pitch, sizeof(int), k);
+	cudaTest(cudaStatus, "malloc filter");
+
+	cudaStatus = cudaMallocPitch((void **)&dataCuda->cubes1, &pitch, RECT_SIZE_3D*FRAME_CNT, k);
+	cudaTest(cudaStatus, "malloc filter");
+	cudaStatus = cudaMallocPitch((void **)&dataCuda->cubes2, &pitch, RECT_SIZE_3D*FRAME_CNT, k);
+	cudaTest(cudaStatus, "malloc filter");
+
+	
 
 	for (; i < frame->frame_count - FRAME_SKIP; i += FRAME_SKIP, j++) {
 		shiftData(ref_data, frame->size);
@@ -83,21 +102,22 @@ double ** countMetricSTVSSIM_CUDA(FILE ** streams, FILE * ref, int files_count, 
 			for (int l = 0; l < files_count; l++) {
 				readFromFile(dataTmp, frame->size, streams[l]);
 				readFromFile(dataTrash, frame->size / 2, streams[l]);//when using yuv, first 2/3 of the picture are Lumma, others are UV which we do not evaluate
-				memcpy(data + indexFs(i, 0, frame->size, j), dataTmp, frame->size);
+				memcpy(data + indexFs(k, 0, frame->size, l), dataTmp, frame->size);
 				//cudaMemcpy(data + indexFs(k, 0, frame->size,l), dataTmp, frame->size, cudaMemcpyHostToDevice);
 			}
 			readFromFile(dataTmp, frame->size, ref);
 			readFromFile(dataTrash, frame->size / 2, ref);//when using yuv, first 2/3 of the picture are Lumma, others are UV which we do not evaluate
-			memcpy(ref_data + indexF(i, 0, frame->size), dataTmp, frame->size); //FIXME optimalize
+			memcpy(ref_data + indexF(k, 0, frame->size), dataTmp, frame->size); //FIXME optimalize
 																				//cudaMemcpy(ref_data + indexF(k, 0, frame->size), dataTmp, frame->size, cudaMemcpyHostToDevice);
 		}
 		double resSSIM, res3D;
 		for (int l = 0; l < files_count; l++) {
-			res3D = countSTVSSIM_CUDA(ref_data, data + indexFs(0, 0, frame->size, l), frame->size, frame->width);
+			//cout<<"diff!!: "<<indexFs(0, 0, frame->size, l)<<endl;
+			res3D = countSTVSSIM_CUDA(ref_data, data + indexFs(0, 0, frame->size, l), frame->size, frame->width,dataCuda);
 			//resSSIM = countSSIM(ref_data[FRAME_CNT / 2], data[l][FRAME_CNT / 2], frame->size, frame->width);
 			results[l][j] = res3D;
-			cout << "3D: " << res3D << " SSIM: " << resSSIM << " Total: " << results[l][j] << endl;
-
+			cout << "3D: " << res3D << endl;
+//<< " SSIM: " << resSSIM << " Total: " << results[l][j] 
 			//cout << j << ": " << results[l][j] << endl;
 		}
 		//cout << results[j] << endl;
@@ -109,14 +129,14 @@ double ** countMetricSTVSSIM_CUDA(FILE ** streams, FILE * ref, int files_count, 
 	return results;
 }
 
-double countSTVSSIM_CUDA(unsigned char * datain1, unsigned char * datain2, int size, int width) {
+double countSTVSSIM_CUDA(unsigned char * datain1, unsigned char * datain2, int size, int width,data_CUDA * dataCuda) {
 
 	unsigned char * out = new unsigned char[RECT_SIZE];
 	int T = ROOD_SIZE;
 
 
 	unsigned char * filters = new unsigned char[RECT_SIZE_3D*FRAME_CNT * 4];// = new unsigned char ****[CHUNK_SIZE]; //generateFilters();
-	double * tmpRes;// = new double[size];
+
 	unsigned char **** cube1 = new unsigned char ***[CHUNK_SIZE]; //generateCube();
 	unsigned char **** cube2 = new unsigned char ***[CHUNK_SIZE]; //generateCube();
 
@@ -139,7 +159,8 @@ double countSTVSSIM_CUDA(unsigned char * datain1, unsigned char * datain2, int s
 	for (int i = 0; i < size / width - RECT_SQRT_3D; i += SKIP_SIZE) {
 		for (int j = 0; j < width - RECT_SQRT_3D; j += SKIP_SIZE) {
 			k = (i / SKIP_SIZE)*((width - RECT_SQRT_3D) / SKIP_SIZE) + j / SKIP_SIZE;
-			getRect(datain1 + indexF(FRAME_CNT / 2, 0, size), i*width + j, width, out); //FIXME - was i??
+			
+			getRect(datain1 + indexF(FRAME_CNT / 2, 0, size), i*width+j, width, out); //FIXME - was i??
 																						//if (abs(vct.x) > abs(vct.y)) T = abs(vct.x); FIXME
 																						//if (abs(vct.x) < abs(vct.y)) T = abs(vct.y);
 			vct = countARPS(out, datain1 + indexF(FRAME_CNT / 2 - 1, 0, size), j, i, width, size / width, T);
@@ -187,33 +208,34 @@ double countSTVSSIM_CUDA(unsigned char * datain1, unsigned char * datain2, int s
 
 	cudaError_t cudaStatus;
 	size_t pitch;
-	unsigned char * filters_CUDA=NULL;
+	/*unsigned char * filters_CUDA=NULL;
 	int * filter_CUDA=NULL;
 	unsigned char * datain1_CUDA=NULL;
 	unsigned char * datain2_CUDA=NULL;
-	cudaStatus = cudaMallocPitch((void **)&filters_CUDA, &pitch, RECT_SIZE_3D, FRAME_CNT);
-	cudaStatus = cudaMallocPitch((void **)&datain1_CUDA, &pitch, width, size / width);
-	cudaStatus = cudaMallocPitch((void **)&datain2_CUDA, &pitch, width, size / width);
-	cudaStatus = cudaMallocPitch((void **)&tmpRes, &pitch, sizeof(double), rectCount);
-	cudaTest(cudaStatus, "malloc filters");
+	unsigned char * cubes1_CUDA=NULL;
+	unsigned char * cubes2_CUDA=NULL;*/
+	
 	generateFilters(filters);
-	cudaStatus = cudaMemcpy((void*)&filters_CUDA, (const void*)filters, FRAME_CNT*RECT_SIZE_3D, cudaMemcpyHostToDevice);
-cudaTest(cudaStatus, "memcpy filters");
-	cudaStatus = cudaMemcpy((void*)&datain1_CUDA, (void*)datain1, size, cudaMemcpyHostToDevice);
+
+	cudaStatus = cudaMemcpy((void*)dataCuda->filters, (const void*)filters, FRAME_CNT*RECT_SIZE_3D*4, cudaMemcpyHostToDevice);
+	cudaTest(cudaStatus, "memcpy filters");
+	cudaStatus = cudaMemcpy((void*)dataCuda->datain1, (void*)datain1, size*FRAME_CNT, cudaMemcpyHostToDevice);
 	cudaTest(cudaStatus, "memcpy data1");
-	cudaStatus = cudaMemcpy((void*)&datain2_CUDA, (void*)datain2, size, cudaMemcpyHostToDevice);
+	cudaStatus = cudaMemcpy((void*)dataCuda->datain2, (void*)datain2, size*FRAME_CNT, cudaMemcpyHostToDevice);
 	cudaTest(cudaStatus, "memcpy data2");
-	cudaStatus = cudaMemcpy((void*)&filter_CUDA, (void*)filter, rectCount * sizeof(int), cudaMemcpyHostToDevice);
+	cudaStatus = cudaMemcpy((void*)dataCuda->filter, (void*)filter, rectCount * sizeof(int), cudaMemcpyHostToDevice);
 	cudaTest(cudaStatus, "memcpy filter");
 
-	SSIM3DKernel << <blocks, THREADS >> > (filters_CUDA, datain1_CUDA, datain2_CUDA, filter_CUDA, tmpRes, width, size / width);
+	
+	//dont know how to transfer struct to device
+	SSIM3DKernel << <blocks, THREADS >> > (dataCuda->datain1, dataCuda->datain2, dataCuda->cubes1,dataCuda->cubes2,dataCuda->filters,dataCuda->tmpRes,dataCuda->filter,width, size / width);
 
-	k = (size / width - RECT_SQRT) / SKIP_SIZE*(width - RECT_SQRT) / SKIP_SIZE;
-	double * tmpRes2 = new double[k];
-	cudaMemcpy((void*)tmpRes2, (void*)tmpRes2, k*sizeof(double), cudaMemcpyDeviceToHost);
+	cudaDeviceSynchronize();
+	double * tmpRes2 = new double[rectCount];
+	cudaMemcpy(tmpRes2, dataCuda->tmpRes, rectCount*sizeof(double), cudaMemcpyDeviceToHost);
 	
 	
-	double res = countRes(tmpRes2, k);
+	double res = countRes(tmpRes2, rectCount);
 	delete[] tmpRes2;
 
 	/*
@@ -257,16 +279,23 @@ cudaTest(cudaStatus, "memcpy filters");
 	return res;
 
 }
-__global__ void SSIM3DKernel(unsigned char * filters, unsigned char * datain1_CUDA, unsigned char * datain2_CUDA, int * filter, double * results, int width, int height) {
+__global__ void SSIM3DKernel(unsigned char * datain1, unsigned char * datain2, unsigned char * cubes1,unsigned char * cubes2,unsigned char * filters,double * tmpRes,unsigned char * filter, int width, int height) {
 	int i = threadIdx.x;
 	int j = blockIdx.x;
 	int pos = j*THREADS + i;
-	unsigned char *cube1;
-	cube1 = generateCube_CUDA(cube1);
-	unsigned char *cube2;
-	cube2 = generateCube_CUDA(cube2);
-	fillCube(datain1_CUDA, j*width + i, cube1, width, height);
-	fillCube(datain2_CUDA, j*width + i, cube2, width, height);
+	//data_CUDA* dataCuda=*dataCuda1;
+	if (pos>=((height - RECT_SQRT) / SKIP_SIZE*(width - RECT_SQRT) / SKIP_SIZE)){
+		return;
+	}
+	unsigned char * cube1=cubes1+RECT_SIZE_3D*FRAME_CNT*pos;
+	//generateCube_CUDA(&cube1);
+	unsigned char *cube2=cubes2+RECT_SIZE_3D*FRAME_CNT*pos;
+	//generateCube_CUDA(&cube2);
+	//cube1[100]=0;
+
+//	datain1_CUDA[100] = 62;
+	fillCube(datain1, j*SKIP_SIZE*width + i*SKIP_SIZE, cube1, width, height);
+	fillCube(datain2, j*SKIP_SIZE*width + i*SKIP_SIZE, cube2, width, height);
 
 	double res0 = countSSIM3D(filters, cube1, cube2);
 	double res1 = countSSIM3D(filters + FRAME_CNT*RECT_SIZE_3D * 1, cube1, cube2);
@@ -274,23 +303,32 @@ __global__ void SSIM3DKernel(unsigned char * filters, unsigned char * datain1_CU
 	double res3 = countSSIM3D(filters + FRAME_CNT*RECT_SIZE_3D * 3, cube1, cube2);
 	switch (filter[pos]) {
 	case 0:
-		results[pos] = res0;
+		tmpRes[pos] = res0;
+		break;
 	case 1:
-		results[pos] = res1;
+		tmpRes[pos] = res1;
+		break;
 	case 2:
-		results[pos] = res2;
+		tmpRes[pos] = res2;
+		break;
 	case 3:
-		results[pos] = res3;
+		tmpRes[pos] = res3;
+		break;
 	case 4:
-		results[pos] = (res0 + res3) / 2;
+		tmpRes[pos] = (res0 + res3) / 2;
+		break;
 	case 5:
-		results[pos] = (res0 + res1) / 2;
+		tmpRes[pos] = (res0 + res1) / 2;
+		break;
 	case 6:
-		results[pos] = (res1 + res2) / 2;
+		tmpRes[pos] = (res1 + res2) / 2;
+		break;
 	case 7:
-		results[pos] = (res2 + res3) / 2;
+		tmpRes[pos] = (res2 + res3) / 2;
+		break;
 	case 8:
-		results[pos] = (res0 + res1 + res2 + res3) / 4;
+		tmpRes[pos] = (res0 + res1 + res2 + res3) / 4;
+		break;
 	}
 
 
@@ -309,16 +347,18 @@ __device__ double countSSIM3D(unsigned char * filter, unsigned char *  cube1, un
 	return ssim3D;
 }
 __device__ double countMu(unsigned char* filter, unsigned char* cube) {
-	double res = 0;
+	double res = 0,res2=0;
 	for (int alpha = 0; alpha < RECT_SQRT_3D; alpha++) {
 		for (int beta = 0; beta < RECT_SQRT_3D; beta++) {
 			for (int gamma = 0; gamma < FRAME_CNT; gamma++) {
-
-				res += filter[index(gamma, alpha, beta)] * cube[index(gamma, alpha, beta)];
+				res2 += filter[index(gamma, alpha, beta)];
+				res += /*filter[index(gamma, alpha, beta)] * */cube[index(gamma, alpha, beta)];
+				
 			}
 		}
+		//printf("res: %d\n",res);
 	}
-	return res / (RECT_SQRT_3D*FRAME_CNT);
+	return res; /// (RECT_SQRT_3D*FRAME_CNT);
 }
 
 __device__ double countDeltaSqr(unsigned char* filter, unsigned char* cube, double mu) {
@@ -347,27 +387,30 @@ __device__ double countDelta(unsigned char* filter, unsigned char* cube1, unsign
 }
 
 //Generates 3D array used for SSIM 3D
-__device__ unsigned char * generateCube_CUDA(unsigned char* cube) {
+__device__ void generateCube_CUDA(unsigned char** cube) {
 	cudaError_t cudaStatus;
 	//	unsigned char* cube;
 	size_t pitch;
-	cube = new unsigned char[FRAME_CNT*RECT_SIZE_3D];
+	*cube =(unsigned char*)malloc(FRAME_CNT*RECT_SIZE_3D);
+//	*cube = new unsigned char[FRAME_CNT*RECT_SIZE_3D];
 	/*cudaStatus = cudaMallocPitch((void **)&cube, &pitch, FRAME_CNT, RECT_SIZE_3D);
 	if (cudaStatus != cudaSuccess) {
 	fprintf(stderr, "cudaMalloc failed 3!");
 	return NULL;
 	}*/
 
-	return cube;
+	//return cube;
 }
 
 //Fill 3D array with data of surroundings pixels
-__device__ void fillCube(unsigned char * datain, int pos, unsigned char * out, int width, int height) {
-	for (int i = 0; i < FRAME_CNT; i++) {
+__device__ void fillCube(unsigned char * datain, int pos, unsigned char *& out, int width, int height) {
+	
 		for (int j = 0; j < RECT_SQRT_3D; j++) {
 			for (int k = 0; k < RECT_SQRT_3D; k++) {
-				out[index(i, j, k)] = datain[indexF(i, pos + width*j, width*height)];
-				//memcpy(out[i][j], datain[i] + pos + width*j, RECT_SQRT_3D);
+				for (int i = 0; i < FRAME_CNT; i++) {
+					out[index(i, j, k)]=datain[indexF(i, pos + width*j, width*height)];
+				// = datain[0];
+				//out[0] = datain[0];
 			}
 		}
 	}
@@ -485,7 +528,7 @@ break;
 */
 __device__ __host__ void shiftData(unsigned char * data, int size) {
 	for (int i = 0; i < FRAME_CNT / 2 + 1; i++) {
-#if defined(CUDA_RUNNING)
+#if defined(__CUDA_ARCH__)
 		cudaMemcpy(data + indexF(i, 0, size), data + indexF(i + FRAME_CNT / 2, 0, size), size, cudaMemcpyDeviceToDevice);
 #else
 		memcpy(data + indexF(i, 0, size), data + indexF(i + FRAME_CNT / 2, 0, size), size);
@@ -504,17 +547,19 @@ __device__ __host__ int countSAD(unsigned char * rect1, unsigned  char * rect2) 
 
 //used for flattening of arrays because CUDA cannot work with multi dimensional arrays, FRAME_CNT frames
 __device__  __host__  inline int indexF(const int x, const int y, const int size) {
+	//cout<<"F : "<<x * size + y<<endl;
 	return x * size + y;
 }
 
 //used for flattening of arrays because CUDA cannot work with multi dimensional arrays, FRAME_CNT frames with files_count files
 __device__  __host__  inline int indexFs(const int x, const int y, const int size, const int file_index) {
-	return x * size *file_index + y;
+	//cout<<"FS: "<<file_index * size * FRAME_CNT + x * size  + y<<endl;
+	return file_index * size * FRAME_CNT + x * size  + y;
 }
 
 //used for flattening of arrays because CUDA cannot work with multi dimensional arrays, cube
 __device__  __host__ inline int index(const int x, const int y, const int z) {
-	return x * RECT_SIZE_3D + y * RECT_SQRT_3D + z;
+	return y * RECT_SQRT_3D*FRAME_CNT + z * FRAME_CNT + x;
 }
 
 //used for flattening of arrays because CUDA cannot work with multi dimensional arrays, filter

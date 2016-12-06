@@ -100,12 +100,12 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 	}
 	omp_set_num_threads(CHUNK_SIZE);
 #pragma omp parallel for private(vct, filter,k)
-	for (int i = 0; i < size / width - RECT_SQRT; i += SKIP_SIZE) {
+	for (int i = 0; i < size / width - RECT_SQRT_3D; i += SKIP_SIZE) {
 		int thr = omp_get_thread_num();
 
-		for (int j = 0; j < width - RECT_SQRT; j += SKIP_SIZE) {
-			k = (i/SKIP_SIZE)*((width - RECT_SQRT)/SKIP_SIZE) + j/SKIP_SIZE;
-			getRect(datain1[FRAME_CNT / 2], i, width, out[thr]); //FIXME - is i should be i*width+j ??
+		for (int j = 0; j < width - RECT_SQRT_3D; j += SKIP_SIZE) {
+			k = (i/SKIP_SIZE)*((width - RECT_SQRT_3D)/SKIP_SIZE) + j/SKIP_SIZE;
+			getRect(datain1[FRAME_CNT / 2], i*width+j, width, out[thr]); //FIXME - is i should be i*width+j ??
 			//if (abs(vct.x) > abs(vct.y)) T = abs(vct.x); FIXME
 			//if (abs(vct.x) < abs(vct.y)) T = abs(vct.y);
 			vct = countARPS(out[thr], datain1[FRAME_CNT / 2 - 1], j, i, width, size / width, T);
@@ -187,7 +187,7 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 			}
 		}
 	}
-	k = (size / width - RECT_SQRT) / SKIP_SIZE*(width - RECT_SQRT) / SKIP_SIZE;
+	k = (size / width - RECT_SQRT_3D) / SKIP_SIZE*(width - RECT_SQRT_3D) / SKIP_SIZE;
 	double res = countRes(tmpRes, k);
 	delete[] tmpRes;
 	
@@ -336,6 +336,8 @@ double countSSIM3D(unsigned char *** filter, unsigned char ***  cube1, unsigned 
 	return ssim3D;
 }
 
+
+
 double countMu(unsigned char*** filter, unsigned char*** cube) {
 	double res = 0;
 	int res2 = 0;
@@ -343,11 +345,12 @@ double countMu(unsigned char*** filter, unsigned char*** cube) {
 		for (int beta = 0; beta < RECT_SQRT_3D; beta++) {
 			for (int gamma = 0; gamma < FRAME_CNT; gamma++) {
 				res2 += filter[gamma][alpha][beta];
-				res += filter[gamma][alpha][beta] * cube[gamma][alpha][beta];
+				res += /*filter[gamma][alpha][beta] **/ cube[gamma][alpha][beta];
+				cout<<res<<endl;
 			}
 		}
 	}
-	return res / (RECT_SQRT_3D*FRAME_CNT);
+	return res ;/// (RECT_SQRT_3D*FRAME_CNT);
 }
 
 //Fill 3D array with data of surroundings pixels

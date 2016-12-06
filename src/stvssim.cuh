@@ -20,20 +20,30 @@ using namespace std;
 	int x;
 	int y;
 */
+//groups all reusable allocated data for CUDA part of calculation 
+struct data_CUDA {
+	unsigned char * datain1=NULL;
+	unsigned char * datain2=NULL;
+	unsigned char * cubes1=NULL;
+	unsigned char * cubes2=NULL;
+	unsigned char * filters=NULL;
+	double * tmpRes=NULL;
+	unsigned char * filter=NULL;
+};
 double ** countMetricSTVSSIM_CUDA(FILE ** streams, FILE * ref, int files_count, PictureData * frame, double ** results, int *& frames);
 
 //__global__ void SSIM3DKernel(unsigned char * filters, unsigned char * datain1_CUDA, unsigned char * datain2_CUDA);
-double countSTVSSIM_CUDA(unsigned char * datain1, unsigned char * datain2, int size, int width);
+double countSTVSSIM_CUDA(unsigned char * datain1, unsigned char * datain2, int size, int width,data_CUDA * dataCuda);
 __device__  __host__ void shiftData(unsigned char * data, int size);
-__device__ void fillCube(unsigned char * datain, int pos, unsigned char * out, int width, int height);
+__device__ void fillCube(unsigned char * datain, int pos, unsigned char *& out, int width, int height);
 
 __device__ double countMu(unsigned char* filter, unsigned char* cube);
 __device__ double countDeltaSqr(unsigned char* filter, unsigned char* cube, double mu);
 __device__ double countDelta(unsigned char* filter, unsigned char* cube1, unsigned char* cube2, double muX, double muY);
 __device__ double countSSIM3D(unsigned char * filter, unsigned char *  cube1, unsigned char *  cube2);
-__device__ unsigned char * generateCube_CUDA(unsigned char *);
+__device__ void generateCube_CUDA(unsigned char ** cube);
 
-__global__ void SSIM3DKernel(unsigned char * filters, unsigned char * datain1_CUDA, unsigned char * datain2_CUDA, int * filter, double * results, int width, int height);
+__global__ void SSIM3DKernel(unsigned char * datain1, unsigned char * datain2, unsigned char * cubes1,unsigned char * cubes2,unsigned char * filters,double * tmpRes,unsigned char * filter, int width, int height);
 
 __device__  __host__  inline int index(const int x, const int y, const int z, const int aa);
 __device__  __host__  inline int indexF(const int x, const int y, int size);
