@@ -28,7 +28,7 @@ struct data_CUDA {
 	unsigned char * cubes2=NULL;
 	unsigned char * filters=NULL;
 	double * tmpRes=NULL;
-	unsigned char * filter=NULL;
+	int * filter=NULL;
 };
 double ** countMetricSTVSSIM_CUDA(FILE ** streams, FILE * ref, int files_count, PictureData * frame, double ** results, int *& frames);
 
@@ -43,7 +43,7 @@ __device__ double countDelta(unsigned char* filter, unsigned char* cube1, unsign
 __device__ double countSSIM3D(unsigned char * filter, unsigned char *  cube1, unsigned char *  cube2);
 __device__ void generateCube_CUDA(unsigned char ** cube);
 
-__global__ void SSIM3DKernel(unsigned char * datain1, unsigned char * datain2, unsigned char * cubes1,unsigned char * cubes2,unsigned char * filters,double * tmpRes,unsigned char * filter, int width, int height);
+__global__ void SSIM3DKernel(unsigned char * datain1, unsigned char * datain2, unsigned char * cubes1,unsigned char * cubes2,unsigned char * filters,double * tmpRes,int * filter, int width, int height);
 
 __device__  __host__  inline int index(const int x, const int y, const int z, const int aa);
 __device__  __host__  inline int indexF(const int x, const int y, int size);
