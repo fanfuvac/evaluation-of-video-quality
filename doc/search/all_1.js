@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['c1',['C1',['../SSIM_8h.html#a44779f18d87e71c78fc9fbf9dc88537d',1,'SSIM.h']]],
+  ['c2',['C2',['../SSIM_8h.html#ad6fc13322a4f1c314332ff34aa8b3fa0',1,'SSIM.h']]],
+  ['chunk_5fsize',['CHUNK_SIZE',['../main_8cpp.html#aea3cfda4f3a9f978ec759f206cf186fe',1,'main.cpp']]],
+  ['compare',['compare',['../main_8cpp.html#ac70138609ef6aa6fabca57aca8681e83',1,'main.cpp']]],
+  ['countarps',['countARPS',['../stvssim_8cpp.html#a6aeaebf5f578aac2e9bdbf3151a571c5',1,'countARPS(unsigned char *block, unsigned char *framePrev, int x, int y, int width, int height, int T):&#160;stvssim.cpp'],['../stvssim_8h.html#a6aeaebf5f578aac2e9bdbf3151a571c5',1,'countARPS(unsigned char *block, unsigned char *framePrev, int x, int y, int width, int height, int T):&#160;stvssim.cpp']]],
+  ['countavg',['countAvg',['../SSIM_8h.html#a76ccde40000cac2ef79df0d64366f5a7',1,'SSIM.h']]],
+  ['countcovariance',['countCovariance',['../SSIM_8h.html#a7c2b58cf78aabd67683c6acb3e2b45f6',1,'SSIM.h']]],
+  ['countdelta',['countDelta',['../stvssim_8cpp.html#a32c2a80ad23848139ce03e3bf0d95b34',1,'countDelta(unsigned char ***filter, unsigned char ***cube1, unsigned char ***cube2, double muX, double muY):&#160;stvssim.cpp'],['../stvssim_8h.html#a32c2a80ad23848139ce03e3bf0d95b34',1,'countDelta(unsigned char ***filter, unsigned char ***cube1, unsigned char ***cube2, double muX, double muY):&#160;stvssim.cpp']]],
+  ['countdeltasqr',['countDeltaSqr',['../stvssim_8cpp.html#a1afca8ffefb48e73d9749f0902e6770e',1,'countDeltaSqr(unsigned char ***filter, unsigned char ***cube, double mu):&#160;stvssim.cpp'],['../stvssim_8h.html#a1afca8ffefb48e73d9749f0902e6770e',1,'countDeltaSqr(unsigned char ***filter, unsigned char ***cube, double mu):&#160;stvssim.cpp']]],
+  ['countmetricstvssim',['countMetricSTVSSIM',['../stvssim_8cpp.html#ac69b5b2265122a1b7775640b8feb43e6',1,'countMetricSTVSSIM(FILE **streams, FILE *ref, int files_count, PictureData *frame, string type, double **results, int *&amp;frames):&#160;stvssim.cpp'],['../stvssim_8h.html#ac69b5b2265122a1b7775640b8feb43e6',1,'countMetricSTVSSIM(FILE **streams, FILE *ref, int files_count, PictureData *frame, string type, double **results, int *&amp;frames):&#160;stvssim.cpp']]],
+  ['countmu',['countMu',['../stvssim_8cpp.html#ae81d1b26772887bce807b38ee044d8cf',1,'countMu(unsigned char ***filter, unsigned char ***cube):&#160;stvssim.cpp'],['../stvssim_8h.html#ae81d1b26772887bce807b38ee044d8cf',1,'countMu(unsigned char ***filter, unsigned char ***cube):&#160;stvssim.cpp']]],
+  ['countpsnr',['countPSNR',['../PSNR_8cpp.html#a40f074ee930b2b40b673a463bb0c089f',1,'countPSNR(unsigned char *data1, unsigned char *data2, int size):&#160;PSNR.cpp'],['../psnr_8h.html#a40f074ee930b2b40b673a463bb0c089f',1,'countPSNR(unsigned char *data1, unsigned char *data2, int size):&#160;PSNR.cpp']]],
+  ['countrectangle',['countRectangle',['../SSIM_8h.html#a63a05219d8b415024b4b5e02d1805786',1,'SSIM.h']]],
+  ['countres',['countRes',['../SSIM_8h.html#ae29f8aaddab3087d2fb731a3a2f1f0eb',1,'SSIM.h']]],
+  ['countsad',['countSAD',['../stvssim_8cpp.html#a0b34f8c2a0ca35e66931ea883c66397e',1,'countSAD(unsigned char *rect1, unsigned char *rect2):&#160;stvssim.cpp'],['../stvssim_8h.html#a0b34f8c2a0ca35e66931ea883c66397e',1,'countSAD(unsigned char *rect1, unsigned char *rect2):&#160;stvssim.cpp']]],
+  ['countssim',['countSSIM',['../SSIM_8cpp.html#ae880e5b68d233da5e2a700216d45cd36',1,'countSSIM(unsigned char *datain1, unsigned char *datain2, int size, int width):&#160;SSIM.cpp'],['../SSIM_8h.html#ae880e5b68d233da5e2a700216d45cd36',1,'countSSIM(unsigned char *datain1, unsigned char *datain2, int size, int width):&#160;SSIM.cpp']]],
+  ['countssim3d',['countSSIM3D',['../stvssim_8cpp.html#ae40d916650014e6266ccbad2e3d08da9',1,'countSSIM3D(unsigned char ***filter, unsigned char ***cube1, unsigned char ***cube2):&#160;stvssim.cpp'],['../stvssim_8h.html#ae40d916650014e6266ccbad2e3d08da9',1,'countSSIM3D(unsigned char ***filter, unsigned char ***cube1, unsigned char ***cube2):&#160;stvssim.cpp']]],
+  ['countstvssim',['countSTVSSIM',['../stvssim_8cpp.html#aa188224c32927a5f4e14c264724276ca',1,'countSTVSSIM(unsigned char **datain1, unsigned char **datain2, int size, int width):&#160;stvssim.cpp'],['../stvssim_8h.html#aa188224c32927a5f4e14c264724276ca',1,'countSTVSSIM(unsigned char **datain1, unsigned char **datain2, int size, int width):&#160;stvssim.cpp']]],
+  ['countvariance',['countVariance',['../SSIM_8h.html#ab5437904deaec203620f72ef3b7fc862',1,'SSIM.h']]]
+];

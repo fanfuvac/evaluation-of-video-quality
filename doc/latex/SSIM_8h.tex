@@ -1,0 +1,207 @@
+\hypertarget{SSIM_8h}{\section{src/\-S\-S\-I\-M.h File Reference}
+\label{SSIM_8h}\index{src/\-S\-S\-I\-M.\-h@{src/\-S\-S\-I\-M.\-h}}
+}
+This graph shows which files directly or indirectly include this file\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{SSIM_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{SSIM_8h_ab60773f9d8d75ec04602ffb878732850}{R\-E\-C\-T\-\_\-\-S\-I\-Z\-E}~64
+\item 
+\#define \hyperlink{SSIM_8h_ac44b64f4a8ae9a6b66d304e070a17e41}{R\-E\-C\-T\-\_\-\-S\-Q\-R\-T}~8
+\item 
+\#define \hyperlink{SSIM_8h_a44779f18d87e71c78fc9fbf9dc88537d}{C1}~6.\-5025
+\item 
+\#define \hyperlink{SSIM_8h_ad6fc13322a4f1c314332ff34aa8b3fa0}{C2}~58.\-5225
+\item 
+\#define \hyperlink{SSIM_8h_a311ca79928cfdb061dc907246d321aed}{S\-K\-I\-P\-\_\-\-S\-I\-Z\-E}~8
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \hyperlink{SSIM_8h_ae880e5b68d233da5e2a700216d45cd36}{count\-S\-S\-I\-M} (unsigned char $\ast$datain1, unsigned char $\ast$datain2, int size, int width)
+\item 
+double \hyperlink{SSIM_8h_a63a05219d8b415024b4b5e02d1805786}{count\-Rectangle} (unsigned char $\ast$data1, unsigned char $\ast$data2)
+\item 
+double \hyperlink{SSIM_8h_a76ccde40000cac2ef79df0d64366f5a7}{count\-Avg} (unsigned char $\ast$data)
+\item 
+double \hyperlink{SSIM_8h_ab5437904deaec203620f72ef3b7fc862}{count\-Variance} (unsigned char $\ast$data, double avg)
+\item 
+double \hyperlink{SSIM_8h_a7c2b58cf78aabd67683c6acb3e2b45f6}{count\-Covariance} (unsigned char $\ast$data1, unsigned char $\ast$data2, double avg1, double avg2)
+\item 
+void \hyperlink{SSIM_8h_a3bd78652837ab363a2c8c7b6ebc71d17}{get\-Rect} (unsigned char $\ast$data, int start, int width, unsigned char $\ast$out)
+\item 
+double \hyperlink{SSIM_8h_ae29f8aaddab3087d2fb731a3a2f1f0eb}{count\-Res} (double $\ast$tmp\-Res, int count)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{SSIM_8h_a44779f18d87e71c78fc9fbf9dc88537d}{\index{S\-S\-I\-M.\-h@{S\-S\-I\-M.\-h}!C1@{C1}}
+\index{C1@{C1}!SSIM.h@{S\-S\-I\-M.\-h}}
+\subsubsection[{C1}]{\setlength{\rightskip}{0pt plus 5cm}\#define C1~6.\-5025}}\label{SSIM_8h_a44779f18d87e71c78fc9fbf9dc88537d}
+
+
+Definition at line 12 of file S\-S\-I\-M.\-h.
+
+\hypertarget{SSIM_8h_ad6fc13322a4f1c314332ff34aa8b3fa0}{\index{S\-S\-I\-M.\-h@{S\-S\-I\-M.\-h}!C2@{C2}}
+\index{C2@{C2}!SSIM.h@{S\-S\-I\-M.\-h}}
+\subsubsection[{C2}]{\setlength{\rightskip}{0pt plus 5cm}\#define C2~58.\-5225}}\label{SSIM_8h_ad6fc13322a4f1c314332ff34aa8b3fa0}
+
+
+Definition at line 13 of file S\-S\-I\-M.\-h.
+
+\hypertarget{SSIM_8h_ab60773f9d8d75ec04602ffb878732850}{\index{S\-S\-I\-M.\-h@{S\-S\-I\-M.\-h}!R\-E\-C\-T\-\_\-\-S\-I\-Z\-E@{R\-E\-C\-T\-\_\-\-S\-I\-Z\-E}}
+\index{R\-E\-C\-T\-\_\-\-S\-I\-Z\-E@{R\-E\-C\-T\-\_\-\-S\-I\-Z\-E}!SSIM.h@{S\-S\-I\-M.\-h}}
+\subsubsection[{R\-E\-C\-T\-\_\-\-S\-I\-Z\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\-E\-C\-T\-\_\-\-S\-I\-Z\-E~64}}\label{SSIM_8h_ab60773f9d8d75ec04602ffb878732850}
+
+
+Definition at line 10 of file S\-S\-I\-M.\-h.
+
+\hypertarget{SSIM_8h_ac44b64f4a8ae9a6b66d304e070a17e41}{\index{S\-S\-I\-M.\-h@{S\-S\-I\-M.\-h}!R\-E\-C\-T\-\_\-\-S\-Q\-R\-T@{R\-E\-C\-T\-\_\-\-S\-Q\-R\-T}}
+\index{R\-E\-C\-T\-\_\-\-S\-Q\-R\-T@{R\-E\-C\-T\-\_\-\-S\-Q\-R\-T}!SSIM.h@{S\-S\-I\-M.\-h}}
+\subsubsection[{R\-E\-C\-T\-\_\-\-S\-Q\-R\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\-E\-C\-T\-\_\-\-S\-Q\-R\-T~8}}\label{SSIM_8h_ac44b64f4a8ae9a6b66d304e070a17e41}
+
+
+Definition at line 11 of file S\-S\-I\-M.\-h.
+
+\hypertarget{SSIM_8h_a311ca79928cfdb061dc907246d321aed}{\index{S\-S\-I\-M.\-h@{S\-S\-I\-M.\-h}!S\-K\-I\-P\-\_\-\-S\-I\-Z\-E@{S\-K\-I\-P\-\_\-\-S\-I\-Z\-E}}
+\index{S\-K\-I\-P\-\_\-\-S\-I\-Z\-E@{S\-K\-I\-P\-\_\-\-S\-I\-Z\-E}!SSIM.h@{S\-S\-I\-M.\-h}}
+\subsubsection[{S\-K\-I\-P\-\_\-\-S\-I\-Z\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\-K\-I\-P\-\_\-\-S\-I\-Z\-E~8}}\label{SSIM_8h_a311ca79928cfdb061dc907246d321aed}
+
+
+Definition at line 14 of file S\-S\-I\-M.\-h.
+
+
+
+\subsection{Function Documentation}
+\hypertarget{SSIM_8h_a76ccde40000cac2ef79df0d64366f5a7}{\index{S\-S\-I\-M.\-h@{S\-S\-I\-M.\-h}!count\-Avg@{count\-Avg}}
+\index{count\-Avg@{count\-Avg}!SSIM.h@{S\-S\-I\-M.\-h}}
+\subsubsection[{count\-Avg}]{\setlength{\rightskip}{0pt plus 5cm}double count\-Avg (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{data}
+\end{DoxyParamCaption}
+)}}\label{SSIM_8h_a76ccde40000cac2ef79df0d64366f5a7}
+\hypertarget{SSIM_8h_a7c2b58cf78aabd67683c6acb3e2b45f6}{\index{S\-S\-I\-M.\-h@{S\-S\-I\-M.\-h}!count\-Covariance@{count\-Covariance}}
+\index{count\-Covariance@{count\-Covariance}!SSIM.h@{S\-S\-I\-M.\-h}}
+\subsubsection[{count\-Covariance}]{\setlength{\rightskip}{0pt plus 5cm}double count\-Covariance (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{data1, }
+\item[{unsigned char $\ast$}]{data2, }
+\item[{double}]{avg1, }
+\item[{double}]{avg2}
+\end{DoxyParamCaption}
+)}}\label{SSIM_8h_a7c2b58cf78aabd67683c6acb3e2b45f6}
+\hypertarget{SSIM_8h_a63a05219d8b415024b4b5e02d1805786}{\index{S\-S\-I\-M.\-h@{S\-S\-I\-M.\-h}!count\-Rectangle@{count\-Rectangle}}
+\index{count\-Rectangle@{count\-Rectangle}!SSIM.h@{S\-S\-I\-M.\-h}}
+\subsubsection[{count\-Rectangle}]{\setlength{\rightskip}{0pt plus 5cm}double count\-Rectangle (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{data1, }
+\item[{unsigned char $\ast$}]{data2}
+\end{DoxyParamCaption}
+)}}\label{SSIM_8h_a63a05219d8b415024b4b5e02d1805786}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=342pt]{SSIM_8h_a63a05219d8b415024b4b5e02d1805786_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{SSIM_8h_ae29f8aaddab3087d2fb731a3a2f1f0eb}{\index{S\-S\-I\-M.\-h@{S\-S\-I\-M.\-h}!count\-Res@{count\-Res}}
+\index{count\-Res@{count\-Res}!SSIM.h@{S\-S\-I\-M.\-h}}
+\subsubsection[{count\-Res}]{\setlength{\rightskip}{0pt plus 5cm}double count\-Res (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{tmp\-Res, }
+\item[{int}]{count}
+\end{DoxyParamCaption}
+)}}\label{SSIM_8h_ae29f8aaddab3087d2fb731a3a2f1f0eb}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{SSIM_8h_ae29f8aaddab3087d2fb731a3a2f1f0eb_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{SSIM_8h_ae880e5b68d233da5e2a700216d45cd36}{\index{S\-S\-I\-M.\-h@{S\-S\-I\-M.\-h}!count\-S\-S\-I\-M@{count\-S\-S\-I\-M}}
+\index{count\-S\-S\-I\-M@{count\-S\-S\-I\-M}!SSIM.h@{S\-S\-I\-M.\-h}}
+\subsubsection[{count\-S\-S\-I\-M}]{\setlength{\rightskip}{0pt plus 5cm}double count\-S\-S\-I\-M (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{datain1, }
+\item[{unsigned char $\ast$}]{datain2, }
+\item[{int}]{size, }
+\item[{int}]{width}
+\end{DoxyParamCaption}
+)}}\label{SSIM_8h_ae880e5b68d233da5e2a700216d45cd36}
+
+
+Definition at line 17 of file S\-S\-I\-M.\-cpp.
+
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=268pt]{SSIM_8h_ae880e5b68d233da5e2a700216d45cd36_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{SSIM_8h_ae880e5b68d233da5e2a700216d45cd36_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{SSIM_8h_ab5437904deaec203620f72ef3b7fc862}{\index{S\-S\-I\-M.\-h@{S\-S\-I\-M.\-h}!count\-Variance@{count\-Variance}}
+\index{count\-Variance@{count\-Variance}!SSIM.h@{S\-S\-I\-M.\-h}}
+\subsubsection[{count\-Variance}]{\setlength{\rightskip}{0pt plus 5cm}double count\-Variance (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{data, }
+\item[{double}]{avg}
+\end{DoxyParamCaption}
+)}}\label{SSIM_8h_ab5437904deaec203620f72ef3b7fc862}
+\hypertarget{SSIM_8h_a3bd78652837ab363a2c8c7b6ebc71d17}{\index{S\-S\-I\-M.\-h@{S\-S\-I\-M.\-h}!get\-Rect@{get\-Rect}}
+\index{get\-Rect@{get\-Rect}!SSIM.h@{S\-S\-I\-M.\-h}}
+\subsubsection[{get\-Rect}]{\setlength{\rightskip}{0pt plus 5cm}void get\-Rect (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{data, }
+\item[{int}]{start, }
+\item[{int}]{width, }
+\item[{unsigned char $\ast$}]{out}
+\end{DoxyParamCaption}
+)}}\label{SSIM_8h_a3bd78652837ab363a2c8c7b6ebc71d17}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{SSIM_8h_a3bd78652837ab363a2c8c7b6ebc71d17_icgraph}
+\end{center}
+\end{figure}
+
+

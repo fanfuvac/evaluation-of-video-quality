@@ -1,0 +1,392 @@
+\hypertarget{stvssim_8cpp}{\section{src/stvssim.cpp File Reference}
+\label{stvssim_8cpp}\index{src/stvssim.\-cpp@{src/stvssim.\-cpp}}
+}
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$fstream$>$}\\*
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$string.\-h$>$}\\*
+{\ttfamily \#include $<$math.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$cmath$>$}\\*
+{\ttfamily \#include \char`\"{}stvssim.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}S\-S\-I\-M.\-h\char`\"{}}\\*
+{\ttfamily \#include $<$map$>$}\\*
+Include dependency graph for stvssim.\-cpp\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{stvssim_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double $\ast$$\ast$ \hyperlink{stvssim_8cpp_ac69b5b2265122a1b7775640b8feb43e6}{count\-Metric\-S\-T\-V\-S\-S\-I\-M} (F\-I\-L\-E $\ast$$\ast$streams, F\-I\-L\-E $\ast$ref, int files\-\_\-count, \hyperlink{structPictureData}{Picture\-Data} $\ast$frame, string type, double $\ast$$\ast$results, int $\ast$\&frames)
+\item 
+double \hyperlink{stvssim_8cpp_aa188224c32927a5f4e14c264724276ca}{count\-S\-T\-V\-S\-S\-I\-M} (unsigned char $\ast$$\ast$datain1, unsigned char $\ast$$\ast$datain2, int size, int width)
+\item 
+double \hyperlink{stvssim_8cpp_ae40d916650014e6266ccbad2e3d08da9}{count\-S\-S\-I\-M3\-D} (unsigned char $\ast$$\ast$$\ast$filter, unsigned char $\ast$$\ast$$\ast$cube1, unsigned char $\ast$$\ast$$\ast$cube2)
+\item 
+double \hyperlink{stvssim_8cpp_ae81d1b26772887bce807b38ee044d8cf}{count\-Mu} (unsigned char $\ast$$\ast$$\ast$filter, unsigned char $\ast$$\ast$$\ast$cube)
+\item 
+double \hyperlink{stvssim_8cpp_a1afca8ffefb48e73d9749f0902e6770e}{count\-Delta\-Sqr} (unsigned char $\ast$$\ast$$\ast$filter, unsigned char $\ast$$\ast$$\ast$cube, double mu)
+\item 
+double \hyperlink{stvssim_8cpp_a32c2a80ad23848139ce03e3bf0d95b34}{count\-Delta} (unsigned char $\ast$$\ast$$\ast$filter, unsigned char $\ast$$\ast$$\ast$cube1, unsigned char $\ast$$\ast$$\ast$cube2, double mu\-X, double mu\-Y)
+\item 
+unsigned char $\ast$$\ast$$\ast$ \hyperlink{stvssim_8cpp_aee5cce2c1f90ed16082c6f01eb8eb2ed}{generate\-Cube} ()
+\item 
+void \hyperlink{stvssim_8cpp_acafb1bf84ccd5750b7745d814c792560}{fill\-Cube} (unsigned char $\ast$$\ast$datain, int pos, unsigned char $\ast$$\ast$$\ast$out, int width)
+\item 
+unsigned char $\ast$$\ast$$\ast$$\ast$ \hyperlink{stvssim_8cpp_a4094691210615420943d90d66fed89f0}{generate\-Filters} ()
+\item 
+\hyperlink{structvector}{vector} \hyperlink{stvssim_8cpp_a6aeaebf5f578aac2e9bdbf3151a571c5}{count\-A\-R\-P\-S} (unsigned char $\ast$block, unsigned char $\ast$frame\-Prev, int \hyperlink{png__decode_8cpp_a6150e0515f7202e2fb518f7206ed97dc}{x}, int \hyperlink{png__decode_8cpp_a0a2f84ed7838f07779ae24c5a9086d33}{y}, int width, int height, int T)
+\item 
+void \hyperlink{stvssim_8cpp_a23d24ef0b8f8b2069dfe95630f8e9181}{shift\-Data} (unsigned char $\ast$$\ast$data, int size)
+\item 
+int \hyperlink{stvssim_8cpp_a0b34f8c2a0ca35e66931ea883c66397e}{count\-S\-A\-D} (unsigned char $\ast$rect1, unsigned char $\ast$rect2)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{stvssim_8cpp_a6aeaebf5f578aac2e9bdbf3151a571c5}{\index{stvssim.\-cpp@{stvssim.\-cpp}!count\-A\-R\-P\-S@{count\-A\-R\-P\-S}}
+\index{count\-A\-R\-P\-S@{count\-A\-R\-P\-S}!stvssim.cpp@{stvssim.\-cpp}}
+\subsubsection[{count\-A\-R\-P\-S}]{\setlength{\rightskip}{0pt plus 5cm}{\bf vector} count\-A\-R\-P\-S (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{block, }
+\item[{unsigned char $\ast$}]{frame\-Prev, }
+\item[{int}]{x, }
+\item[{int}]{y, }
+\item[{int}]{width, }
+\item[{int}]{height, }
+\item[{int}]{T}
+\end{DoxyParamCaption}
+)}}\label{stvssim_8cpp_a6aeaebf5f578aac2e9bdbf3151a571c5}
+
+
+Definition at line 316 of file stvssim.\-cpp.
+
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=246pt]{stvssim_8cpp_a6aeaebf5f578aac2e9bdbf3151a571c5_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{stvssim_8cpp_a6aeaebf5f578aac2e9bdbf3151a571c5_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{stvssim_8cpp_a32c2a80ad23848139ce03e3bf0d95b34}{\index{stvssim.\-cpp@{stvssim.\-cpp}!count\-Delta@{count\-Delta}}
+\index{count\-Delta@{count\-Delta}!stvssim.cpp@{stvssim.\-cpp}}
+\subsubsection[{count\-Delta}]{\setlength{\rightskip}{0pt plus 5cm}double count\-Delta (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$$\ast$$\ast$}]{filter, }
+\item[{unsigned char $\ast$$\ast$$\ast$}]{cube1, }
+\item[{unsigned char $\ast$$\ast$$\ast$}]{cube2, }
+\item[{double}]{mu\-X, }
+\item[{double}]{mu\-Y}
+\end{DoxyParamCaption}
+)}}\label{stvssim_8cpp_a32c2a80ad23848139ce03e3bf0d95b34}
+
+
+Definition at line 235 of file stvssim.\-cpp.
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{stvssim_8cpp_a32c2a80ad23848139ce03e3bf0d95b34_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{stvssim_8cpp_a1afca8ffefb48e73d9749f0902e6770e}{\index{stvssim.\-cpp@{stvssim.\-cpp}!count\-Delta\-Sqr@{count\-Delta\-Sqr}}
+\index{count\-Delta\-Sqr@{count\-Delta\-Sqr}!stvssim.cpp@{stvssim.\-cpp}}
+\subsubsection[{count\-Delta\-Sqr}]{\setlength{\rightskip}{0pt plus 5cm}double count\-Delta\-Sqr (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$$\ast$$\ast$}]{filter, }
+\item[{unsigned char $\ast$$\ast$$\ast$}]{cube, }
+\item[{double}]{mu}
+\end{DoxyParamCaption}
+)}}\label{stvssim_8cpp_a1afca8ffefb48e73d9749f0902e6770e}
+
+
+Definition at line 222 of file stvssim.\-cpp.
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{stvssim_8cpp_a1afca8ffefb48e73d9749f0902e6770e_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{stvssim_8cpp_ac69b5b2265122a1b7775640b8feb43e6}{\index{stvssim.\-cpp@{stvssim.\-cpp}!count\-Metric\-S\-T\-V\-S\-S\-I\-M@{count\-Metric\-S\-T\-V\-S\-S\-I\-M}}
+\index{count\-Metric\-S\-T\-V\-S\-S\-I\-M@{count\-Metric\-S\-T\-V\-S\-S\-I\-M}!stvssim.cpp@{stvssim.\-cpp}}
+\subsubsection[{count\-Metric\-S\-T\-V\-S\-S\-I\-M}]{\setlength{\rightskip}{0pt plus 5cm}double$\ast$$\ast$ count\-Metric\-S\-T\-V\-S\-S\-I\-M (
+\begin{DoxyParamCaption}
+\item[{F\-I\-L\-E $\ast$$\ast$}]{streams, }
+\item[{F\-I\-L\-E $\ast$}]{ref, }
+\item[{int}]{files\-\_\-count, }
+\item[{{\bf Picture\-Data} $\ast$}]{frame, }
+\item[{string}]{type, }
+\item[{double $\ast$$\ast$}]{results, }
+\item[{int $\ast$\&}]{frames}
+\end{DoxyParamCaption}
+)}}\label{stvssim_8cpp_ac69b5b2265122a1b7775640b8feb43e6}
+
+
+Definition at line 16 of file stvssim.\-cpp.
+
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{stvssim_8cpp_ac69b5b2265122a1b7775640b8feb43e6_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{stvssim_8cpp_ae81d1b26772887bce807b38ee044d8cf}{\index{stvssim.\-cpp@{stvssim.\-cpp}!count\-Mu@{count\-Mu}}
+\index{count\-Mu@{count\-Mu}!stvssim.cpp@{stvssim.\-cpp}}
+\subsubsection[{count\-Mu}]{\setlength{\rightskip}{0pt plus 5cm}double count\-Mu (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$$\ast$$\ast$}]{filter, }
+\item[{unsigned char $\ast$$\ast$$\ast$}]{cube}
+\end{DoxyParamCaption}
+)}}\label{stvssim_8cpp_ae81d1b26772887bce807b38ee044d8cf}
+
+
+Definition at line 208 of file stvssim.\-cpp.
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{stvssim_8cpp_ae81d1b26772887bce807b38ee044d8cf_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{stvssim_8cpp_a0b34f8c2a0ca35e66931ea883c66397e}{\index{stvssim.\-cpp@{stvssim.\-cpp}!count\-S\-A\-D@{count\-S\-A\-D}}
+\index{count\-S\-A\-D@{count\-S\-A\-D}!stvssim.cpp@{stvssim.\-cpp}}
+\subsubsection[{count\-S\-A\-D}]{\setlength{\rightskip}{0pt plus 5cm}int count\-S\-A\-D (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{rect1, }
+\item[{unsigned char $\ast$}]{rect2}
+\end{DoxyParamCaption}
+)}}\label{stvssim_8cpp_a0b34f8c2a0ca35e66931ea883c66397e}
+
+
+Definition at line 390 of file stvssim.\-cpp.
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{stvssim_8cpp_a0b34f8c2a0ca35e66931ea883c66397e_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{stvssim_8cpp_ae40d916650014e6266ccbad2e3d08da9}{\index{stvssim.\-cpp@{stvssim.\-cpp}!count\-S\-S\-I\-M3\-D@{count\-S\-S\-I\-M3\-D}}
+\index{count\-S\-S\-I\-M3\-D@{count\-S\-S\-I\-M3\-D}!stvssim.cpp@{stvssim.\-cpp}}
+\subsubsection[{count\-S\-S\-I\-M3\-D}]{\setlength{\rightskip}{0pt plus 5cm}double count\-S\-S\-I\-M3\-D (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$$\ast$$\ast$}]{filter, }
+\item[{unsigned char $\ast$$\ast$$\ast$}]{cube1, }
+\item[{unsigned char $\ast$$\ast$$\ast$}]{cube2}
+\end{DoxyParamCaption}
+)}}\label{stvssim_8cpp_ae40d916650014e6266ccbad2e3d08da9}
+
+
+Definition at line 196 of file stvssim.\-cpp.
+
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=274pt]{stvssim_8cpp_ae40d916650014e6266ccbad2e3d08da9_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{stvssim_8cpp_ae40d916650014e6266ccbad2e3d08da9_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{stvssim_8cpp_aa188224c32927a5f4e14c264724276ca}{\index{stvssim.\-cpp@{stvssim.\-cpp}!count\-S\-T\-V\-S\-S\-I\-M@{count\-S\-T\-V\-S\-S\-I\-M}}
+\index{count\-S\-T\-V\-S\-S\-I\-M@{count\-S\-T\-V\-S\-S\-I\-M}!stvssim.cpp@{stvssim.\-cpp}}
+\subsubsection[{count\-S\-T\-V\-S\-S\-I\-M}]{\setlength{\rightskip}{0pt plus 5cm}double count\-S\-T\-V\-S\-S\-I\-M (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$$\ast$}]{datain1, }
+\item[{unsigned char $\ast$$\ast$}]{datain2, }
+\item[{int}]{size, }
+\item[{int}]{width}
+\end{DoxyParamCaption}
+)}}\label{stvssim_8cpp_aa188224c32927a5f4e14c264724276ca}
+
+
+Definition at line 81 of file stvssim.\-cpp.
+
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{stvssim_8cpp_aa188224c32927a5f4e14c264724276ca_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=314pt]{stvssim_8cpp_aa188224c32927a5f4e14c264724276ca_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{stvssim_8cpp_acafb1bf84ccd5750b7745d814c792560}{\index{stvssim.\-cpp@{stvssim.\-cpp}!fill\-Cube@{fill\-Cube}}
+\index{fill\-Cube@{fill\-Cube}!stvssim.cpp@{stvssim.\-cpp}}
+\subsubsection[{fill\-Cube}]{\setlength{\rightskip}{0pt plus 5cm}void fill\-Cube (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$$\ast$}]{datain, }
+\item[{int}]{pos, }
+\item[{unsigned char $\ast$$\ast$$\ast$}]{out, }
+\item[{int}]{width}
+\end{DoxyParamCaption}
+)}}\label{stvssim_8cpp_acafb1bf84ccd5750b7745d814c792560}
+
+
+Definition at line 261 of file stvssim.\-cpp.
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{stvssim_8cpp_acafb1bf84ccd5750b7745d814c792560_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{stvssim_8cpp_aee5cce2c1f90ed16082c6f01eb8eb2ed}{\index{stvssim.\-cpp@{stvssim.\-cpp}!generate\-Cube@{generate\-Cube}}
+\index{generate\-Cube@{generate\-Cube}!stvssim.cpp@{stvssim.\-cpp}}
+\subsubsection[{generate\-Cube}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char$\ast$$\ast$$\ast$ generate\-Cube (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{stvssim_8cpp_aee5cce2c1f90ed16082c6f01eb8eb2ed}
+
+
+Definition at line 248 of file stvssim.\-cpp.
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{stvssim_8cpp_aee5cce2c1f90ed16082c6f01eb8eb2ed_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{stvssim_8cpp_a4094691210615420943d90d66fed89f0}{\index{stvssim.\-cpp@{stvssim.\-cpp}!generate\-Filters@{generate\-Filters}}
+\index{generate\-Filters@{generate\-Filters}!stvssim.cpp@{stvssim.\-cpp}}
+\subsubsection[{generate\-Filters}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char$\ast$$\ast$$\ast$$\ast$ generate\-Filters (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{stvssim_8cpp_a4094691210615420943d90d66fed89f0}
+
+
+Definition at line 270 of file stvssim.\-cpp.
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{stvssim_8cpp_a4094691210615420943d90d66fed89f0_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{stvssim_8cpp_a23d24ef0b8f8b2069dfe95630f8e9181}{\index{stvssim.\-cpp@{stvssim.\-cpp}!shift\-Data@{shift\-Data}}
+\index{shift\-Data@{shift\-Data}!stvssim.cpp@{stvssim.\-cpp}}
+\subsubsection[{shift\-Data}]{\setlength{\rightskip}{0pt plus 5cm}void shift\-Data (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$$\ast$}]{data, }
+\item[{int}]{size}
+\end{DoxyParamCaption}
+)}}\label{stvssim_8cpp_a23d24ef0b8f8b2069dfe95630f8e9181}
+
+
+Definition at line 383 of file stvssim.\-cpp.
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=284pt]{stvssim_8cpp_a23d24ef0b8f8b2069dfe95630f8e9181_icgraph}
+\end{center}
+\end{figure}
+
+

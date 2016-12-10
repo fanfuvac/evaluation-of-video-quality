@@ -1,0 +1,338 @@
+\begin{theindex}
+
+  \item {abort\discretionary {-}{}{}\_\discretionary {-}{}{}}
+    \subitem {png\discretionary {-}{}{}\_\discretionary {-}{}{}decode.\discretionary {-}{}{}cpp}, 
+		\hyperpage{13}
+
+  \indexspace
+
+  \item {C1}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{19}
+  \item {C2}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{19}
+  \item {C\discretionary {-}{}{}H\discretionary {-}{}{}U\discretionary {-}{}{}N\discretionary {-}{}{}K\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E}
+    \subitem {main.\discretionary {-}{}{}cpp}, \hyperpage{10}
+  \item {compare}
+    \subitem {main.\discretionary {-}{}{}cpp}, \hyperpage{10}
+  \item {count\discretionary {-}{}{}A\discretionary {-}{}{}R\discretionary {-}{}{}P\discretionary {-}{}{}S}
+    \subitem {stvssim.\discretionary {-}{}{}cpp}, \hyperpage{22}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{30}
+  \item {count\discretionary {-}{}{}Avg}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{20}
+  \item {count\discretionary {-}{}{}Covariance}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{20}
+  \item {count\discretionary {-}{}{}Delta}
+    \subitem {stvssim.\discretionary {-}{}{}cpp}, \hyperpage{23}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{30}
+  \item {count\discretionary {-}{}{}Delta\discretionary {-}{}{}Sqr}
+    \subitem {stvssim.\discretionary {-}{}{}cpp}, \hyperpage{23}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{31}
+  \item {count\discretionary {-}{}{}Metric\discretionary {-}{}{}S\discretionary {-}{}{}T\discretionary {-}{}{}V\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M}
+    \subitem {stvssim.\discretionary {-}{}{}cpp}, \hyperpage{24}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{31}
+  \item {count\discretionary {-}{}{}Mu}
+    \subitem {stvssim.\discretionary {-}{}{}cpp}, \hyperpage{24}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{32}
+  \item {count\discretionary {-}{}{}P\discretionary {-}{}{}S\discretionary {-}{}{}N\discretionary {-}{}{}R}
+    \subitem {P\discretionary {-}{}{}S\discretionary {-}{}{}N\discretionary {-}{}{}R.\discretionary {-}{}{}cpp}, 
+		\hyperpage{16}
+    \subitem {psnr.\discretionary {-}{}{}h}, \hyperpage{17}
+  \item {count\discretionary {-}{}{}Rectangle}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{20}
+  \item {count\discretionary {-}{}{}Res}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{20}
+  \item {count\discretionary {-}{}{}S\discretionary {-}{}{}A\discretionary {-}{}{}D}
+    \subitem {stvssim.\discretionary {-}{}{}cpp}, \hyperpage{24}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{32}
+  \item {count\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}cpp}, 
+		\hyperpage{18}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{20}
+  \item {count\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M3\discretionary {-}{}{}D}
+    \subitem {stvssim.\discretionary {-}{}{}cpp}, \hyperpage{25}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{32}
+  \item {count\discretionary {-}{}{}S\discretionary {-}{}{}T\discretionary {-}{}{}V\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M}
+    \subitem {stvssim.\discretionary {-}{}{}cpp}, \hyperpage{25}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{33}
+  \item {count\discretionary {-}{}{}Variance}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{21}
+
+  \indexspace
+
+  \item {data}
+    \subitem {Picture\discretionary {-}{}{}Data}, \hyperpage{5}
+
+  \indexspace
+
+  \item {F\discretionary {-}{}{}R\discretionary {-}{}{}A\discretionary {-}{}{}M\discretionary {-}{}{}E\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}C\discretionary {-}{}{}N\discretionary {-}{}{}T}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{29}
+  \item {F\discretionary {-}{}{}R\discretionary {-}{}{}A\discretionary {-}{}{}M\discretionary {-}{}{}E\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}K\discretionary {-}{}{}I\discretionary {-}{}{}P}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{29}
+  \item {fill\discretionary {-}{}{}Cube}
+    \subitem {stvssim.\discretionary {-}{}{}cpp}, \hyperpage{26}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{34}
+  \item {frame\discretionary {-}{}{}\_\discretionary {-}{}{}count}
+    \subitem {Picture\discretionary {-}{}{}Data}, \hyperpage{6}
+
+  \indexspace
+
+  \item {generate\discretionary {-}{}{}Cube}
+    \subitem {stvssim.\discretionary {-}{}{}cpp}, \hyperpage{27}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{35}
+  \item {generate\discretionary {-}{}{}Filters}
+    \subitem {stvssim.\discretionary {-}{}{}cpp}, \hyperpage{27}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{35}
+  \item {get\discretionary {-}{}{}Rect}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{21}
+  \item {get\discretionary {-}{}{}Video\discretionary {-}{}{}Info}
+    \subitem {main.\discretionary {-}{}{}cpp}, \hyperpage{10}
+
+  \indexspace
+
+  \item {height}
+    \subitem {Picture\discretionary {-}{}{}Data}, \hyperpage{6}
+
+  \indexspace
+
+  \item {I\discretionary {-}{}{}N\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}X}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{29}
+
+  \indexspace
+
+  \item {M\discretionary {-}{}{}A\discretionary {-}{}{}X\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}F\discretionary {-}{}{}I\discretionary {-}{}{}L\discretionary {-}{}{}E\discretionary {-}{}{}S}
+    \subitem {main.\discretionary {-}{}{}h}, \hyperpage{12}
+  \item {main}
+    \subitem {main.\discretionary {-}{}{}cpp}, \hyperpage{10}
+  \item {main.\discretionary {-}{}{}cpp}
+    \subitem {C\discretionary {-}{}{}H\discretionary {-}{}{}U\discretionary {-}{}{}N\discretionary {-}{}{}K\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E}, 
+		\hyperpage{10}
+    \subitem {compare}, \hyperpage{10}
+    \subitem {get\discretionary {-}{}{}Video\discretionary {-}{}{}Info}, 
+		\hyperpage{10}
+    \subitem {main}, \hyperpage{10}
+    \subitem {shift\discretionary {-}{}{}Data}, \hyperpage{11}
+    \subitem {start\discretionary {-}{}{}F\discretionary {-}{}{}Fmpeg}, 
+		\hyperpage{11}
+  \item {main.\discretionary {-}{}{}h}
+    \subitem {M\discretionary {-}{}{}A\discretionary {-}{}{}X\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}F\discretionary {-}{}{}I\discretionary {-}{}{}L\discretionary {-}{}{}E\discretionary {-}{}{}S}, 
+		\hyperpage{12}
+    \subitem {T\discretionary {-}{}{}H\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}D\discretionary {-}{}{}S}, 
+		\hyperpage{12}
+
+  \indexspace
+
+  \item {number\discretionary {-}{}{}\_\discretionary {-}{}{}of\discretionary {-}{}{}\_\discretionary {-}{}{}passes}
+    \subitem {png\discretionary {-}{}{}\_\discretionary {-}{}{}decode.\discretionary {-}{}{}cpp}, 
+		\hyperpage{14}
+
+  \indexspace
+
+  \item {P\discretionary {-}{}{}S\discretionary {-}{}{}N\discretionary {-}{}{}R.\discretionary {-}{}{}cpp}
+    \subitem {count\discretionary {-}{}{}P\discretionary {-}{}{}S\discretionary {-}{}{}N\discretionary {-}{}{}R}, 
+		\hyperpage{16}
+  \item {Picture\discretionary {-}{}{}Data}, \hyperpage{5}
+    \subitem {data}, \hyperpage{5}
+    \subitem {frame\discretionary {-}{}{}\_\discretionary {-}{}{}count}, 
+		\hyperpage{6}
+    \subitem {height}, \hyperpage{6}
+    \subitem {size}, \hyperpage{6}
+    \subitem {width}, \hyperpage{6}
+  \item {png\discretionary {-}{}{}\_\discretionary {-}{}{}decode.\discretionary {-}{}{}cpp}
+    \subitem {abort\discretionary {-}{}{}\_\discretionary {-}{}{}}, 
+		\hyperpage{13}
+    \subitem {number\discretionary {-}{}{}\_\discretionary {-}{}{}of\discretionary {-}{}{}\_\discretionary {-}{}{}passes}, 
+		\hyperpage{14}
+    \subitem {process\discretionary {-}{}{}\_\discretionary {-}{}{}file}, 
+		\hyperpage{13}
+    \subitem {read\discretionary {-}{}{}\_\discretionary {-}{}{}png\discretionary {-}{}{}\_\discretionary {-}{}{}file}, 
+		\hyperpage{14}
+    \subitem {x}, \hyperpage{14}
+    \subitem {y}, \hyperpage{14}
+  \item {png\discretionary {-}{}{}\_\discretionary {-}{}{}decode.\discretionary {-}{}{}h}
+    \subitem {process\discretionary {-}{}{}\_\discretionary {-}{}{}file}, 
+		\hyperpage{15}
+    \subitem {read\discretionary {-}{}{}\_\discretionary {-}{}{}png\discretionary {-}{}{}\_\discretionary {-}{}{}file}, 
+		\hyperpage{15}
+  \item {process\discretionary {-}{}{}\_\discretionary {-}{}{}file}
+    \subitem {png\discretionary {-}{}{}\_\discretionary {-}{}{}decode.\discretionary {-}{}{}cpp}, 
+		\hyperpage{13}
+    \subitem {png\discretionary {-}{}{}\_\discretionary {-}{}{}decode.\discretionary {-}{}{}h}, 
+		\hyperpage{15}
+  \item {psnr.\discretionary {-}{}{}h}
+    \subitem {count\discretionary {-}{}{}P\discretionary {-}{}{}S\discretionary {-}{}{}N\discretionary {-}{}{}R}, 
+		\hyperpage{17}
+
+  \indexspace
+
+  \item {R\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{20}
+  \item {R\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E\discretionary {-}{}{}\_\discretionary {-}{}{}3\discretionary {-}{}{}D}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{29}
+  \item {R\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}A\discretionary {-}{}{}R\discretionary {-}{}{}P\discretionary {-}{}{}S}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{29}
+  \item {R\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}Q\discretionary {-}{}{}R\discretionary {-}{}{}T}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{20}
+  \item {R\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}Q\discretionary {-}{}{}R\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}3\discretionary {-}{}{}D}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{29}
+  \item {R\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}Q\discretionary {-}{}{}R\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}A\discretionary {-}{}{}R\discretionary {-}{}{}P\discretionary {-}{}{}S}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{30}
+  \item {R\discretionary {-}{}{}O\discretionary {-}{}{}O\discretionary {-}{}{}D\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{30}
+  \item {read\discretionary {-}{}{}\_\discretionary {-}{}{}png\discretionary {-}{}{}\_\discretionary {-}{}{}file}
+    \subitem {png\discretionary {-}{}{}\_\discretionary {-}{}{}decode.\discretionary {-}{}{}cpp}, 
+		\hyperpage{14}
+    \subitem {png\discretionary {-}{}{}\_\discretionary {-}{}{}decode.\discretionary {-}{}{}h}, 
+		\hyperpage{15}
+
+  \indexspace
+
+  \item {S\discretionary {-}{}{}K\discretionary {-}{}{}I\discretionary {-}{}{}P\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E}
+    \subitem {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{20}
+  \item {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}cpp}
+    \subitem {count\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M}, 
+		\hyperpage{18}
+  \item {S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}
+    \subitem {C1}, \hyperpage{19}
+    \subitem {C2}, \hyperpage{19}
+    \subitem {count\discretionary {-}{}{}Avg}, \hyperpage{20}
+    \subitem {count\discretionary {-}{}{}Covariance}, \hyperpage{20}
+    \subitem {count\discretionary {-}{}{}Rectangle}, \hyperpage{20}
+    \subitem {count\discretionary {-}{}{}Res}, \hyperpage{20}
+    \subitem {count\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M}, 
+		\hyperpage{20}
+    \subitem {count\discretionary {-}{}{}Variance}, \hyperpage{21}
+    \subitem {get\discretionary {-}{}{}Rect}, \hyperpage{21}
+    \subitem {R\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E}, 
+		\hyperpage{20}
+    \subitem {R\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}Q\discretionary {-}{}{}R\discretionary {-}{}{}T}, 
+		\hyperpage{20}
+    \subitem {S\discretionary {-}{}{}K\discretionary {-}{}{}I\discretionary {-}{}{}P\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E}, 
+		\hyperpage{20}
+  \item {shift\discretionary {-}{}{}Data}
+    \subitem {main.\discretionary {-}{}{}cpp}, \hyperpage{11}
+    \subitem {stvssim.\discretionary {-}{}{}cpp}, \hyperpage{27}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{35}
+  \item {size}
+    \subitem {Picture\discretionary {-}{}{}Data}, \hyperpage{6}
+  \item {src/\discretionary {-}{}{}P\discretionary {-}{}{}S\discretionary {-}{}{}N\discretionary {-}{}{}R.\discretionary {-}{}{}cpp}, 
+		\hyperpage{16}
+  \item {src/\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}cpp}, 
+		\hyperpage{18}
+  \item {src/\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M.\discretionary {-}{}{}h}, 
+		\hyperpage{19}
+  \item {src/main.\discretionary {-}{}{}cpp}, \hyperpage{9}
+  \item {src/main.\discretionary {-}{}{}h}, \hyperpage{12}
+  \item {src/png\discretionary {-}{}{}\_\discretionary {-}{}{}decode.\discretionary {-}{}{}cpp}, 
+		\hyperpage{13}
+  \item {src/png\discretionary {-}{}{}\_\discretionary {-}{}{}decode.\discretionary {-}{}{}h}, 
+		\hyperpage{15}
+  \item {src/psnr.\discretionary {-}{}{}h}, \hyperpage{17}
+  \item {src/stvssim.\discretionary {-}{}{}cpp}, \hyperpage{22}
+  \item {src/stvssim.\discretionary {-}{}{}h}, \hyperpage{28}
+  \item {start\discretionary {-}{}{}F\discretionary {-}{}{}Fmpeg}
+    \subitem {main.\discretionary {-}{}{}cpp}, \hyperpage{11}
+  \item {stvssim.\discretionary {-}{}{}cpp}
+    \subitem {count\discretionary {-}{}{}A\discretionary {-}{}{}R\discretionary {-}{}{}P\discretionary {-}{}{}S}, 
+		\hyperpage{22}
+    \subitem {count\discretionary {-}{}{}Delta}, \hyperpage{23}
+    \subitem {count\discretionary {-}{}{}Delta\discretionary {-}{}{}Sqr}, 
+		\hyperpage{23}
+    \subitem {count\discretionary {-}{}{}Metric\discretionary {-}{}{}S\discretionary {-}{}{}T\discretionary {-}{}{}V\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M}, 
+		\hyperpage{24}
+    \subitem {count\discretionary {-}{}{}Mu}, \hyperpage{24}
+    \subitem {count\discretionary {-}{}{}S\discretionary {-}{}{}A\discretionary {-}{}{}D}, 
+		\hyperpage{24}
+    \subitem {count\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M3\discretionary {-}{}{}D}, 
+		\hyperpage{25}
+    \subitem {count\discretionary {-}{}{}S\discretionary {-}{}{}T\discretionary {-}{}{}V\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M}, 
+		\hyperpage{25}
+    \subitem {fill\discretionary {-}{}{}Cube}, \hyperpage{26}
+    \subitem {generate\discretionary {-}{}{}Cube}, \hyperpage{27}
+    \subitem {generate\discretionary {-}{}{}Filters}, \hyperpage{27}
+    \subitem {shift\discretionary {-}{}{}Data}, \hyperpage{27}
+  \item {stvssim.\discretionary {-}{}{}h}
+    \subitem {count\discretionary {-}{}{}A\discretionary {-}{}{}R\discretionary {-}{}{}P\discretionary {-}{}{}S}, 
+		\hyperpage{30}
+    \subitem {count\discretionary {-}{}{}Delta}, \hyperpage{30}
+    \subitem {count\discretionary {-}{}{}Delta\discretionary {-}{}{}Sqr}, 
+		\hyperpage{31}
+    \subitem {count\discretionary {-}{}{}Metric\discretionary {-}{}{}S\discretionary {-}{}{}T\discretionary {-}{}{}V\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M}, 
+		\hyperpage{31}
+    \subitem {count\discretionary {-}{}{}Mu}, \hyperpage{32}
+    \subitem {count\discretionary {-}{}{}S\discretionary {-}{}{}A\discretionary {-}{}{}D}, 
+		\hyperpage{32}
+    \subitem {count\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M3\discretionary {-}{}{}D}, 
+		\hyperpage{32}
+    \subitem {count\discretionary {-}{}{}S\discretionary {-}{}{}T\discretionary {-}{}{}V\discretionary {-}{}{}S\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}M}, 
+		\hyperpage{33}
+    \subitem {F\discretionary {-}{}{}R\discretionary {-}{}{}A\discretionary {-}{}{}M\discretionary {-}{}{}E\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}C\discretionary {-}{}{}N\discretionary {-}{}{}T}, 
+		\hyperpage{29}
+    \subitem {F\discretionary {-}{}{}R\discretionary {-}{}{}A\discretionary {-}{}{}M\discretionary {-}{}{}E\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}K\discretionary {-}{}{}I\discretionary {-}{}{}P}, 
+		\hyperpage{29}
+    \subitem {fill\discretionary {-}{}{}Cube}, \hyperpage{34}
+    \subitem {generate\discretionary {-}{}{}Cube}, \hyperpage{35}
+    \subitem {generate\discretionary {-}{}{}Filters}, \hyperpage{35}
+    \subitem {I\discretionary {-}{}{}N\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}M\discretionary {-}{}{}A\discretionary {-}{}{}X}, 
+		\hyperpage{29}
+    \subitem {R\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E\discretionary {-}{}{}\_\discretionary {-}{}{}3\discretionary {-}{}{}D}, 
+		\hyperpage{29}
+    \subitem {R\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}A\discretionary {-}{}{}R\discretionary {-}{}{}P\discretionary {-}{}{}S}, 
+		\hyperpage{29}
+    \subitem {R\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}Q\discretionary {-}{}{}R\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}3\discretionary {-}{}{}D}, 
+		\hyperpage{29}
+    \subitem {R\discretionary {-}{}{}E\discretionary {-}{}{}C\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}Q\discretionary {-}{}{}R\discretionary {-}{}{}T\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}A\discretionary {-}{}{}R\discretionary {-}{}{}P\discretionary {-}{}{}S}, 
+		\hyperpage{30}
+    \subitem {R\discretionary {-}{}{}O\discretionary {-}{}{}O\discretionary {-}{}{}D\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}S\discretionary {-}{}{}I\discretionary {-}{}{}Z\discretionary {-}{}{}E}, 
+		\hyperpage{30}
+    \subitem {shift\discretionary {-}{}{}Data}, \hyperpage{35}
+    \subitem {Z\discretionary {-}{}{}E\discretionary {-}{}{}R\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}M\discretionary {-}{}{}V\discretionary {-}{}{}M\discretionary {-}{}{}T}, 
+		\hyperpage{30}
+
+  \indexspace
+
+  \item {T\discretionary {-}{}{}H\discretionary {-}{}{}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}D\discretionary {-}{}{}S}
+    \subitem {main.\discretionary {-}{}{}h}, \hyperpage{12}
+
+  \indexspace
+
+  \item {vector}, \hyperpage{6}
+    \subitem {x}, \hyperpage{7}
+    \subitem {y}, \hyperpage{7}
+
+  \indexspace
+
+  \item {width}
+    \subitem {Picture\discretionary {-}{}{}Data}, \hyperpage{6}
+
+  \indexspace
+
+  \item {x}
+    \subitem {png\discretionary {-}{}{}\_\discretionary {-}{}{}decode.\discretionary {-}{}{}cpp}, 
+		\hyperpage{14}
+    \subitem {vector}, \hyperpage{7}
+
+  \indexspace
+
+  \item {y}
+    \subitem {png\discretionary {-}{}{}\_\discretionary {-}{}{}decode.\discretionary {-}{}{}cpp}, 
+		\hyperpage{14}
+    \subitem {vector}, \hyperpage{7}
+
+  \indexspace
+
+  \item {Z\discretionary {-}{}{}E\discretionary {-}{}{}R\discretionary {-}{}{}O\discretionary {-}{}{}\_\discretionary {-}{}{}\discretionary {-}{}{}M\discretionary {-}{}{}V\discretionary {-}{}{}M\discretionary {-}{}{}T}
+    \subitem {stvssim.\discretionary {-}{}{}h}, \hyperpage{30}
+
+\end{theindex}

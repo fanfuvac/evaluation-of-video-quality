@@ -37,22 +37,23 @@ double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, Pictu
 	for (int i = FRAME_CNT / 2; i < FRAME_CNT; i++) {
 		for (int j = 0; j < files_count; j++) {
 			readFromFile(data[j][i], frame->size, streams[j]);
-			readFromFile(dataTrash, frame->size/2, streams[j]);//when using yuv, first 2/3 of the picture are Lumma, others are UV which we do not evaluate
-			
+			readFromFile(dataTrash, frame->size / 2, streams[j]);//when using yuv, first 2/3 of the picture are Lumma, others are UV which we do not evaluate
+
 		}
 		readFromFile(ref_data[i], frame->size, ref);
-		readFromFile(dataTrash, frame->size/2, ref);
+		readFromFile(dataTrash, frame->size / 2, ref);
 	}
 
 	int i = FRAME_SKIP;
 	int j = 0;
 
-	for (; i < frame->frame_count - FRAME_SKIP; i += FRAME_SKIP, j++) {
+	for (; i < frame->frame_count - 1*FRAME_SKIP-1; i += FRAME_SKIP, j++) {
+		//cout << i << endl;
 		shiftData(ref_data, frame->size);
 		for (int k = 0; k < files_count; k++) {
 			shiftData(data[k], frame->size);
 		}
-		for (int k = FRAME_CNT / 2+1; k < FRAME_CNT; k++) {
+		for (int k = FRAME_CNT / 2 + 1; k < FRAME_CNT; k++) {
 			for (int l = 0; l < files_count; l++) {
 				readFromFile(data[l][k], frame->size, streams[l]);
 				readFromFile(dataTrash, frame->size / 2, streams[l]);//when using yuv, first 2/3 of the picture are Lumma, others are UV which we do not evaluate
@@ -64,10 +65,10 @@ double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, Pictu
 		double resSSIM, res3D;
 		for (int l = 0; l < files_count; l++) {
 			res3D = countSTVSSIM(ref_data, data[l], frame->width*frame->height, frame->width);
-			resSSIM = 1;//countSSIM(ref_data[FRAME_CNT / 2], data[l][FRAME_CNT / 2], frame->size, frame->width);
+			resSSIM = countSSIM(ref_data[FRAME_CNT / 2], data[l][FRAME_CNT / 2], frame->size, frame->width);
 			results[l][j] = res3D*resSSIM;
 			cout << "3D: " << res3D << " SSIM: " << resSSIM << " Total: " << results[l][j] << endl;
-			
+
 			//cout << j << ": " << results[l][j] << endl;
 		}
 		//cout << results[j] << endl;
@@ -88,14 +89,14 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 	vct.y = 0;
 	int filter;
 	unsigned char ***** filters = new unsigned char ****[CHUNK_SIZE]; //generateFilters();
-	int rectCount = (int)((size / width - RECT_SQRT_3D)/SKIP_SIZE+1)*	(int)((width - RECT_SQRT_3D)/SKIP_SIZE+1);
+	int rectCount = (int)((size / width - RECT_SQRT_3D) / SKIP_SIZE + 1)*	(int)((width - RECT_SQRT_3D) / SKIP_SIZE + 1);
 	double * tmpRes = new double[rectCount];
 	unsigned char **** cube1 = new unsigned char ***[CHUNK_SIZE]; //generateCube();
 	unsigned char **** cube2 = new unsigned char ***[CHUNK_SIZE]; //generateCube();
 	int k = 0;
 	for (int i = 0; i < CHUNK_SIZE; i++) {
 		filters[i] = generateFilters();
-		cube1[i]= generateCube();
+		cube1[i] = generateCube();
 		cube2[i] = generateCube();
 		out[i] = new unsigned char[RECT_SIZE];
 	}
@@ -105,13 +106,15 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 		int thr = omp_get_thread_num();
 
 		for (int j = 0; j < width - RECT_SQRT_3D; j += SKIP_SIZE) {
-			k = (int)((i)/SKIP_SIZE)*	(int)((j)/SKIP_SIZE); FIXME
-			getRect(datain1[FRAME_CNT / 2], i*width+j, width, out[thr]); //FIXME - is i should be i*width+j ??
-			cout<<k<<endl;
+			//(int)((size / width - RECT_SQRT_3D) / SKIP_SIZE + 1)*	(int)((width - RECT_SQRT_3D) / SKIP_SIZE + 1)
+				k = (j / SKIP_SIZE) % (width - RECT_SQRT_3D) + (i / SKIP_SIZE) * ((width - RECT_SQRT_3D)/SKIP_SIZE+1);
+				//(int)((i) / SKIP_SIZE)*	(int)((j) / SKIP_SIZE); //FIXME
+				getRect(datain1[FRAME_CNT / 2], i*width + j, width, out[thr]); //FIXME - is i should be i*width+j ??
+			//cout << k << endl;
 			//if (abs(vct.x) > abs(vct.y)) T = abs(vct.x); FIXME
 			//if (abs(vct.x) < abs(vct.y)) T = abs(vct.y);
 			vct = countARPS(out[thr], datain1[FRAME_CNT / 2 - 1], j, i, width, size / width, T);
-			
+
 			if ((vct.x > vct.y * 2 && vct.x*-1 < 2 * vct.y) || (vct.x < vct.y * 2 && vct.x*-1 > 2 * vct.y)) { //y=0
 				filter = 0;
 			}
@@ -146,15 +149,15 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 
 
 			//3D-SSIM part
-			fillCube(datain1, i*width + j, cube1[thr],width);
+			fillCube(datain1, i*width + j, cube1[thr], width);
 			fillCube(datain2, i*width + j, cube2[thr], width);
-						
+
 			/*double res0 = countSSIM3D(filters[thr][0], cube1[thr], cube2[thr]);
 			double res1 = countSSIM3D(filters[thr][1], cube1[thr], cube2[thr]);
 			double res2 = countSSIM3D(filters[thr][2], cube1[thr], cube2[thr]);
-			double res3 = countSSIM3D(filters[thr][3], cube1[thr], cube2[thr]);*/
+			double res3 = countSSIM3D(filters[thr][3], cube1[thr], cube2[thr]);
 
-			//printf("%f %f %f %f %d\n", res0,res1,res2,res3, filter);
+			printf("%d %f %f %f %f %d\n",k, res0,res1,res2,res3, filter);*/
 			if (filter < 4) {
 				tmpRes[k] = countSSIM3D(filters[thr][filter], cube1[thr], cube2[thr]);
 				//cout << tmpRes[k] << endl;
@@ -188,7 +191,7 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 				b = countSSIM3D(filters[thr][1], cube1[thr], cube2[thr]);
 				c = countSSIM3D(filters[thr][2], cube1[thr], cube2[thr]);
 				d = countSSIM3D(filters[thr][3], cube1[thr], cube2[thr]);
-				tmpRes[k] = (a + b+c+d) / 4;
+				tmpRes[k] = (a + b + c + d) / 4;
 				//cout << tmpRes[k] << endl;
 			}
 			if (tmpRes[k] >  1) {
@@ -197,10 +200,10 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 		}
 	}
 	k = rectCount;//(int)((size/width - RECT_SQRT_3D)/SKIP_SIZE+1)*	(int)((width - RECT_SQRT_3D)/SKIP_SIZE+1);
-	cout<<k<<endl;
+	//cout << k << endl;
 	double res = countRes(tmpRes, k);
 	delete[] tmpRes;
-	
+
 	for (int l = 0; l < CHUNK_SIZE; l++) {
 		for (int i = 0; i < FRAME_CNT; i++) {
 			for (int j = 0; j < RECT_SQRT_3D; j++) {
@@ -222,7 +225,7 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 	delete[] cube2;
 	//delete[] filters;
 	delete[] out;
-	
+
 	for (int l = 0; l < CHUNK_SIZE; l++) {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < FRAME_CNT; j++) {
@@ -236,7 +239,7 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 		delete[] filters[l];
 	}
 	delete[] filters;
-	
+
 	return res;
 
 }
@@ -356,12 +359,12 @@ double countMu(unsigned char*** filter, unsigned char*** cube) {
 		for (int beta = 0; beta < RECT_SQRT_3D; beta++) {
 			for (int gamma = 0; gamma < FRAME_CNT; gamma++) {
 				res2 += filter[gamma][alpha][beta];
-				res += filter[gamma][alpha][beta] *cube[gamma][alpha][beta];
+				res += filter[gamma][alpha][beta] * cube[gamma][alpha][beta];
 				//cout<<res<<" ";
 			}
 		}
 	}
-	return res ;/// (RECT_SQRT_3D*FRAME_CNT);
+	return res;/// (RECT_SQRT_3D*FRAME_CNT);
 }
 
 //Fill 3D array with data of surroundings pixels
@@ -375,40 +378,40 @@ void fillCube(unsigned char ** datain, int pos, unsigned char *** out, int width
 
 //other functions are defined in CUDA version, stvssim.cu
 
-vector countARPS(unsigned char * block, unsigned char * framePrev, int x,int y,int width, int height, int T) {
+vector countARPS(unsigned char * block, unsigned char * framePrev, int x, int y, int width, int height, int T) {
 	unsigned char * out = new unsigned char[RECT_SIZE];
 	getRect(framePrev, x*y, width, out);
-	int sad=countSAD(block, out);
+	int sad = countSAD(block, out);
 	vector vOut;
 	if (sad < ZERO_MVMT) {
 		vOut.x = 0;
 		vOut.y = 0;
 		return vOut;
 	}
-	map<int , int > past;
+	map<int, int > past;
 	int xOrig = x;
 	int yOrig = y;
 	int res[5];
 	while (1) {
-		getRect(framePrev, x+y*width, width, out);
+		getRect(framePrev, x + y*width, width, out);
 		res[0] = countSAD(block, out);
 		if (x - T - RECT_SQRT / 2 > 0) {
-			getRect(framePrev, (x-T)+y*width, width, out);
+			getRect(framePrev, (x - T) + y*width, width, out);
 			res[3] = countSAD(block, out);
 		}
 		else res[3] = INT_MAX;
 		if (x + T + RECT_SQRT / 2< width) {
-			getRect(framePrev, (x + T)+y*width, width, out);
+			getRect(framePrev, (x + T) + y*width, width, out);
 			res[1] = countSAD(block, out);
 		}
 		else res[1] = INT_MAX;
-		if (y + T + RECT_SQRT/2< height) {
-			getRect(framePrev, x+(y+T)*width, width, out);
+		if (y + T + RECT_SQRT / 2< height) {
+			getRect(framePrev, x + (y + T)*width, width, out);
 			res[2] = countSAD(block, out);
 		}
 		else res[2] = INT_MAX;
 		if (y - T - RECT_SQRT / 2 > 0) {
-			getRect(framePrev, x+(y-T)*width, width, out);
+			getRect(framePrev, x + (y - T)*width, width, out);
 			res[4] = countSAD(block, out);
 		}
 		else res[4] = INT_MAX;
@@ -420,26 +423,26 @@ vector countARPS(unsigned char * block, unsigned char * framePrev, int x,int y,i
 				minPos = i;
 			}
 		}
-		if (minPos==0) {
+		if (minPos == 0) {
 			vOut.x = x - xOrig;
 			vOut.y = y - yOrig;
 			delete[] out;
 			return vOut;
 		}
 		switch (minPos) {
-		case 1: 
+		case 1:
 			x += T;
 			break;
-		case 2:	
+		case 2:
 			y += T;
 			break;
-		case 3: 
+		case 3:
 			x -= T;
 			break;
-		case 4:	
+		case 4:
 			y -= T;
 			break;
-		}	
+		}
 	}
 }
 

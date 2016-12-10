@@ -254,18 +254,23 @@ int main(int argc, char ** argv) {
 	}
 	if (gpu == 1) {
 		if (string(type) == string("STVSSIM")) {
+			cout << "stvssim CUDA" << endl;
 			countMetricSTVSSIM_CUDA(streams, ref, files_count, frame, results, frames);
 		}
-		countCUDA(streams, ref, files_count, frame, type, results);
+		else {
+			cout << "SSIM CUDA" << endl;
+			countCUDA(streams, ref, files_count, frame, type, results);
+		}
 	}
 
 	else if (string(type) == string("STVSSIM")) {
-
+		cout << "stvssim CPU" << endl;
 		countMetricSTVSSIM(streams, ref, files_count, frame, results, frames);
 		delete streams; //?
 		
 	}
 	else {
+		cout << "SSIM/PSNR CPU" << endl;
 		countMetric(streams, ref, files_count, frame, type, results); //SSIM, PSNR
 		
 	}

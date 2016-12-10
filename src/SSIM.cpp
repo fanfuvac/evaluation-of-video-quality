@@ -31,18 +31,20 @@ double countSSIM(unsigned char * datain1, unsigned char * datain2, int size,int 
 	//nthreads = omp_get_num_threads();
 
 //	#pragma omp parallel for schedule(static, 20)
-	for (int i = 0; i < size / width - RECT_SQRT; i += SKIP_SIZE) {
+	for (int i = 0; i <= size / width - RECT_SQRT; i += SKIP_SIZE) {
 		
-		for (int j = 0; j < width - RECT_SQRT; j += SKIP_SIZE,k++) {
+		for (int j = 0; j <= width - RECT_SQRT; j += SKIP_SIZE,k++) {
 			//for (int i = 0; i < size-(RECT_SQRT-1)*width; i+=SKIP_SIZE) {
 			getRect(datain1, i*width+j, width, rect1);
 			getRect(datain2, i*width + j, width, rect2);
 			tmpRes[k] =  countRectangle(rect1, rect2);
+			//printf("%d: %f\n", j + i*width, tmpRes[k]);
 			//if (tmpRes[k] < 0) cout << "low result: " << i<< ": " << j<< " :" << tmpRes[k] << endl;
 			/*delete[] rect1;
 			delete[] rect1;*/
 		}
 	}
+	//cout << "rectcount: " << k << endl;
 	double res= countRes(tmpRes, k);
 	delete[] tmpRes;
 	//delete[] data1;

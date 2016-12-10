@@ -65,14 +65,16 @@ double countSSIM(unsigned char * datain1, unsigned char * datain2, unsigned char
 
 
 	//	#pragma omp parallel for schedule(static, 20)
-	int rectCount = (size / width - RECT_SQRT)*(width - RECT_SQRT) / SKIP_SIZE / SKIP_SIZE / THREADS*THREADS;
+	int perLine = ( width) / SKIP_SIZE;
+	int linesCount = (size / width) / SKIP_SIZE;
+	int rectCount = perLine * linesCount / THREADS*THREADS;
 	int blocks = rectCount / THREADS;
-	if (rectCount< (size / width - RECT_SQRT)*(width - RECT_SQRT) / SKIP_SIZE / SKIP_SIZE) {
+	if (rectCount < perLine * linesCount) {
 		blocks = rectCount / THREADS + 1;
-		rectCount = (size / width - RECT_SQRT)*(width - RECT_SQRT) / SKIP_SIZE / SKIP_SIZE;
+		rectCount = perLine * linesCount;
 	}
 	countRectangleKernel << <blocks, THREADS >> >(dataC1, dataC2, rects1, rects2, results, size, width); 
-
+	//cout << "rectcount: "<< rectCount << endl;
 
 
 	double * resultsOut = new double[rectCount];
@@ -162,7 +164,7 @@ __host__ __device__ double countCovariance(unsigned char * data1, unsigned char 
 double countRes(double * tmpRes, int count) {
 	double sum = 0;
 	for (int i = 0; i < count; i += 1) {
-		cout << tmpRes[i]<<endl;
+		//cout << tmpRes[i]<<endl;
 		sum += tmpRes[i];
 
 	}
@@ -175,14 +177,17 @@ __global__ void countRectangleKernel(unsigned char * data1, unsigned char * data
 	int j = blockIdx.x;
 	int a;
 	int pos = j*THREADS + i;
-	int x = (pos*SKIP_SIZE) % (width - RECT_SQRT);
-	int y = (pos*SKIP_SIZE) / (width - RECT_SQRT)*SKIP_SIZE;
+	int leftover = (width - RECT_SQRT) % SKIP_SIZE;
+	int line = width - RECT_SQRT - leftover + SKIP_SIZE;
+	int x = (pos*SKIP_SIZE) % (line);
+	int y = (pos*SKIP_SIZE) / (line)*SKIP_SIZE;
 	if (pos<size / SKIP_SIZE / SKIP_SIZE) {
 		getRect(data1, x+y*width, width, rects1 + (pos)*RECT_SIZE);
 		getRect(data2, x + y*width, width, rects2 + (pos)*RECT_SIZE);
 		//return -3;
 
 		out[pos] =  countRectangle(rects1 + pos*RECT_SIZE, rects2 + pos*RECT_SIZE);
+		//printf("%d %d %d: %f\n", x + y*width, blockIdx.x, threadIdx.x, out[pos]);
 	}
 }
 /*

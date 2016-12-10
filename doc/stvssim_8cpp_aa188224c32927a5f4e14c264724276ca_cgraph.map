@@ -1,0 +1,13 @@
+<map id="countSTVSSIM" name="countSTVSSIM">
+<area shape="rect" id="node2" href="$stvssim_8cpp.html#a4094691210615420943d90d66fed89f0" title="generateFilters" alt="" coords="169,5,277,32"/>
+<area shape="rect" id="node3" href="$stvssim_8cpp.html#aee5cce2c1f90ed16082c6f01eb8eb2ed" title="generateCube" alt="" coords="171,56,274,83"/>
+<area shape="rect" id="node4" href="$SSIM_8h.html#a3bd78652837ab363a2c8c7b6ebc71d17" title="getRect" alt="" coords="345,107,413,133"/>
+<area shape="rect" id="node5" href="$stvssim_8cpp.html#a6aeaebf5f578aac2e9bdbf3151a571c5" title="countARPS" alt="" coords="177,157,268,184"/>
+<area shape="rect" id="node7" href="$stvssim_8cpp.html#acafb1bf84ccd5750b7745d814c792560" title="fillCube" alt="" coords="189,208,256,235"/>
+<area shape="rect" id="node8" href="$stvssim_8cpp.html#ae40d916650014e6266ccbad2e3d08da9" title="countSSIM3D" alt="" coords="171,259,275,285"/>
+<area shape="rect" id="node12" href="$SSIM_8h.html#ae29f8aaddab3087d2fb731a3a2f1f0eb" title="countRes" alt="" coords="183,309,262,336"/>
+<area shape="rect" id="node6" href="$stvssim_8cpp.html#a0b34f8c2a0ca35e66931ea883c66397e" title="countSAD" alt="" coords="337,157,420,184"/>
+<area shape="rect" id="node9" href="$stvssim_8cpp.html#ae81d1b26772887bce807b38ee044d8cf" title="countMu" alt="" coords="343,208,415,235"/>
+<area shape="rect" id="node10" href="$stvssim_8cpp.html#a1afca8ffefb48e73d9749f0902e6770e" title="countDeltaSqr" alt="" coords="326,259,431,285"/>
+<area shape="rect" id="node11" href="$stvssim_8cpp.html#a32c2a80ad23848139ce03e3bf0d95b34" title="countDelta" alt="" coords="336,309,421,336"/>
+</map>

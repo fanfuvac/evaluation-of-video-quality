@@ -1,0 +1,132 @@
+\hypertarget{png__decode_8cpp}{\section{src/png\-\_\-decode.cpp File Reference}
+\label{png__decode_8cpp}\index{src/png\-\_\-decode.\-cpp@{src/png\-\_\-decode.\-cpp}}
+}
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$string.\-h$>$}\\*
+{\ttfamily \#include $<$stdarg.\-h$>$}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include \char`\"{}png\-\_\-decode.\-h\char`\"{}}\\*
+Include dependency graph for png\-\_\-decode.\-cpp\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{png__decode_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{png__decode_8cpp_a7fe6a9c0c549657aa0d7da2e3c73fa01}{abort\-\_\-} (const char $\ast$s,...)
+\item 
+\hyperlink{structPictureData}{Picture\-Data} $\ast$ \hyperlink{png__decode_8cpp_ac47e45c677d42810fe262f4d9353912e}{read\-\_\-png\-\_\-file} (char $\ast$file\-\_\-name)
+\item 
+\hyperlink{structPictureData}{Picture\-Data} $\ast$ \hyperlink{png__decode_8cpp_a15766d3ba7e4f300d172280de6ef6a9e}{process\-\_\-file} (\hyperlink{structPictureData}{Picture\-Data} $\ast$data)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{png__decode_8cpp_a6150e0515f7202e2fb518f7206ed97dc}{x}
+\item 
+int \hyperlink{png__decode_8cpp_a0a2f84ed7838f07779ae24c5a9086d33}{y}
+\item 
+int \hyperlink{png__decode_8cpp_add7425c568955bb79994730e77d38a18}{number\-\_\-of\-\_\-passes}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{png__decode_8cpp_a7fe6a9c0c549657aa0d7da2e3c73fa01}{\index{png\-\_\-decode.\-cpp@{png\-\_\-decode.\-cpp}!abort\-\_\-@{abort\-\_\-}}
+\index{abort\-\_\-@{abort\-\_\-}!png_decode.cpp@{png\-\_\-decode.\-cpp}}
+\subsubsection[{abort\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}void abort\-\_\- (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{s, }
+\item[{}]{...}
+\end{DoxyParamCaption}
+)}}\label{png__decode_8cpp_a7fe6a9c0c549657aa0d7da2e3c73fa01}
+
+
+Definition at line 11 of file png\-\_\-decode.\-cpp.
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=234pt]{png__decode_8cpp_a7fe6a9c0c549657aa0d7da2e3c73fa01_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{png__decode_8cpp_a15766d3ba7e4f300d172280de6ef6a9e}{\index{png\-\_\-decode.\-cpp@{png\-\_\-decode.\-cpp}!process\-\_\-file@{process\-\_\-file}}
+\index{process\-\_\-file@{process\-\_\-file}!png_decode.cpp@{png\-\_\-decode.\-cpp}}
+\subsubsection[{process\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Picture\-Data}$\ast$ process\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{{\bf Picture\-Data} $\ast$}]{data}
+\end{DoxyParamCaption}
+)}}\label{png__decode_8cpp_a15766d3ba7e4f300d172280de6ef6a9e}
+
+
+Definition at line 84 of file png\-\_\-decode.\-cpp.
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=260pt]{png__decode_8cpp_a15766d3ba7e4f300d172280de6ef6a9e_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{png__decode_8cpp_ac47e45c677d42810fe262f4d9353912e}{\index{png\-\_\-decode.\-cpp@{png\-\_\-decode.\-cpp}!read\-\_\-png\-\_\-file@{read\-\_\-png\-\_\-file}}
+\index{read\-\_\-png\-\_\-file@{read\-\_\-png\-\_\-file}!png_decode.cpp@{png\-\_\-decode.\-cpp}}
+\subsubsection[{read\-\_\-png\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Picture\-Data}$\ast$ read\-\_\-png\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{file\-\_\-name}
+\end{DoxyParamCaption}
+)}}\label{png__decode_8cpp_ac47e45c677d42810fe262f4d9353912e}
+
+
+Definition at line 29 of file png\-\_\-decode.\-cpp.
+
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=260pt]{png__decode_8cpp_ac47e45c677d42810fe262f4d9353912e_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Variable Documentation}
+\hypertarget{png__decode_8cpp_add7425c568955bb79994730e77d38a18}{\index{png\-\_\-decode.\-cpp@{png\-\_\-decode.\-cpp}!number\-\_\-of\-\_\-passes@{number\-\_\-of\-\_\-passes}}
+\index{number\-\_\-of\-\_\-passes@{number\-\_\-of\-\_\-passes}!png_decode.cpp@{png\-\_\-decode.\-cpp}}
+\subsubsection[{number\-\_\-of\-\_\-passes}]{\setlength{\rightskip}{0pt plus 5cm}int number\-\_\-of\-\_\-passes}}\label{png__decode_8cpp_add7425c568955bb79994730e77d38a18}
+
+
+Definition at line 24 of file png\-\_\-decode.\-cpp.
+
+\hypertarget{png__decode_8cpp_a6150e0515f7202e2fb518f7206ed97dc}{\index{png\-\_\-decode.\-cpp@{png\-\_\-decode.\-cpp}!x@{x}}
+\index{x@{x}!png_decode.cpp@{png\-\_\-decode.\-cpp}}
+\subsubsection[{x}]{\setlength{\rightskip}{0pt plus 5cm}int x}}\label{png__decode_8cpp_a6150e0515f7202e2fb518f7206ed97dc}
+
+
+Definition at line 21 of file png\-\_\-decode.\-cpp.
+
+\hypertarget{png__decode_8cpp_a0a2f84ed7838f07779ae24c5a9086d33}{\index{png\-\_\-decode.\-cpp@{png\-\_\-decode.\-cpp}!y@{y}}
+\index{y@{y}!png_decode.cpp@{png\-\_\-decode.\-cpp}}
+\subsubsection[{y}]{\setlength{\rightskip}{0pt plus 5cm}int y}}\label{png__decode_8cpp_a0a2f84ed7838f07779ae24c5a9086d33}
+
+
+Definition at line 21 of file png\-\_\-decode.\-cpp.
+
