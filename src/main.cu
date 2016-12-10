@@ -276,20 +276,23 @@ int main(int argc, char ** argv) {
 	}
 
 	for (int j = 0; j < files_count; j++) {
-		cout << "input file number: " << j << endl;
-		for (int i = 0; i < frames[j]; i++) {
-			cout << i << " " << results[j][i] << endl;
+		cout << "file number: " << j << "\t";
+	}
+	cout<<endl;
+	for (int i = 0; i < frames[j]; i++) {
+		cout << i<<"\t";
+		for (int j = 0; j < files_count; j++) {
+			cout <<results[j][i] << "\t";
 			if (isfinite(results[j][i]))
 				sum[j] += results[j][i];
 			else frames[j]--;
 		}
-
+		cout<<endl;
 	}
 	for (int i = 0; i < files_count; i++) {
-		cout << "AVG: " << sum[i] / frames[i] << endl;
+		cout << "File "<<i<<": AVG: " << sum[i] / frames[i];
 		qsort(results[i], frames[i], sizeof(double), compare);
-		cout << "Median: " << results[i][frames[i] / 2] << endl;
+		cout << "\tmedian: " << results[i][frames[i] / 2] << endl;
 	}
-	//_CrtDumpMemoryLeaks();
 
 }

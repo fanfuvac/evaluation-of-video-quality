@@ -15,15 +15,13 @@
 
 using namespace std;
 
-//count STVSSIM metric for all files 
+///count STVSSIM metric for all files 
 double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, PictureData * frame, double ** results, int *& frames) {
-	//results= new double *[files_count];
 	int rec;
 	unsigned char ** ref_data = new unsigned char *[FRAME_CNT];
 	unsigned char *** data = new unsigned char **[FRAME_CNT];
 	unsigned char * dataTrash = new unsigned char[frame->width*frame->height / 2];
 	for (int k = 0; k < files_count; k++) {
-		//results[k] = new double[frame->frame_count];
 		data[k] = new unsigned char *[FRAME_CNT];
 		for (int j = 0; j < FRAME_CNT; j++) {
 			data[k][j] = new unsigned char[frame->size];
@@ -48,7 +46,6 @@ double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, Pictu
 	int j = 0;
 
 	for (; i < frame->frame_count - 1*FRAME_SKIP-1; i += FRAME_SKIP, j++) {
-		//cout << i << endl;
 		shiftData(ref_data, frame->size);
 		for (int k = 0; k < files_count; k++) {
 			shiftData(data[k], frame->size);
@@ -68,11 +65,7 @@ double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, Pictu
 			resSSIM = countSSIM(ref_data[FRAME_CNT / 2], data[l][FRAME_CNT / 2], frame->size, frame->width);
 			results[l][j] = res3D*resSSIM;
 			cout << "3D: " << res3D << " SSIM: " << resSSIM << " Total: " << results[l][j] << endl;
-
-			//cout << j << ": " << results[l][j] << endl;
 		}
-		//cout << results[j] << endl;
-
 	}
 	for (int i = 0; i < files_count; i++) {
 		frames[i] = j;
@@ -106,13 +99,8 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 		int thr = omp_get_thread_num();
 
 		for (int j = 0; j < width - RECT_SQRT_3D; j += SKIP_SIZE) {
-			//(int)((size / width - RECT_SQRT_3D) / SKIP_SIZE + 1)*	(int)((width - RECT_SQRT_3D) / SKIP_SIZE + 1)
-				k = (j / SKIP_SIZE) % (width - RECT_SQRT_3D) + (i / SKIP_SIZE) * ((width - RECT_SQRT_3D)/SKIP_SIZE+1);
-				//(int)((i) / SKIP_SIZE)*	(int)((j) / SKIP_SIZE); //FIXME
-				getRect(datain1[FRAME_CNT / 2], i*width + j, width, out[thr]); //FIXME - is i should be i*width+j ??
-			//cout << k << endl;
-			//if (abs(vct.x) > abs(vct.y)) T = abs(vct.x); FIXME
-			//if (abs(vct.x) < abs(vct.y)) T = abs(vct.y);
+			k = (j / SKIP_SIZE) % (width - RECT_SQRT_3D) + (i / SKIP_SIZE) * ((width - RECT_SQRT_3D)/SKIP_SIZE+1); //actual position in loop
+			getRect(datain1[FRAME_CNT / 2], i*width + j, width, out[thr]);
 			vct = countARPS(out[thr], datain1[FRAME_CNT / 2 - 1], j, i, width, size / width, T);
 
 			if ((vct.x > vct.y * 2 && vct.x*-1 < 2 * vct.y) || (vct.x < vct.y * 2 && vct.x*-1 > 2 * vct.y)) { //y=0
@@ -152,15 +140,9 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 			fillCube(datain1, i*width + j, cube1[thr], width);
 			fillCube(datain2, i*width + j, cube2[thr], width);
 
-			/*double res0 = countSSIM3D(filters[thr][0], cube1[thr], cube2[thr]);
-			double res1 = countSSIM3D(filters[thr][1], cube1[thr], cube2[thr]);
-			double res2 = countSSIM3D(filters[thr][2], cube1[thr], cube2[thr]);
-			double res3 = countSSIM3D(filters[thr][3], cube1[thr], cube2[thr]);
-
-			printf("%d %f %f %f %f %d\n",k, res0,res1,res2,res3, filter);*/
+			//printf("%d %f %f %f %f %d\n",k, res0,res1,res2,res3, filter);*/
 			if (filter < 4) {
 				tmpRes[k] = countSSIM3D(filters[thr][filter], cube1[thr], cube2[thr]);
-				//cout << tmpRes[k] << endl;
 			}
 			else if (filter < 8) {
 				double a, b;
@@ -183,7 +165,6 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 					break;
 				}
 				tmpRes[k] = (a + b) / 2;
-				//cout << tmpRes[k] << endl;
 			}
 			else {
 				double a, b, c, d;
@@ -192,16 +173,13 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 				c = countSSIM3D(filters[thr][2], cube1[thr], cube2[thr]);
 				d = countSSIM3D(filters[thr][3], cube1[thr], cube2[thr]);
 				tmpRes[k] = (a + b + c + d) / 4;
-				//cout << tmpRes[k] << endl;
 			}
 			if (tmpRes[k] >  1) {
 				//cout<< tmpRes[k] <<endl;
 			}
 		}
 	}
-	k = rectCount;//(int)((size/width - RECT_SQRT_3D)/SKIP_SIZE+1)*	(int)((width - RECT_SQRT_3D)/SKIP_SIZE+1);
-	//cout << k << endl;
-	double res = countRes(tmpRes, k);
+	double res = countRes(tmpRes, rectCount);
 	delete[] tmpRes;
 
 	for (int l = 0; l < CHUNK_SIZE; l++) {
@@ -244,7 +222,7 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 
 }
 
-//generate cube filters, vertical, horizontal and 2 inclined are being created
+///generate cube filters, vertical, horizontal and 2 inclined are being created
 unsigned char **** generateFilters() {
 	unsigned char **** out = new unsigned char***[4];
 	for (int i = 0; i < 4; i++) {
@@ -315,7 +293,7 @@ double countDelta(unsigned char*** filter, unsigned char*** cube1, unsigned char
 	return res / (RECT_SQRT_3D*FRAME_CNT);
 }
 
-//Generates 3D array used for SSIM 3D
+///Generates 3D array used for SSIM 3D
 unsigned char *** generateCube() {
 	unsigned char *** out = new unsigned char**[FRAME_CNT];
 	for (int i = 0; i < FRAME_CNT; i++) {
@@ -328,7 +306,7 @@ unsigned char *** generateCube() {
 	return out;
 }
 
-//move (FRAME_CNT / 2 + 1) frames from end to begining of the buffer
+///move (FRAME_CNT / 2 + 1) frames from end to begining of the buffer
 void shiftData(unsigned char ** data, int size) {
 	for (int i = 0; i < FRAME_CNT / 2 + 1; i++) {
 		memcpy(data[i], data[i + FRAME_CNT / 2], size);
@@ -364,10 +342,10 @@ double countMu(unsigned char*** filter, unsigned char*** cube) {
 			}
 		}
 	}
-	return res;/// (RECT_SQRT_3D*FRAME_CNT);
+	return res / (RECT_SQRT_3D*FRAME_CNT);
 }
 
-//Fill 3D array with data of surroundings pixels
+///Fill 3D array with data of surroundings pixels
 void fillCube(unsigned char ** datain, int pos, unsigned char *** out, int width) {
 	for (int i = 0; i < FRAME_CNT; i++) {
 		for (int j = 0; j < RECT_SQRT_3D; j++) {
@@ -377,6 +355,7 @@ void fillCube(unsigned char ** datain, int pos, unsigned char *** out, int width
 }
 
 //other functions are defined in CUDA version, stvssim.cu
+
 
 vector countARPS(unsigned char * block, unsigned char * framePrev, int x, int y, int width, int height, int T) {
 	unsigned char * out = new unsigned char[RECT_SIZE];
