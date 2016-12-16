@@ -13,6 +13,9 @@
 #include "stvssim.cuh"
 #include "ssim.cuh"
 #include <omp.h>
+#include <ctime>
+#include <chrono>
+
 
 
 using namespace std;
@@ -258,6 +261,7 @@ int main(int argc, char ** argv) {
 		frames[i] = frame->frame_count;
 		sum[i] = 0;
 	}
+	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	if (gpu == 1) {
 		if (string(type) == string("STVSSIM")) {
 			cout << "stvssim CUDA" << endl;
@@ -280,6 +284,12 @@ int main(int argc, char ** argv) {
 		countMetric(streams, ref, files_count, frame, type, results); //SSIM, PSNR
 		
 	}
+	chrono::high_resolution_clock::time_point t2 = high_resolution_clock::now();
+	 
+	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+
+	std::cout << "It took me " << time_span.count() << " seconds.";
+	std::cout << std::endl;
 
 	for (int j = 0; j < files_count; j++) {
 		cout << "file number: " << j << "\t";

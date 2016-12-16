@@ -1,26 +1,12 @@
-TARGET    = nothing
-SRC_DIR   = src
-OBJ_DIR   = src
+SRC=./src/
+all: program
 
-CPP_FILES = $(wildcard $(SRC_DIR)/*.cpp)
-CU_FILES  = $(wildcard $(SRC_DIR)/*.cu)
+program: cudacode.o
+	nvcc -o program -g -G -L/usr/local/cuda/lib64 -lcuda -lpthread  -Xcompiler -fopenmp $(SRC)*.cpp  $(SRC)stvssim.cu.o $(SRC)main.cu.o $(SRC)SSIM.cu.o
 
-H_FILES   = $(wildcard $(SRC_DIR)/*.h)
-CUH_FILES = $(wildcard $(SRC_DIR)/*.cuh)
+cudacode.o:
+	nvcc -g -G -c -arch=sm_20 $(SRC)stvssim.cu -o $(SRC)stvssim.cu.o
+	nvcc -g -G -c -arch=sm_20 $(SRC)main.cu -o $(SRC)main.cu.o
+	nvcc -g -G -c -arch=sm_20 $(SRC)SSIM.cu -o $(SRC)SSIM.cu.o
 
-OBJ_FILES = $(addprefix $(OBJ_DIR)/,$(notdir $(CPP_FILES:.cpp=.o)))
-CUO_FILES = $(addprefix $(OBJ_DIR)/,$(notdir $(CU_FILES:.cu=.
-
-OBJS =  $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(notdir $(CPP_FILES)))
-OBJS += $(patsubst %.cu,$(OBJ_DIR)/%.cu.o,$(notdir $(CU_FILES)))
-
-$(TARGET) : $(OBJS)
-    echo "linking rule : " -o $@ $?
-
-$(OBJ_DIR)/%.cu.o : $(SRC_DIR)/%.cu $(CUH_FILES)
-	echo ".cu.o rule : " $@ $<
-	touch $@
-
-$(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp $(H_FILES)
-	echo ".o rule : " $@ $<
-	touch $@
+clean: rm -rf *o program
