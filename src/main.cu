@@ -14,7 +14,9 @@
 #include "ssim.cuh"
 #include <omp.h>
 
+
 using namespace std;
+string FF_PATH = "";
 int compare(const void * a, const void * b)
 {
 	return (*(double*)a - *(double*)b);
@@ -22,10 +24,10 @@ int compare(const void * a, const void * b)
 PictureData *getVideoInfo(string path) {
 	PictureData * data = new PictureData;
 	cout << path.c_str() << endl;
-	string cmd = "ffprobe -v error -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 " + path;
+	string cmd = FF_PATH+"ffprobe -v error -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 " + path;
 	cout << cmd.c_str() << endl;
 	//string cmd="ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=width,height,nb_frames -of default=noprint_wrappers=1:nokey=1 "+path;
-	string cmd2 = "ffprobe - select_streams v - show_streams" + path + " 2> NUL";
+	string cmd2 = FF_PATH + "ffprobe - select_streams v - show_streams" + path + " 2> NUL";
 
 #ifdef __linux__
 	FILE *stream = popen(cmd.c_str(), "r");
@@ -59,11 +61,11 @@ PictureData *getVideoInfo(string path) {
 FILE * startFFmpeg(string path) {
 	FILE *stream;
 #ifdef __linux__
-	string cmd = "ffmpeg -i " + path + " -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null";
+	string cmd = FF_PATH + "ffmpeg -i " + path + " -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null";
 	cout << cmd << endl;
 	stream = popen(cmd.c_str(), "r");
 #else 
-	string cmd = "ffmpeg -i " + path + " -f image2pipe -threads 3  -pix_fmt yuv420p -vcodec rawvideo - 2>NUL";
+	string cmd = FF_PATH + "ffmpeg -i " + path + " -f image2pipe -threads 3  -pix_fmt yuv420p -vcodec rawvideo - 2>NUL";
 	//-c:v h264_qsv
 	stream = _popen(cmd.c_str(), "rb");
 #endif
@@ -186,7 +188,7 @@ int main(int argc, char ** argv) {
 	int files_count = 0;
 	if (argc < 6) { // Check the value of argc. If not enough parameters have been passed, inform user and exit.
 		cout << argc << endl;
-		cout << "Usage is -r <reference file> -in <first video to compare> -in <second video to compare> [-type]\n"; // Inform the user of how to use the program
+		cout << "Usage is -r <reference file> -in <first video to compare> -in <second video to compare> [-type <STVSSIM, SSIM or PSNR>] [-ffpath <path to folder with ffmpeg and ffprobe executables>] [CUDA] \n"; // Inform the user of how to use the program
 																													 //std::cin.get();
 		exit(0);
 	}
@@ -212,6 +214,10 @@ int main(int argc, char ** argv) {
 				}*/
 				else if (string(argv[i]) == string("-type")) {
 					type = string(argv[i + 1]);
+
+				}
+				else if (string(argv[i]) == string("-ffpath")) {
+					FF_PATH = string(argv[i + 1]);
 
 				}
 				
@@ -279,7 +285,7 @@ int main(int argc, char ** argv) {
 		cout << "file number: " << j << "\t";
 	}
 	cout<<endl;
-	for (int i = 0; i < frames[j]; i++) {
+	for (int i = 0; i < frames[0]; i++) {
 		cout << i<<"\t";
 		for (int j = 0; j < files_count; j++) {
 			cout <<results[j][i] << "\t";
@@ -289,10 +295,11 @@ int main(int argc, char ** argv) {
 		}
 		cout<<endl;
 	}
+	cout << "File" << "\t" << "AVG" << "\t" << "Median" << endl;
 	for (int i = 0; i < files_count; i++) {
-		cout << "File "<<i<<": AVG: " << sum[i] / frames[i];
+		cout <<i<<"\t" << sum[i] / frames[i];
 		qsort(results[i], frames[i], sizeof(double), compare);
-		cout << "\tmedian: " << results[i][frames[i] / 2] << endl;
+		cout << "\t" << results[i][frames[i] / 2] << endl;
 	}
 
 }

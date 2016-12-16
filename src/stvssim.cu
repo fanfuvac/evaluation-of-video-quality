@@ -42,7 +42,7 @@ double ** countMetricSTVSSIM_CUDA(FILE ** streams, FILE * ref, int files_count, 
 	size_t pitch;
 
 	unsigned char * ref_data = new unsigned char[FRAME_CNT*frame->size];
-	unsigned char * data = new unsigned char[FRAME_CNT*frame->size];
+	unsigned char * data = new unsigned char[FRAME_CNT*frame->size*files_count];
 	unsigned char * dataTrash = new unsigned char[frame->size / 2];
 	unsigned char * dataTmp = new unsigned char[frame->size];
 
@@ -125,6 +125,7 @@ double ** countMetricSTVSSIM_CUDA(FILE ** streams, FILE * ref, int files_count, 
 																				//cudaMemcpy(ref_data + indexF(k, 0, frame->size), dataTmp, frame->size, cudaMemcpyHostToDevice);
 		}
 		double resSSIM=0, res3D;
+		cout << "file" << "\t" << "3D" << "\t" << "SSIM" << "\t" << "total" << endl;
 		for (int l = 0; l < files_count; l++) {
 			res3D = countSTVSSIM_CUDA(ref_data, data + indexFs(0, 0, frame->size, l), frame->size, frame->width, dataCuda);
 			
@@ -132,7 +133,8 @@ double ** countMetricSTVSSIM_CUDA(FILE ** streams, FILE * ref, int files_count, 
 			//resSSIM = countSSIM(ref_data+indexF(FRAME_CNT / 2,0,frame->size), data+ indexFs(FRAME_CNT / 2, 0, frame->size, l), frame->size, frame->width);
 			resSSIM=countSSIM(ref_data + indexF(FRAME_CNT / 2, 0, frame->size), data + indexFs(FRAME_CNT / 2, 0, frame->size, l), dataRef, dataGPU[l], rects[0], rects[1], frame->size, frame->width, resultsFrame);
 			results[l][j] = res3D*resSSIM;
-			cout << "3D: " << res3D << " SSIM: " << resSSIM << " Total: " << results[l][j] << endl;
+			cout << l << "\t" << res3D << "\t" << resSSIM << "\t" << results[l][j] << endl;
+			//cout << "3D: " << res3D << " SSIM: " << resSSIM << " Total: " << results[l][j] << endl;
 		}
 	}
 	for (int i = 0; i < files_count; i++) {

@@ -64,7 +64,8 @@ double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, Pictu
 			res3D = countSTVSSIM(ref_data, data[l], frame->width*frame->height, frame->width);
 			resSSIM = countSSIM(ref_data[FRAME_CNT / 2], data[l][FRAME_CNT / 2], frame->size, frame->width);
 			results[l][j] = res3D*resSSIM;
-			cout << "3D: " << res3D << " SSIM: " << resSSIM << " Total: " << results[l][j] << endl;
+			cout<< l<<"\t"<< res3D << "\t" << resSSIM<< "\t"<<results[l][j] << endl;
+			//cout << "3D: " << res3D << " SSIM: " << resSSIM << " Total: " << results[l][j] << endl;
 		}
 	}
 	for (int i = 0; i < files_count; i++) {
@@ -100,6 +101,8 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 
 		for (int j = 0; j < width - RECT_SQRT_3D; j += SKIP_SIZE) {
 			k = (j / SKIP_SIZE) % (width - RECT_SQRT_3D) + (i / SKIP_SIZE) * ((width - RECT_SQRT_3D)/SKIP_SIZE+1); //actual position in loop
+			if (i*width + j > 2060000)
+				cout << "wut" << endl;
 			getRect(datain1[FRAME_CNT / 2], i*width + j, width, out[thr]);
 			vct = countARPS(out[thr], datain1[FRAME_CNT / 2 - 1], j, i, width, size / width, T);
 
@@ -374,22 +377,22 @@ vector countARPS(unsigned char * block, unsigned char * framePrev, int x, int y,
 	while (1) {
 		getRect(framePrev, x + y*width, width, out);
 		res[0] = countSAD(block, out);
-		if (x - T - RECT_SQRT / 2 > 0) {
+		if (x - T - RECT_SQRT  > 0) {
 			getRect(framePrev, (x - T) + y*width, width, out);
 			res[3] = countSAD(block, out);
 		}
 		else res[3] = INT_MAX;
-		if (x + T + RECT_SQRT / 2< width) {
+		if (x + T + RECT_SQRT < width) {
 			getRect(framePrev, (x + T) + y*width, width, out);
 			res[1] = countSAD(block, out);
 		}
 		else res[1] = INT_MAX;
-		if (y + T + RECT_SQRT / 2< height) {
+		if (y + T + RECT_SQRT < height) {
 			getRect(framePrev, x + (y + T)*width, width, out);
 			res[2] = countSAD(block, out);
 		}
 		else res[2] = INT_MAX;
-		if (y - T - RECT_SQRT / 2 > 0) {
+		if (y - T - RECT_SQRT  > 0) {
 			getRect(framePrev, x + (y - T)*width, width, out);
 			res[4] = countSAD(block, out);
 		}
