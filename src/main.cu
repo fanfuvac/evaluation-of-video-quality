@@ -223,6 +223,9 @@ int main(int argc, char ** argv) {
 					FF_PATH = string(argv[i + 1]);
 
 				}
+				else if (string(argv[i]) == string("CUDA")) { //we will use CUDA computation
+					gpu = 1;
+				}
 				
 				else {
 					//cout << "Not enough or invalid arguments, please try again.\n";
@@ -261,7 +264,7 @@ int main(int argc, char ** argv) {
 		frames[i] = frame->frame_count;
 		sum[i] = 0;
 	}
-	high_resolution_clock::time_point t1 = high_resolution_clock::now();
+	chrono::high_resolution_clock::time_point t1 = chrono::high_resolution_clock::now();
 	if (gpu == 1) {
 		if (string(type) == string("STVSSIM")) {
 			cout << "stvssim CUDA" << endl;
@@ -284,9 +287,9 @@ int main(int argc, char ** argv) {
 		countMetric(streams, ref, files_count, frame, type, results); //SSIM, PSNR
 		
 	}
-	chrono::high_resolution_clock::time_point t2 = high_resolution_clock::now();
+	chrono::high_resolution_clock::time_point t2 = chrono::high_resolution_clock::now();
 	 
-	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+	chrono::duration<double> time_span = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
 
 	std::cout << "It took me " << time_span.count() << " seconds.";
 	std::cout << std::endl;
@@ -299,7 +302,7 @@ int main(int argc, char ** argv) {
 		cout << i<<"\t";
 		for (int j = 0; j < files_count; j++) {
 			cout <<results[j][i] << "\t";
-			if (isfinite(results[j][i]))
+			if (std::isfinite(results[j][i]))
 				sum[j] += results[j][i];
 			else frames[j]--;
 		}
