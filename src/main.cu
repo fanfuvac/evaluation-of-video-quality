@@ -219,6 +219,16 @@ int main(int argc, char ** argv) {
 					type = string(argv[i + 1]);
 
 				}
+				else if (string(argv[i]) == string("-threads")) {
+					CHUNK_SIZE = int(argv[i + 1]);
+					cout<<"Threads: "<<CHUNK_SIZE;
+				}
+				else if (string(argv[i]) == string("-CUDA_threads")) {
+					THREADS = int(argv[i + 1]);
+					cout<<"CUDA threads: "<<THREADS;
+
+				}
+				
 				else if (string(argv[i]) == string("-ffpath")) {
 					FF_PATH = string(argv[i + 1]);
 

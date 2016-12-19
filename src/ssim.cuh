@@ -17,5 +17,5 @@ double countSSIM(unsigned char * datain1, unsigned char * datain2, unsigned char
 #define SKIP_SIZE 8 //how many pixels should be skipped when going to next window, should be pow of 2((have to be?) //for counting of vectors, needs to be same as SKIP for 3D-SSIM
 //FIXME
 
-#define THREADS 256 //how many parallel threads will be started for CUDA kernel
+int THREADS=256 ;//how many parallel threads will be started for CUDA kernel
 

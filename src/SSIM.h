@@ -12,4 +12,6 @@ double countRes(double * tmpRes, int count);
 #define C1 6.5025 //(K1*L )**2
 #define C2 58.5225 //(K2*L )**2
 #define SKIP_SIZE 8 //how many pixels should be skipped when going to next window, should be pow of 2((have to be?)
-#define CHUNK_SIZE 4 //how many frames will be executed at once
+//#define CHUNK_SIZE 4 //how many frames will be executed at once
+
+int CHUNK_SIZE = 4;
