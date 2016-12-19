@@ -30,4 +30,4 @@
 # Do not change.
 #$ -q gpu_01.q
 
-./../program -r ./../data/out.mp4 -in ./../data/out2.mp4 -type SSIM CUDA -ffpath ./../../ffmpeg-3.2/
+./../program -r ./../data/out.mp4 -in ./../data/out2.mp4 -type SSIM -ffpath ./../../ffmpeg-3.2/ -threads 15

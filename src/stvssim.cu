@@ -254,7 +254,7 @@ double countSTVSSIM_CUDA(unsigned char * datain1, unsigned char * datain2, int s
 __global__ void SSIM3DKernel(unsigned char * datain1, unsigned char * datain2, unsigned char * cubes1, unsigned char * cubes2, unsigned char * filters, double * tmpRes, int * filter, int width, int height) {
 	int i = threadIdx.x;
 	int j = blockIdx.x;
-	int pos = j*THREADS + i;
+	int pos = j*blockDim.x + i;
 	if (pos >= ((int)((height - RECT_SQRT_3D) / SKIP_SIZE + 1)*	(int)((width - RECT_SQRT_3D) / SKIP_SIZE + 1))) {
 		return;
 	}

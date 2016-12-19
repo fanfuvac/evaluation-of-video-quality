@@ -1,3 +1,4 @@
+#pragma once
 double countSSIM(unsigned char * datain1, unsigned  char * datain2, int size,int width); 
 double countRectangle(unsigned char * data1, unsigned  char * data2);
 double countAvg(unsigned char * data);
@@ -14,4 +15,4 @@ double countRes(double * tmpRes, int count);
 #define SKIP_SIZE 8 //how many pixels should be skipped when going to next window, should be pow of 2((have to be?)
 //#define CHUNK_SIZE 4 //how many frames will be executed at once
 
-int CHUNK_SIZE = 4;
+extern  int CHUNK_SIZE;

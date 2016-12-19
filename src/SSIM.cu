@@ -176,7 +176,7 @@ __global__ void countRectangleKernel(unsigned char * data1, unsigned char * data
 	int i = threadIdx.x;
 	int j = blockIdx.x;
 	int a;
-	int pos = j*THREADS + i;
+	int pos = j*blockDim.x + i;
 	int leftover = (width - RECT_SQRT) % SKIP_SIZE;
 	int line = width - RECT_SQRT - leftover + SKIP_SIZE;
 	int x = (pos*SKIP_SIZE) % (line);

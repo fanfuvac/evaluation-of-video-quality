@@ -63,7 +63,7 @@ INFINIBAND="false"
 # | Parallel program with arguments.                                          |
 # |                                                                           |
 #  ===========================================================================
-MY_PARALLEL_PROGRAM="./my_parallel_program arg1 arg2 ..."
+MY_PARALLEL_PROGRAM="./../program -r ./../data/out.mp4 -in ./../data/out2.mp4 -type SSIM -ffpath ./../../ffmpeg-3.2/ -threads 15"
 
 
 

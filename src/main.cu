@@ -20,6 +20,8 @@
 
 using namespace std;
 string FF_PATH = "";
+int CHUNK_SIZE = 4;
+int THREADS=256 ;
 int compare(const void * a, const void * b)
 {
 	return (*(double*)a - *(double*)b);
@@ -128,8 +130,10 @@ double ** countMetric(FILE ** streams, FILE * ref, int files_count, PictureData 
 
 		}
 		omp_set_num_threads(CHUNK_SIZE);
+		
 		for (int k = 0; k < files_count; k++) {
 			#pragma omp parallel for 
+			//cout<<"size: "<<CHUNK_SIZE<<"Threads real: "<<omp_get_num_threads()<<endl;
 			for (int j = 0; j < CHUNK_SIZE; j++) {
 
 				if (string(type) == string("SSIM")) results[k][j + i*CHUNK_SIZE] = countSSIM(dataRef[j], data[k][j], frame->width*frame->height, frame->width);
@@ -220,11 +224,11 @@ int main(int argc, char ** argv) {
 
 				}
 				else if (string(argv[i]) == string("-threads")) {
-					CHUNK_SIZE = int(argv[i + 1]);
+					CHUNK_SIZE = atoi(argv[i + 1]);
 					cout<<"Threads: "<<CHUNK_SIZE;
 				}
 				else if (string(argv[i]) == string("-CUDA_threads")) {
-					THREADS = int(argv[i + 1]);
+					THREADS = atoi(argv[i + 1]);
 					cout<<"CUDA threads: "<<THREADS;
 
 				}

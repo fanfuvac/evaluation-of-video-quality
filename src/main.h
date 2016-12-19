@@ -14,4 +14,3 @@ int readFromFile(unsigned char *& data, int count, FILE * file);
 
 #define MAX_FILES 10 //max amount of comapred files
 
-#define THREADS 256 //how many parallel threads will be started for CUDA kernel

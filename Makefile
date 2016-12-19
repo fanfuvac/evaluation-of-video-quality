@@ -7,8 +7,8 @@ program: cudacode.o
 
 cudacode.o:
 	
-	nvcc -ccbin=/usr/bin/gcc-4.8.5 -std=c++11 -g -G -c  -arch=sm_20 $(SRC)main.cu -o $(OBJ)main.cu.o
-	nvcc -ccbin=/usr/bin/gcc-4.8.5 -std=c++11 -g -G -c -arch=sm_20 $(SRC)SSIM.cu -o $(OBJ)SSIM.cu.o
-	nvcc  -ccbin=/usr/bin/gcc-4.8.5 -std=c++11 -c  -arch=sm_20  $(SRC)stvssim.cu -o $(OBJ)stvssim.cu.o 
+	nvcc -ccbin=/usr/bin/gcc-4.8.5 -std=c++11  -O3 -c -Xcompiler -fopenmp -arch=sm_20 $(SRC)main.cu -o $(OBJ)main.cu.o
+	nvcc -ccbin=/usr/bin/gcc-4.8.5 -std=c++11  -O3 -c -Xcompiler -fopenmp -arch=sm_20 $(SRC)SSIM.cu -o $(OBJ)SSIM.cu.o
+	nvcc  -ccbin=/usr/bin/gcc-4.8.5 -std=c++11 -O3 -c -Xcompiler -fopenmp  -arch=sm_20  $(SRC)stvssim.cu -o $(OBJ)stvssim.cu.o 
 
 clean: rm -rf *o program
