@@ -1,0 +1,300 @@
+0x7ffdcbfe46a8
+Threads: 13
+./../../data/h265_09_00.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../data/h265_09_00.mkv
+29.97
+10.01
+300
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_00.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_00.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_18.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_18.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+stvssim CPU
+0	0.986159	0.962214	0.948896
+0	0.985568	0.962351	0.948462
+0	0.985586	0.961871	0.948007
+0	0.985491	0.963403	0.949425
+0	0.985377	0.968127	0.95397
+0	0.985226	0.965045	0.950787
+0	0.984798	0.96538	0.950704
+0	0.985076	0.964082	0.949694
+0	0.984837	0.972689	0.95794
+0	0.985033	0.982971	0.968258
+0	0.984978	0.959944	0.945524
+0	0.984439	0.965366	0.950343
+0	0.985529	0.959493	0.945608
+0	0.985594	0.986168	0.971962
+0	0.98543	0.95854	0.944574
+0	0.983294	0.958417	0.942406
+0	0.975457	0.959139	0.935598
+It took me 38.4321 seconds.
+file number: 0	
+0	0.948896	
+1	0.948462	
+2	0.948007	
+3	0.949425	
+4	0.95397	
+5	0.950787	
+6	0.950704	
+7	0.949694	
+8	0.95794	
+9	0.968258	
+10	0.945524	
+11	0.950343	
+12	0.945608	
+13	0.971962	
+14	0.944574	
+15	0.942406	
+16	0.935598	
+File	AVG	Median
+0	0.950715	0.95794
+0x7ffde95d7f38
+Threads: 14
+./../../data/h265_09_00.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../data/h265_09_00.mkv
+29.97
+10.01
+300
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_00.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_00.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_18.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_18.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+stvssim CPU
+0	0.986159	0.962214	0.948896
+0	0.985568	0.962351	0.948462
+0	0.985586	0.961871	0.948007
+0	0.985491	0.963403	0.949425
+0	0.985377	0.968127	0.95397
+0	0.985226	0.965045	0.950787
+0	0.984798	0.96538	0.950704
+0	0.985076	0.964082	0.949694
+0	0.984837	0.972689	0.95794
+0	0.985033	0.982971	0.968258
+0	0.984978	0.959944	0.945524
+0	0.984439	0.965366	0.950343
+0	0.985529	0.959493	0.945608
+0	0.985594	0.986168	0.971962
+0	0.98543	0.95854	0.944574
+0	0.983294	0.958417	0.942406
+0	0.975457	0.959139	0.935598
+It took me 37.7138 seconds.
+file number: 0	
+0	0.948896	
+1	0.948462	
+2	0.948007	
+3	0.949425	
+4	0.95397	
+5	0.950787	
+6	0.950704	
+7	0.949694	
+8	0.95794	
+9	0.968258	
+10	0.945524	
+11	0.950343	
+12	0.945608	
+13	0.971962	
+14	0.944574	
+15	0.942406	
+16	0.935598	
+File	AVG	Median
+0	0.950715	0.95794
+0x7ffc11f2c208
+Threads: 15
+./../../data/h265_09_00.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../data/h265_09_00.mkv
+29.97
+10.01
+300
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_00.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_00.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_18.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_18.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+stvssim CPU
+0	0.986159	0.962214	0.948896
+0	0.985568	0.962351	0.948462
+0	0.985586	0.961871	0.948007
+0	0.985491	0.963403	0.949425
+0	0.985377	0.968127	0.95397
+0	0.985226	0.965045	0.950787
+0	0.984798	0.96538	0.950704
+0	0.985076	0.964082	0.949694
+0	0.984837	0.972689	0.95794
+0	0.985033	0.982971	0.968258
+0	0.984978	0.959944	0.945524
+0	0.984439	0.965366	0.950343
+0	0.985529	0.959493	0.945608
+0	0.985594	0.986168	0.971962
+0	0.98543	0.95854	0.944574
+0	0.983294	0.958417	0.942406
+0	0.975457	0.959139	0.935598
+It took me 36.3174 seconds.
+file number: 0	
+0	0.948896	
+1	0.948462	
+2	0.948007	
+3	0.949425	
+4	0.95397	
+5	0.950787	
+6	0.950704	
+7	0.949694	
+8	0.95794	
+9	0.968258	
+10	0.945524	
+11	0.950343	
+12	0.945608	
+13	0.971962	
+14	0.944574	
+15	0.942406	
+16	0.935598	
+File	AVG	Median
+0	0.950715	0.95794
+0x7ffd9604da38
+Threads: 16
+./../../data/h265_09_00.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../data/h265_09_00.mkv
+29.97
+10.01
+300
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_00.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_00.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_18.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_18.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+stvssim CPU
+0	0.986159	0.962214	0.948896
+0	0.985568	0.962351	0.948462
+0	0.985586	0.961871	0.948007
+0	0.985491	0.963403	0.949425
+0	0.985377	0.968127	0.95397
+0	0.985226	0.965045	0.950787
+0	0.984798	0.96538	0.950704
+0	0.985076	0.964082	0.949694
+0	0.984837	0.972689	0.95794
+0	0.985033	0.982971	0.968258
+0	0.984978	0.959944	0.945524
+0	0.984439	0.965366	0.950343
+0	0.985529	0.959493	0.945608
+0	0.985594	0.986168	0.971962
+0	0.98543	0.95854	0.944574
+0	0.983294	0.958417	0.942406
+0	0.975457	0.959139	0.935598
+It took me 36.5336 seconds.
+file number: 0	
+0	0.948896	
+1	0.948462	
+2	0.948007	
+3	0.949425	
+4	0.95397	
+5	0.950787	
+6	0.950704	
+7	0.949694	
+8	0.95794	
+9	0.968258	
+10	0.945524	
+11	0.950343	
+12	0.945608	
+13	0.971962	
+14	0.944574	
+15	0.942406	
+16	0.935598	
+File	AVG	Median
+0	0.950715	0.95794
+0x7ffc6004a4b8
+Threads: 17
+./../../data/h265_09_00.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../data/h265_09_00.mkv
+29.97
+10.01
+300
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_00.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_00.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_18.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_18.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+stvssim CPU
+0	0.986159	0.962214	0.948896
+0	0.985568	0.962351	0.948462
+0	0.985586	0.961871	0.948007
+0	0.985491	0.963403	0.949425
+0	0.985377	0.968127	0.95397
+0	0.985226	0.965045	0.950787
+0	0.984798	0.96538	0.950704
+0	0.985076	0.964082	0.949694
+0	0.984837	0.972689	0.95794
+0	0.985033	0.982971	0.968258
+0	0.984978	0.959944	0.945524
+0	0.984439	0.965366	0.950343
+0	0.985529	0.959493	0.945608
+0	0.985594	0.986168	0.971962
+0	0.98543	0.95854	0.944574
+0	0.983294	0.958417	0.942406
+0	0.975457	0.959139	0.935598
+It took me 35.3624 seconds.
+file number: 0	
+0	0.948896	
+1	0.948462	
+2	0.948007	
+3	0.949425	
+4	0.95397	
+5	0.950787	
+6	0.950704	
+7	0.949694	
+8	0.95794	
+9	0.968258	
+10	0.945524	
+11	0.950343	
+12	0.945608	
+13	0.971962	
+14	0.944574	
+15	0.942406	
+16	0.935598	
+File	AVG	Median
+0	0.950715	0.95794
+0x7ffec2a22308
+Threads: 18
+./../../data/h265_09_00.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../data/h265_09_00.mkv
+29.97
+10.01
+300
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_00.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_00.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_18.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_09_18.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+stvssim CPU
+0	0.986159	0.962214	0.948896
+0	0.985568	0.962351	0.948462
+0	0.985586	0.961871	0.948007
+0	0.985491	0.963403	0.949425
+0	0.985377	0.968127	0.95397
+0	0.985226	0.965045	0.950787
+0	0.984798	0.96538	0.950704
+0	0.985076	0.964082	0.949694
+0	0.984837	0.972689	0.95794
+0	0.985033	0.982971	0.968258
+0	0.984978	0.959944	0.945524
+0	0.984439	0.965366	0.950343
+0	0.985529	0.959493	0.945608
+0	0.985594	0.986168	0.971962
+0	0.98543	0.95854	0.944574
+0	0.983294	0.958417	0.942406
+0	0.975457	0.959139	0.935598
+It took me 35.6932 seconds.
+file number: 0	
+0	0.948896	
+1	0.948462	
+2	0.948007	
+3	0.949425	
+4	0.95397	
+5	0.950787	
+6	0.950704	
+7	0.949694	
+8	0.95794	
+9	0.968258	
+10	0.945524	
+11	0.950343	
+12	0.945608	
+13	0.971962	
+14	0.944574	
+15	0.942406	
+16	0.935598	
+File	AVG	Median
+0	0.950715	0.95794

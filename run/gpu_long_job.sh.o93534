@@ -1,0 +1,24 @@
+Threads: 12
+./../../data/h264_08_00.mkv
+./../../data/h264_08_18.mkv
+stvssim CPU
+It took me 34.5521 seconds.
+file number: 0	
+File	AVG	Median
+0	0.967277	0.970862
+Threads: 12
+./../../data/h264_08_00.mkv
+./../../data/h264_08_28.mkv
+stvssim CPU
+It took me 34.3533 seconds.
+file number: 0	
+File	AVG	Median
+0	0.941598	0.944946
+Threads: 12
+./../../data/h264_08_00.mkv
+./../../data/h264_08_51.mkv
+stvssim CPU
+It took me 34.8432 seconds.
+file number: 0	
+File	AVG	Median
+0	0.699214	0.688973

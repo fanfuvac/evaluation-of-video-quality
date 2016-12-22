@@ -1,0 +1,18 @@
+Device Tesla K40c has compute capability 3.5.
+Device Tesla C2050 has compute capability 2.0.
+Device GeForce GTX 780 Ti has compute capability 3.5.
+Device GeForce GTX 750 has compute capability 5.0.
+0x7ffc6d3152e8
+Threads: 1
+./../../data/h264_fHD_orig.mp4
+./../../ffmpeg-3.2/ffprobe -v error -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../data/h264_fHD_orig.mp4
+23.976
+3180.18
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h264_fHD_orig.mp4 -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h264_fHD_orig.mp4 -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../h264_fHD_2000Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_2000Kb.mkv
+-nan
+-nan
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_2000Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_2000Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null

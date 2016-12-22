@@ -64,7 +64,7 @@ double ** countMetricSTVSSIM(FILE ** streams, FILE * ref, int files_count, Pictu
 			res3D = countSTVSSIM(ref_data, data[l], frame->width*frame->height, frame->width);
 			resSSIM = countSSIM(ref_data[FRAME_CNT / 2], data[l][FRAME_CNT / 2], frame->size, frame->width);
 			results[l][j] = res3D*resSSIM;
-			cout<< l<<"\t"<< res3D << "\t" << resSSIM<< "\t"<<results[l][j] << endl;
+			//cout<< l<<"\t"<< res3D << "\t" << resSSIM<< "\t"<<results[l][j] << endl;
 			//cout << "3D: " << res3D << " SSIM: " << resSSIM << " Total: " << results[l][j] << endl;
 		}
 	}

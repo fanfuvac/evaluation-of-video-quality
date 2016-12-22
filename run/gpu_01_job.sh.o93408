@@ -1,0 +1,7 @@
+CUDA threads: 512
+./../../data/h265_fHD_crf22.mkv
+SSIM CUDA
+It took me 22.0869 seconds.
+file number: 0	
+File	AVG	Median
+0	0.985253	0.992423

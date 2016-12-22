@@ -1,0 +1,42 @@
+Threads: 1
+./../../data/h265_fHD_crf22.mkv
+SSIM/PSNR CPU
+It took me 37.6078 seconds.
+file number: 0	
+File	AVG	Median
+0	45.9363	46.3932
+Threads: 2
+./../../data/h265_fHD_crf22.mkv
+SSIM/PSNR CPU
+It took me 26.1386 seconds.
+file number: 0	
+File	AVG	Median
+0	45.9363	46.3932
+Threads: 4
+./../../data/h265_fHD_crf22.mkv
+SSIM/PSNR CPU
+It took me 21.8604 seconds.
+file number: 0	
+File	AVG	Median
+0	45.9363	46.3932
+Threads: 6
+./../../data/h265_fHD_crf22.mkv
+SSIM/PSNR CPU
+It took me 21.3599 seconds.
+file number: 0	
+File	AVG	Median
+0	45.9363	46.3932
+Threads: 12
+./../../data/h265_fHD_crf22.mkv
+SSIM/PSNR CPU
+It took me 20.3831 seconds.
+file number: 0	
+File	AVG	Median
+0	45.9363	46.3932
+Threads: 24
+./../../data/h265_fHD_crf22.mkv
+SSIM/PSNR CPU
+It took me 20.2511 seconds.
+file number: 0	
+File	AVG	Median
+0	45.9363	46.3932

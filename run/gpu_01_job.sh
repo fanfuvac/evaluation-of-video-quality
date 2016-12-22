@@ -30,4 +30,6 @@
 # Do not change.
 #$ -q gpu_01.q
 
-./../program -r ./../data/out.mp4 -in ./../data/out2.mp4 -type SSIM -ffpath ./../../ffmpeg-3.2/ -threads 15
+
+./../program -r ./../../data/h265_fHD_crf22.mkv -in ./../../data/h264_fHD_crf26.mkv -type STVSSIM CUDA -ffpath ./../../ffmpeg-3.2/ -CUDA_threads 64
+

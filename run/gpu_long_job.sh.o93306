@@ -1,0 +1,192 @@
+0x7ffcfa45c288
+Threads: 13
+./../../h264_fHD_500Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_500Kb.mkv
+-nan
+0
+0
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+SSIM/PSNR CPU
+It took me 1.0219e-05 seconds.
+file number: 0	
+File	AVG	Median
+0	-nan	2.31971e-310
+0x7ffd578e8b18
+Threads: 14
+./../../h264_fHD_500Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_500Kb.mkv
+-nan
+0
+0
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+SSIM/PSNR CPU
+It took me 1.1525e-05 seconds.
+file number: 0	
+File	AVG	Median
+0	-nan	2.35058e-310
+0x7ffff37bb6f8
+Threads: 15
+./../../h264_fHD_500Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_500Kb.mkv
+-nan
+0
+0
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+SSIM/PSNR CPU
+It took me 1.4101e-05 seconds.
+file number: 0	
+File	AVG	Median
+0	-nan	2.33835e-310
+0x7ffd7baf4e08
+Threads: 16
+./../../h264_fHD_500Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_500Kb.mkv
+-nan
+0
+0
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+SSIM/PSNR CPU
+It took me 1.1003e-05 seconds.
+file number: 0	
+File	AVG	Median
+0	-nan	2.35196e-310
+0x7ffda9904348
+Threads: 17
+./../../h264_fHD_500Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_500Kb.mkv
+-nan
+0
+0
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+SSIM/PSNR CPU
+It took me 1.1787e-05 seconds.
+file number: 0	
+File	AVG	Median
+0	-nan	2.36286e-310
+0x7fff2590e718
+Threads: 18
+./../../h264_fHD_500Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_500Kb.mkv
+-nan
+0
+0
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+SSIM/PSNR CPU
+It took me 1.1133e-05 seconds.
+file number: 0	
+File	AVG	Median
+0	-nan	2.33561e-310
+0x7ffe10a3e868
+Threads: 19
+./../../h264_fHD_500Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_500Kb.mkv
+-nan
+0
+0
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+SSIM/PSNR CPU
+It took me 1.6087e-05 seconds.
+file number: 0	
+File	AVG	Median
+0	-nan	2.36428e-310
+0x7fffcd00a6a8
+Threads: 20
+./../../h264_fHD_500Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_500Kb.mkv
+-nan
+0
+0
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+SSIM/PSNR CPU
+It took me 1.5895e-05 seconds.
+file number: 0	
+File	AVG	Median
+0	-nan	2.32498e-310
+0x7ffda8868558
+Threads: 21
+./../../h264_fHD_500Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_500Kb.mkv
+-nan
+0
+0
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+SSIM/PSNR CPU
+It took me 1.2266e-05 seconds.
+file number: 0	
+File	AVG	Median
+0	-nan	2.32517e-310
+0x7ffe0b835d98
+Threads: 22
+./../../h264_fHD_500Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_500Kb.mkv
+-nan
+0
+0
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+SSIM/PSNR CPU
+It took me 1.5668e-05 seconds.
+file number: 0	
+File	AVG	Median
+0	-nan	2.35491e-310
+0x7ffe9383e6b8
+Threads: 23
+./../../h264_fHD_500Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_500Kb.mkv
+-nan
+0
+0
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+SSIM/PSNR CPU
+It took me 2.6466e-05 seconds.
+file number: 0	
+File	AVG	Median
+0	-nan	2.31786e-310
+0x7ffc19e682a8
+Threads: 24
+./../../h264_fHD_500Kb.mkv
+./../../ffmpeg-3.2/ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 ./../../h264_fHD_500Kb.mkv
+-nan
+0
+0
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../h264_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+./../../ffmpeg-3.2/ffmpeg -i ./../../data/h265_fHD_500Kb.mkv -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null
+SSIM/PSNR CPU
+It took me 1.5863e-05 seconds.
+file number: 0	
+File	AVG	Median
+0	-nan	2.33587e-310

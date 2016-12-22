@@ -28,9 +28,9 @@ int compare(const void * a, const void * b)
 }
 PictureData *getVideoInfo(string path) {
 	PictureData * data = new PictureData;
-	cout << path.c_str() << endl;
-	string cmd = FF_PATH+"ffprobe -v error -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 " + path;
-	cout << cmd.c_str() << endl;
+	
+	string cmd = FF_PATH+"ffprobe -v error  -count_frames -of flat=s=_  -select_streams v:0 -show_entries stream=width,height,r_frame_rate,nb_read_frames -show_entries format=duration,nb_frames -of default=noprint_wrappers=1:nokey=1 " + path;
+	//cout << cmd.c_str() << endl;
 	//string cmd="ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=width,height,nb_frames -of default=noprint_wrappers=1:nokey=1 "+path;
 	string cmd2 = FF_PATH + "ffprobe - select_streams v - show_streams" + path + " 2> NUL";
 
@@ -50,31 +50,34 @@ PictureData *getVideoInfo(string path) {
 	int fps1 = atoi(buffer);
 	double fps2 = atoi(tmp.substr(pos + 1).c_str());
 	double fps = fps1 / fps2;
-	cout << fps << endl;
+	//cout << fps << endl;
+	fgets(buffer, 10, stream);
+	data->frame_count = atoi(buffer);
 	fgets(buffer, 20, stream);
 	//cout << buffer << endl;
 
 
 	double len = atof(buffer);
-
-	cout << len*fps << endl;
-	data->frame_count = len*fps;
+	//cout<<len<<endl;
+	//cout << data->frame_count << endl;
+	//data->frame_count = len*fps;
 	data->size = data->width*data->height;
 	//else data->frame_count = 3121;//181250; // 7100;//3121;//1359;//7192;
 	return data;
 }
 FILE * startFFmpeg(string path) {
 	FILE *stream;
+	cout << path.c_str() << endl;
 #ifdef __linux__
 	string cmd = FF_PATH + "ffmpeg -i " + path + " -f image2pipe -pix_fmt yuv420p -vcodec rawvideo - 2>/dev/null";
-	cout << cmd << endl;
+	//cout << cmd << endl;
 	stream = popen(cmd.c_str(), "r");
 #else 
 	string cmd = FF_PATH + "ffmpeg -i " + path + " -f image2pipe -threads 3  -pix_fmt yuv420p -vcodec rawvideo - 2>NUL";
 	//-c:v h264_qsv
 	stream = _popen(cmd.c_str(), "rb");
 #endif
-	cout << cmd.c_str() << endl;
+	//cout << cmd.c_str() << endl;
 
 
 	return stream;
@@ -145,7 +148,7 @@ double ** countMetric(FILE ** streams, FILE * ref, int files_count, PictureData 
 	}
 	for (int j = 0; j < frame->frame_count % CHUNK_SIZE; j++) {
 		rec = fread(dataRef[j], 1, frame->width*frame->height, ref);
-		fread(dataTrash, 1, frame->width*frame->height/2, ref);
+		rec = fread(dataTrash, 1, frame->width*frame->height/2, ref);
 		
 		//fseek(ref, frame->width*frame->height / 2, SEEK_CUR); //skip others except Y channel
 		if (rec != frame->width*frame->height/2) {
@@ -186,6 +189,15 @@ int readFromFile(unsigned char *& data, int count, FILE * file) {
 
 
 int main(int argc, char ** argv) {
+	
+/*int deviceCount;
+ cudaGetDeviceCount(&deviceCount); 
+ int device; 
+ for (device = 0; device < deviceCount; ++device) {
+	 cudaDeviceProp deviceProp; 
+	 cudaGetDeviceProperties(&deviceProp, device); 
+	 printf("Device %s has compute capability %d.%d.\n", deviceProp.name, deviceProp.major, deviceProp.minor);
+}*/
 
 	string reference;
 	string file1, file2;
@@ -193,6 +205,7 @@ int main(int argc, char ** argv) {
 	int gpu = 0;
 	string  * files = new string[MAX_FILES];
 	int files_count = 0;
+	//cout<<argv<<endl;
 	if (argc < 6) { // Check the value of argc. If not enough parameters have been passed, inform user and exit.
 		cout << argc << endl;
 		cout << "Usage is -r <reference file> -in <first video to compare> -in <second video to compare> [-type <STVSSIM, SSIM or PSNR>] [-ffpath <path to folder with ffmpeg and ffprobe executables>] [CUDA] \n"; // Inform the user of how to use the program
@@ -225,11 +238,11 @@ int main(int argc, char ** argv) {
 				}
 				else if (string(argv[i]) == string("-threads")) {
 					CHUNK_SIZE = atoi(argv[i + 1]);
-					cout<<"Threads: "<<CHUNK_SIZE;
+					cout<<"Threads: "<<CHUNK_SIZE<<endl;
 				}
 				else if (string(argv[i]) == string("-CUDA_threads")) {
 					THREADS = atoi(argv[i + 1]);
-					cout<<"CUDA threads: "<<THREADS;
+					cout<<"CUDA threads: "<<THREADS<<endl;
 
 				}
 				
@@ -265,7 +278,7 @@ int main(int argc, char ** argv) {
 	frame = getVideoInfo(reference);
 	ref = startFFmpeg(reference);
 	for (int i = 0; i < files_count; i++) {
-		frame = getVideoInfo(files[i]);
+		//frame = getVideoInfo(files[i]);
 		streams[i] = startFFmpeg(files[i]);
 		results[i] = new double[frame->frame_count];
 	}
@@ -313,14 +326,14 @@ int main(int argc, char ** argv) {
 	}
 	cout<<endl;
 	for (int i = 0; i < frames[0]; i++) {
-		cout << i<<"\t";
+		//cout << i<<"\t";
 		for (int j = 0; j < files_count; j++) {
-			cout <<results[j][i] << "\t";
+			//cout <<results[j][i] << "\t";
 			if (std::isfinite(results[j][i]))
 				sum[j] += results[j][i];
 			else frames[j]--;
 		}
-		cout<<endl;
+		//cout<<endl;
 	}
 	cout << "File" << "\t" << "AVG" << "\t" << "Median" << endl;
 	for (int i = 0; i < files_count; i++) {

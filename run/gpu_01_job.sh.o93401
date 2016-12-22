@@ -1,0 +1,28 @@
+CUDA threads: 64
+./../../data/h265_fHD_crf22.mkv
+SSIM CUDA
+It took me 20.3997 seconds.
+file number: 0	
+File	AVG	Median
+0	0.985253	0.992423
+CUDA threads: 128
+./../../data/h265_fHD_crf22.mkv
+SSIM CUDA
+It took me 22.1168 seconds.
+file number: 0	
+File	AVG	Median
+0	0.985253	0.992423
+CUDA threads: 256
+./../../data/h265_fHD_crf22.mkv
+SSIM CUDA
+It took me 21.69 seconds.
+file number: 0	
+File	AVG	Median
+0	0.985253	0.992423
+CUDA threads: 512
+./../../data/h265_fHD_crf22.mkv
+SSIM CUDA
+It took me 22.3132 seconds.
+file number: 0	
+File	AVG	Median
+0	0.985253	0.992423

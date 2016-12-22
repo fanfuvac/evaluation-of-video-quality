@@ -1,0 +1,4 @@
+./../../h264_fHD_2000Kb.mkv: No such file or directory
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+/opt/share/sge/default/spool/node-017/job_scripts/93296: line 33: 23831 Aborted                 (core dumped) ./../program -r ./../../data/h264_fHD_orig.mp4 -in ./../../h264_fHD_2000Kb.mkv -type SSIM -ffpath ./../../ffmpeg-3.2/ -threads 1

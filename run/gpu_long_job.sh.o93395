@@ -1,0 +1,42 @@
+Threads: 1
+./../../data/out.avi
+SSIM/PSNR CPU
+It took me 112.677 seconds.
+file number: 0	
+File	AVG	Median
+0	0.825984	0.972586
+Threads: 2
+./../../data/out.avi
+SSIM/PSNR CPU
+It took me 61.2092 seconds.
+file number: 0	
+File	AVG	Median
+0	0.825984	0.972586
+Threads: 4
+./../../data/out.avi
+SSIM/PSNR CPU
+It took me 35.7152 seconds.
+file number: 0	
+File	AVG	Median
+0	0.825984	0.972586
+Threads: 6
+./../../data/out.avi
+SSIM/PSNR CPU
+It took me 26.7676 seconds.
+file number: 0	
+File	AVG	Median
+0	0.825984	0.972586
+Threads: 12
+./../../data/out.avi
+SSIM/PSNR CPU
+It took me 18.9936 seconds.
+file number: 0	
+File	AVG	Median
+0	0.825984	0.972586
+Threads: 24
+./../../data/out.avi
+SSIM/PSNR CPU
+It took me 17.2981 seconds.
+file number: 0	
+File	AVG	Median
+0	0.825984	0.972586

@@ -1,0 +1,7 @@
+Threads: 4
+./../../data/h265_fHD_crf22.mkv
+stvssim CPU
+It took me 724.365 seconds.
+file number: 0	
+File	AVG	Median
+0	0.981945	0.988748
