@@ -101,8 +101,6 @@ double countSTVSSIM(unsigned char ** datain1, unsigned char ** datain2, int size
 
 		for (int j = 0; j < width - RECT_SQRT_3D; j += SKIP_SIZE) {
 			k = (j / SKIP_SIZE) % (width - RECT_SQRT_3D) + (i / SKIP_SIZE) * ((width - RECT_SQRT_3D)/SKIP_SIZE+1); //actual position in loop
-			if (i*width + j > 2060000)
-				cout << "wut" << endl;
 			getRect(datain1[FRAME_CNT / 2], i*width + j, width, out[thr]);
 			vct = countARPS(out[thr], datain1[FRAME_CNT / 2 - 1], j, i, width, size / width, T);
 
